@@ -1,0 +1,16 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Local env/settings
+.env
+local.settings.json
+
+# Virtual env
+.venv/
+
+# Azure Functions build artifacts
+.python_packages/
+
+# Logs
+*.log
