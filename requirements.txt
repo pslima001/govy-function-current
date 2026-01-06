@@ -1,15 +1,14 @@
-# Azure Document Intelligence (camada principal)
-azure-ai-documentintelligence>=1.0.0
-azure-core>=1.30.0
-azure-storage-blob>=12.19.0
+# Azure Functions
 azure-functions>=1.18.0
 
-# Utilitários comuns
+# Azure SDK
+azure-core>=1.30.0
+azure-ai-documentintelligence>=1.0.0
+azure-storage-blob==12.24.0
+
+# Utilitários
 python-dotenv>=1.0.0
 
-# (LEGADO) AWS Textract - mantenha apenas se ainda for usar localmente como fallback
-# boto3>=1.34.0
-azure-storage-blob==12.24.0
 
 
 
