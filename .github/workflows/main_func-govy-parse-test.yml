@@ -1,5 +1,5 @@
 # Docs for the Azure Functions Deploy action: https://github.com/Azure/functions-action
-# OIDC login (federated credentials) - NÃO usa publish profile
+# OIDC login (federated credentials) + build no Azure (Oryx)
 
 name: Build and deploy Python project to Azure Function App - func-govy-parse-test
 
@@ -30,6 +30,9 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
+      # IMPORTANT:
+      # Do NOT build .python_packages in GitHub runner.
+      # Azure will install dependencies during deployment via Oryx (scm-do-build-during-deployment).
       - name: Create deployment zip
         run: |
           rm -f release.zip
@@ -71,7 +74,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Deploy to Azure Functions
+      - name: Deploy to Azure Functions (build on Azure)
         uses: Azure/functions-action@v1
         with:
           app-name: func-govy-parse-test
@@ -79,6 +82,3 @@ jobs:
           package: release.zip
           scm-do-build-during-deployment: true
           enable-oryx-build: true
-
-
-
