@@ -3,6 +3,8 @@ import sys
 import logging
 import traceback
 from pathlib import Path
+from govy.api.upload_edital import handle_upload_edital
+
 
 import azure.functions as func
 
@@ -52,3 +54,11 @@ def extract_params(req: func.HttpRequest) -> func.HttpResponse:
         return handle_extract_params(req)
     except Exception as e:
         return _safe_error_response("extract_params", e)
+
+@app.function_name(name="upload_edital")
+@app.route(route="upload_edital", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+def upload_edital(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        return handle_upload_edital(req)
+    except Exception as e:
+        return _safe_error_response("upload_edital", e)
