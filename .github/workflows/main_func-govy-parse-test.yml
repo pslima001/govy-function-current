@@ -14,7 +14,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
 
@@ -59,7 +59,7 @@ jobs:
           path: release.zip
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: build
     permissions:
       id-token: write
@@ -84,4 +84,5 @@ jobs:
           app-name: func-govy-parse-test
           slot-name: Production
           package: release.zip
+
 
