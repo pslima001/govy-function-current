@@ -1,4 +1,5 @@
 # Docs for the Azure Functions Deploy action: https://github.com/Azure/functions-action
+# OIDC login (federated credentials) - NÃO usa publish profile
 
 name: Build and deploy Python project to Azure Function App - func-govy-parse-test
 
@@ -9,8 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'   # repo root
-  PYTHON_VERSION: '3.11'
+  PYTHON_VERSION: "3.11"
 
 jobs:
   build:
@@ -71,7 +71,7 @@ jobs:
         with:
           name: python-app
 
-    - name: Login to Azure (OIDC)
+      - name: Login to Azure (OIDC)
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
@@ -81,8 +81,6 @@ jobs:
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
-          app-name: 'func-govy-parse-test'
-          slot-name: 'Production'
+          app-name: func-govy-parse-test
+          slot-name: Production
           package: release.zip
-
-
