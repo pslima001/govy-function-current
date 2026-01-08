@@ -38,6 +38,12 @@ def _safe_error_response(fn_name: str, err: Exception) -> func.HttpResponse:
     )
 
 
+@app.function_name(name="ping")
+@app.route(route="ping", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+def ping(req: func.HttpRequest) -> func.HttpResponse:
+    return func.HttpResponse("pong", status_code=200)
+
+
 @app.function_name(name="parse_layout")
 @app.route(route="parse_layout", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
