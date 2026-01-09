@@ -3,9 +3,6 @@ import sys
 import logging
 import traceback
 from pathlib import Path
-from govy.api.upload_edital import handle_upload_edital
-
-
 import azure.functions as func
 
 # ---- Path bootstrap (keeps "src/" importable) ----
@@ -20,9 +17,9 @@ logging.basicConfig(level=logging.INFO)
 # ---- Handlers (your business logic) ----
 from govy.api.parse_layout import handle_parse_layout
 from govy.api.extract_params import handle_extract_params
+from govy.api.upload_edital import handle_upload_edital
 
 app = func.FunctionApp()
-
 
 def _safe_error_response(fn_name: str, err: Exception) -> func.HttpResponse:
     """
