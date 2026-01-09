@@ -58,11 +58,11 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Deploy ZIP to Azure Functions
-        uses: Azure/functions-action@v1
-        with:
-          app-name: func-govy-parse-test
-          slot-name: Production
-          package: release.zip
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+- name: 'Run Azure Functions Action'
+  uses: Azure/functions-action@v1
+  with:
+    app-name: 'func-govy-parse-test'
+    package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+    scm-do-build-during-deployment: true
+    enable-oryx-build: true
+
