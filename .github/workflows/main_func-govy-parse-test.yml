@@ -1,5 +1,4 @@
 name: Build and deploy (ZIP root + OIDC) - func-govy-parse-test
-
 on:
   push:
     branches: [ main ]
@@ -10,11 +9,10 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      
       - name: Verify required files at repo root
         run: |
           ls -la
@@ -22,7 +20,7 @@ jobs:
           test -f function_app.py || (echo "ERROR: function_app.py not found at repo root" && exit 1)
           test -f requirements.txt || (echo "ERROR: requirements.txt not found at repo root" && exit 1)
           test -d src || (echo "ERROR: src/ not found at repo root" && exit 1)
-
+      
       - name: Create deployment zip (host.json at ZIP root)
         run: |
           rm -f release.zip
@@ -31,7 +29,7 @@ jobs:
           unzip -l release.zip | head -n 60
           echo "=== CHECK host.json at root ==="
           unzip -l release.zip | awk '{print $4}' | grep -x "host.json" >/dev/null || (echo "ERROR: host.json not at ZIP root" && exit 1)
-
+      
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -44,25 +42,24 @@ jobs:
     permissions:
       id-token: write
       contents: read
-
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: python-app
-
+      
       - name: Login to Azure (OIDC)
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-
-- name: 'Run Azure Functions Action'
-  uses: Azure/functions-action@v1
-  with:
-    app-name: 'func-govy-parse-test'
-    package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-    scm-do-build-during-deployment: true
-    enable-oryx-build: true
-
+      
+      - name: 'Run Azure Functions Action'
+        id: deploy-to-function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: 'func-govy-parse-test'
+          package: 'release.zip'
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
