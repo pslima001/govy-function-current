@@ -1,0 +1,26 @@
+﻿[
+    {
+        "id":  "e001",
+        "label":  "e001_entrega",
+        "type":  "text",
+        "source_file":  "e001_entrega.py"
+    },
+    {
+        "id":  "l001",
+        "label":  "l001_tables_di",
+        "type":  "text",
+        "source_file":  "l001_tables_di.py"
+    },
+    {
+        "id":  "o001",
+        "label":  "o001_objeto",
+        "type":  "text",
+        "source_file":  "o001_objeto.py"
+    },
+    {
+        "id":  "pg001",
+        "label":  "pg001_pagamento",
+        "type":  "text",
+        "source_file":  "pg001_pagamento.py"
+    }
+]
