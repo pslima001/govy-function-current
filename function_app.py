@@ -89,7 +89,7 @@ def get_params(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="application/json",
             )
 
-        with open(params_path, "r", encoding="utf-8") as f:
+        with open(params_path, "r", encoding="utf-8-sig") as f:
             params = json.load(f)
 
         return func.HttpResponse(
