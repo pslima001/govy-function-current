@@ -1,20 +1,64 @@
-name: Deploy Azure Functions (OIDC + Oryx)
+name: Build and deploy Python project to Azure Function App - func-govy-parse-test
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  PYTHON_VERSION: "3.11"
+
 jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Sanity check: host.json must exist at repo root
+      - name: Verify required files exist
+        run: |
+          test -f host.json || (echo "ERROR: host.json not found at repo root" && exit 1)
+          test -f function_app.py || (echo "ERROR: function_app.py not found at repo root" && exit 1)
+          test -f requirements.txt || (echo "ERROR: requirements.txt not found at repo root" && exit 1)
+          echo "OK: required files found."
+
+      - name: Create deployment zip (root-level)
+        run: |
+          rm -f release.zip
+          zip -r release.zip host.json function_app.py requirements.txt src scripts README.md \
+            -x "*.git*" \
+            -x ".github/*" \
+            -x "venv/*" \
+            -x ".venv/*" \
+            -x "__pycache__/*" \
+            -x "**/__pycache__/*" \
+            -x "*.pyc" \
+            -x ".pytest_cache/*" \
+            -x ".mypy_cache/*" \
+            -x ".DS_Store"
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-app
+          path: release.zip
+
   deploy:
     runs-on: ubuntu-22.04
+    needs: build
     permissions:
       id-token: write
       contents: read
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: python-app
 
       - name: Login to Azure (OIDC)
         uses: azure/login@v2
@@ -23,11 +67,11 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Deploy to Azure Functions (build on Azure)
+      - name: Deploy ZIP to Azure Functions (Oryx build on Azure)
         uses: Azure/functions-action@v1
         with:
           app-name: func-govy-parse-test
           slot-name: Production
-          package: .
+          package: release.zip
           scm-do-build-during-deployment: true
           enable-oryx-build: true
