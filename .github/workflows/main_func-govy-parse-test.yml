@@ -1,12 +1,9 @@
-name: Build and deploy Python project to Azure Function App - func-govy-parse-test
+name: Build and deploy (ZIP root + OIDC) - func-govy-parse-test
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
-env:
-  PYTHON_VERSION: "3.11"
 
 jobs:
   build:
@@ -15,33 +12,27 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # Sanity check: host.json must exist at repo root
-      - name: Verify required files exist
+      - name: Verify required files at repo root
         run: |
+          ls -la
           test -f host.json || (echo "ERROR: host.json not found at repo root" && exit 1)
           test -f function_app.py || (echo "ERROR: function_app.py not found at repo root" && exit 1)
           test -f requirements.txt || (echo "ERROR: requirements.txt not found at repo root" && exit 1)
-          echo "OK: required files found."
+          test -d src || (echo "ERROR: src/ not found at repo root" && exit 1)
 
-      - name: Create deployment zip (root-level)
+      - name: Create deployment zip (host.json at ZIP root)
         run: |
           rm -f release.zip
-          zip -r release.zip host.json function_app.py requirements.txt src scripts README.md \
-            -x "*.git*" \
-            -x ".github/*" \
-            -x "venv/*" \
-            -x ".venv/*" \
-            -x "__pycache__/*" \
-            -x "**/__pycache__/*" \
-            -x "*.pyc" \
-            -x ".pytest_cache/*" \
-            -x ".mypy_cache/*" \
-            -x ".DS_Store"
+          zip -r release.zip host.json function_app.py requirements.txt src scripts README.md || true
+          echo "=== ZIP CONTENTS (top) ==="
+          unzip -l release.zip | head -n 60
+          echo "=== CHECK host.json at root ==="
+          unzip -l release.zip | awk '{print $4}' | grep -x "host.json" >/dev/null || (echo "ERROR: host.json not at ZIP root" && exit 1)
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: python-app
@@ -55,7 +46,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: python-app
@@ -67,7 +58,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Deploy ZIP to Azure Functions (Oryx build on Azure)
+      - name: Deploy ZIP to Azure Functions
         uses: Azure/functions-action@v1
         with:
           app-name: func-govy-parse-test
@@ -75,3 +66,12 @@ jobs:
           package: release.zip
           scm-do-build-during-deployment: true
           enable-oryx-build: true
+
+      # Force correct run mode (prevents “stuck on old blob zip” behavior)
+      - name: Ensure WEBSITE_RUN_FROM_PACKAGE=1 and restart
+        run: |
+          az functionapp config appsettings set \
+            --name func-govy-parse-test \
+            --resource-group rg-govy-parse-test-sponsor \
+            --settings WEBSITE_RUN_FROM_PACKAGE=1
+          az functionapp restart --name func-govy-parse-test --resource-group rg-govy-parse-test-sponsor
