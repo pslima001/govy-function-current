@@ -66,12 +66,3 @@ jobs:
           package: release.zip
           scm-do-build-during-deployment: true
           enable-oryx-build: true
-
-      # Force correct run mode (prevents “stuck on old blob zip” behavior)
-      - name: Ensure WEBSITE_RUN_FROM_PACKAGE=1 and restart
-        run: |
-          az functionapp config appsettings set \
-            --name func-govy-parse-test \
-            --resource-group rg-govy-parse-test-sponsor \
-            --settings WEBSITE_RUN_FROM_PACKAGE=1
-          az functionapp restart --name func-govy-parse-test --resource-group rg-govy-parse-test-sponsor
