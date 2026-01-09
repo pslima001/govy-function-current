@@ -1,4 +1,4 @@
-name: Build and deploy (ZIP root + OIDC) - func-govy-parse-test
+name: Build and deploy (ZIP + Azure CLI) - func-govy-parse-test
 on:
   push:
     branches: [ main ]
@@ -16,19 +16,16 @@ jobs:
       - name: Verify required files at repo root
         run: |
           ls -la
-          test -f host.json || (echo "ERROR: host.json not found at repo root" && exit 1)
-          test -f function_app.py || (echo "ERROR: function_app.py not found at repo root" && exit 1)
-          test -f requirements.txt || (echo "ERROR: requirements.txt not found at repo root" && exit 1)
-          test -d src || (echo "ERROR: src/ not found at repo root" && exit 1)
+          test -f host.json || (echo "ERROR: host.json not found" && exit 1)
+          test -f function_app.py || (echo "ERROR: function_app.py not found" && exit 1)
+          test -f requirements.txt || (echo "ERROR: requirements.txt not found" && exit 1)
+          test -d src || (echo "ERROR: src/ not found" && exit 1)
       
-      - name: Create deployment zip (host.json at ZIP root)
+      - name: Create deployment zip
         run: |
-          rm -f release.zip
-          zip -r release.zip host.json function_app.py requirements.txt src scripts README.md || true
-          echo "=== ZIP CONTENTS (top) ==="
-          unzip -l release.zip | head -n 60
-          echo "=== CHECK host.json at root ==="
-          unzip -l release.zip | awk '{print $4}' | grep -x "host.json" >/dev/null || (echo "ERROR: host.json not at ZIP root" && exit 1)
+          zip -r release.zip host.json function_app.py requirements.txt src
+          echo "=== ZIP CONTENTS ==="
+          unzip -l release.zip
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -55,11 +52,23 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
       
-      - name: 'Run Azure Functions Action'
-        id: deploy-to-function
-        uses: Azure/functions-action@v1
-        with:
-          app-name: 'func-govy-parse-test'
-          package: 'release.zip'
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+      - name: Deploy via Azure CLI (ZipDeploy method)
+        run: |
+          echo "Deploying release.zip via Azure CLI..."
+          az functionapp deployment source config-zip \
+            --resource-group rg-govy-parse-test-sponsor \
+            --name func-govy-parse-test \
+            --src release.zip \
+            --build-remote \
+            --timeout 600
+          echo "Deploy completed successfully"
+      
+      - name: Verify deployment
+        run: |
+          echo "Waiting 30 seconds for functions to load..."
+          sleep 30
+          echo "Listing functions:"
+          az functionapp function list \
+            --name func-govy-parse-test \
+            --resource-group rg-govy-parse-test-sponsor \
+            --output table
