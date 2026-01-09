@@ -23,7 +23,7 @@ jobs:
       
       - name: Create deployment zip
         run: |
-          zip -r release.zip host.json function_app.py requirements.txt src
+          zip -r release.zip host.json function_app.py requirements.txt params.json src
           echo "=== ZIP CONTENTS ==="
           unzip -l release.zip
       
