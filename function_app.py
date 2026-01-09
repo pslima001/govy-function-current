@@ -75,15 +75,16 @@ def upload_edital(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name(name="params")
 @app.route(route="params", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
 def get_params(req: func.HttpRequest) -> func.HttpResponse:
-    """
-    GET /api/params?code=...
-    Returns the extractor registry from params.json so the frontend can auto-render fields.
-    """
     try:
-        params_path = os.path.join(ROOT, "params.json")  # same folder as function_app.py
+        # Caminho correto no Azure Functions
+        base_dir = os.environ.get("AzureWebJobsScriptRoot", os.getcwd())
+        params_path = os.path.join(base_dir, "params.json")
+
+        logging.info("Loading params.json from: %s", params_path)
+
         if not os.path.exists(params_path):
             return func.HttpResponse(
-                json.dumps({"error": "params.json not found"}),
+                json.dumps({"error": f"params.json not found at {params_path}"}),
                 status_code=500,
                 mimetype="application/json",
             )
@@ -96,5 +97,7 @@ def get_params(req: func.HttpRequest) -> func.HttpResponse:
             status_code=200,
             mimetype="application/json",
         )
+
     except Exception as e:
         return _safe_error_response("params", e)
+
