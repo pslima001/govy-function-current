@@ -2,6 +2,8 @@
 import sys
 import logging
 import traceback
+import json
+import os
 from pathlib import Path
 
 import azure.functions as func
@@ -21,6 +23,7 @@ from govy.api.extract_params import handle_extract_params
 from govy.api.upload_edital import handle_upload_edital
 
 app = func.FunctionApp()
+
 
 def _safe_error_response(fn_name: str, err: Exception) -> func.HttpResponse:
     """
@@ -59,6 +62,7 @@ def extract_params(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         return _safe_error_response("extract_params", e)
 
+
 @app.function_name(name="upload_edital")
 @app.route(route="upload_edital", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def upload_edital(req: func.HttpRequest) -> func.HttpResponse:
@@ -67,23 +71,16 @@ def upload_edital(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         return _safe_error_response("upload_edital", e)
 
-# === GET /api/params ===
-# Retorna o registry de extractors (params.json) para o frontend se auto-atualizar.
 
-import json
-import os
-import azure.functions as func
-
-@app.route(
-    route="params",
-    methods=["GET"],
-    auth_level=func.AuthLevel.FUNCTION
-)
+@app.function_name(name="params")
+@app.route(route="params", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
 def get_params(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    GET /api/params?code=...
+    Returns the extractor registry from params.json so the frontend can auto-render fields.
+    """
     try:
-        base_dir = os.path.dirname(__file__)  # pasta da raiz do projeto (onde está function_app.py)
-        params_path = os.path.join(base_dir, "params.json")
-
+        params_path = os.path.join(ROOT, "params.json")  # same folder as function_app.py
         if not os.path.exists(params_path):
             return func.HttpResponse(
                 json.dumps({"error": "params.json not found"}),
@@ -94,17 +91,10 @@ def get_params(req: func.HttpRequest) -> func.HttpResponse:
         with open(params_path, "r", encoding="utf-8") as f:
             params = json.load(f)
 
-        # Modelo 1: só parâmetros (extractors)
         return func.HttpResponse(
-            json.dumps({"extractors": params, "version": "1"}),
+            json.dumps({"version": "1", "extractors": params}),
             status_code=200,
             mimetype="application/json",
         )
-
     except Exception as e:
-        return func.HttpResponse(
-            json.dumps({"error": str(e)}),
-            status_code=500,
-            mimetype="application/json",
-        )
-
+        return _safe_error_response("params", e)
