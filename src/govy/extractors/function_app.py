@@ -1,15 +1,114 @@
 import json
 import os
 import re
+import uuid
 from collections import Counter
+from datetime import datetime
+from io import BytesIO
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import azure.functions as func
 from azure.storage.blob import BlobServiceClient
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.core.credentials import AzureKeyCredential
+from azure.core.exceptions import ResourceNotFoundError
 
 from govy.run.extract_all import extract_all_params
+
+
+# =========================================================
+# CACHE / PERSISTÊNCIA (NOVO - mínimo e seguro)
+# =========================================================
+
+def _env_first(keys: List[str], default: Optional[str] = None) -> Optional[str]:
+    for k in keys:
+        v = os.getenv(k)
+        if v:
+            return v
+    return default
+
+def _get_storage_conn_str() -> str:
+    v = _env_first(
+        ["STORAGE_CONNECTION_STRING", "AZURE_STORAGE_CONNECTION_STRING", "AzureWebJobsStorage"],
+        None
+    )
+    if not v:
+        raise RuntimeError("Missing storage connection string env var (STORAGE_CONNECTION_STRING/AZURE_STORAGE_CONNECTION_STRING/AzureWebJobsStorage)")
+    return v
+
+def _get_container_name() -> str:
+    return _env_first(["BLOB_CONTAINER", "BLOB_CONTAINER_NAME", "GOVY_CONTAINER"], "editais-teste") or "editais-teste"
+
+def _prefix(env_name: str, default: str) -> str:
+    return (os.getenv(env_name, default) or default).strip("/")
+
+def _enable_cache() -> bool:
+    return os.getenv("GOVY_ENABLE_CACHE", "0") == "1"
+
+def _base_id_from_blob_name(blob_name: str) -> str:
+    base = blob_name.split("/")[-1]
+    if "." in base:
+        base = base.rsplit(".", 1)[0]
+    return base
+
+def _blob_exists(container_client, blob_path: str) -> bool:
+    try:
+        container_client.get_blob_client(blob_path).get_blob_properties()
+        return True
+    except ResourceNotFoundError:
+        return False
+
+def _download_json(container_client, blob_path: str) -> Dict[str, Any]:
+    bc = container_client.get_blob_client(blob_path)
+    raw = bc.download_blob().readall()
+    return json.loads(raw)
+
+def _upload_json(container_client, blob_path: str, payload: Dict[str, Any]) -> None:
+    bc = container_client.get_blob_client(blob_path)
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    bc.upload_blob(body, overwrite=True, content_type="application/json")
+
+
+# =========================================================
+# MULTIPART (upload_edital) - parsing robusto
+# =========================================================
+
+def _parse_multipart_file(req: func.HttpRequest, field_name: str = "file") -> Tuple[str, bytes]:
+    """
+    Extrai o arquivo do multipart/form-data com segurança.
+    Retorna (filename, content_bytes).
+    """
+    ctype = req.headers.get("content-type") or req.headers.get("Content-Type") or ""
+    if "multipart/form-data" not in ctype.lower():
+        raise ValueError("Expected multipart/form-data")
+
+    body = req.get_body()
+
+    # Usamos email parser para evitar dependências extras
+    # Monta uma mensagem MIME completa
+    msg_bytes = b"Content-Type: " + ctype.encode("utf-8") + b"\r\n\r\n" + body
+
+    import email
+    from email import policy
+    msg = email.message_from_bytes(msg_bytes, policy=policy.default)
+
+    if not msg.is_multipart():
+        raise ValueError("Invalid multipart payload")
+
+    for part in msg.iter_parts():
+        cd = part.get("Content-Disposition", "")
+        if not cd:
+            continue
+        # Ex: form-data; name="file"; filename="abc.pdf"
+        if f'name="{field_name}"' in cd:
+            filename = part.get_filename() or "upload.bin"
+            data = part.get_payload(decode=True) or b""
+            if not data:
+                raise ValueError("Empty file")
+            return filename, data
+
+    raise ValueError(f"Missing multipart field: {field_name}")
 
 
 # =========================================================
@@ -79,20 +178,17 @@ def _is_noise_line(n: str) -> bool:
 NON_LATIN_RE = re.compile(r"[\u4e00-\u9fff\u3040-\u30ff]")  # CJK
 VOWELS_RE = re.compile(r"[aeiouáéíóúãõàêô]", re.IGNORECASE)
 
-# ✅ V6.4.1: tokens OCR internos mais abrangentes
-# Exemplos cobertos: REFFITVE, REFFITVA, REFFITYF, REFFITUJE, REFITVE, BEFFATVA, BEFFATVIA...
 INTERNAL_OCR_TOKENS_RE = re.compile(
     r"\b("
-    r"re+f+it+[a-z]{1,10}"        # reffit + sufixo
-    r"|ref+it+[a-z]{1,10}"        # refit + sufixo
-    r"|be+f+at+[a-z]{1,10}"       # beffat + sufixo
-    r"|b+e*f+f+at+[a-z]{1,10}"    # variações
+    r"re+f+it+[a-z]{1,10}"
+    r"|ref+it+[a-z]{1,10}"
+    r"|be+f+at+[a-z]{1,10}"
+    r"|b+e*f+f+at+[a-z]{1,10}"
     r")\b",
     re.IGNORECASE,
 )
 
 def _strip_internal_ocr_tokens(raw: str) -> str:
-    """Remove tokens OCR típicos mesmo quando aparecem no meio da linha."""
     if not raw:
         return raw
     out = INTERNAL_OCR_TOKENS_RE.sub("", raw)
@@ -149,7 +245,7 @@ def _semantic_trigger(text: str) -> bool:
 
 
 # =========================================================
-# Geometria (Y) + fallback por ordem (mantém V6.3)
+# Geometria (Y) + fallback por ordem
 # =========================================================
 
 def _line_y_bounds_norm(line, page_height: float) -> Tuple[float, float, bool]:
@@ -164,15 +260,6 @@ def _line_y_bounds_norm(line, page_height: float) -> Tuple[float, float, bool]:
     return (min(ys) / page_height, max(ys) / page_height, True)
 
 
-def _percentile(values: List[float], p: float) -> float:
-    if not values:
-        return 0.0
-    v = sorted(values)
-    k = int(round((len(v) - 1) * p))
-    k = max(0, min(k, len(v) - 1))
-    return v[k]
-
-
 def calibrate_header_footer_y_v63(
     result,
     default_header_y_max: float = 0.18,
@@ -184,13 +271,6 @@ def calibrate_header_footer_y_v63(
     if not pages:
         return default_header_y_max, default_footer_y_min, {"mode": "fallback_no_pages"}
 
-    top_trigger_ys: List[float] = []
-    bottom_trigger_ys: List[float] = []
-
-    all_line_ymins: List[float] = []
-    all_lines_norm_in_doc: List[str] = []
-    line_records: List[Tuple[str, float]] = []
-
     geom_total = 0
     geom_valid = 0
 
@@ -201,51 +281,24 @@ def calibrate_header_footer_y_v63(
             raw = (getattr(line, "content", "") or "").strip()
             if not raw:
                 continue
-            n = _norm_line(raw)
-            if not n:
-                continue
-
             y_min_n, y_max_n, ok = _line_y_bounds_norm(line, page_h)
             geom_total += 1
             if ok:
                 geom_valid += 1
 
-            y_center = (y_min_n + y_max_n) / 2.0
-            all_line_ymins.append(y_min_n)
-            all_lines_norm_in_doc.append(n)
-            line_records.append((n, y_center))
-
-            if _semantic_trigger(raw):
-                if y_center <= 0.50:
-                    top_trigger_ys.append(y_max_n)
-                else:
-                    bottom_trigger_ys.append(y_min_n)
-
     geom_quality = geom_valid / max(1, geom_total)
 
     debug = {
-        "mode": None,
-        "top_trigger_count": len(top_trigger_ys),
-        "bottom_trigger_count": len(bottom_trigger_ys),
+        "mode": "auto_repeated_or_geom",
         "geom_quality": geom_quality,
+        "header_y_max": default_header_y_max,
+        "footer_y_min": default_footer_y_min,
     }
-
-    # Se não houver geometria, vai cair no fallback_line_order
-    # Então aqui basta devolver os defaults.
-    debug.update({"mode": "auto_repeated_or_geom", "header_y_max": default_header_y_max, "footer_y_min": default_footer_y_min})
     return default_header_y_max, default_footer_y_min, debug
 
 
-def _region_by_y(y_min_n: float, y_max_n: float, header_y_max: float, footer_y_min: float) -> str:
-    if y_max_n <= header_y_max:
-        return "header"
-    if y_min_n >= footer_y_min:
-        return "footer"
-    return "body"
-
-
 # =========================================================
-# Fallback por ordem (top/bottom) + remoção de número solto (mantém V6.4)
+# Fallback por ordem (top/bottom) + remoção de número solto
 # =========================================================
 
 MONEY_OR_DECIMAL_RE = re.compile(r"(r\$\s*)?[-+]?\s*[\d\.\s]+,\s*\d{1,2}", re.IGNORECASE)
@@ -322,7 +375,6 @@ def clean_content_fallback_line_order(
 
             kept_lines.append(raw)
 
-        # remover “número solto” entre dois valores monetários
         kept2: List[str] = []
         for i, line in enumerate(kept_lines):
             n = _norm_line(line)
@@ -372,10 +424,7 @@ def clean_content_by_page_using_y_or_fallback(
             raw = (getattr(line, "content", "") or "").strip()
             if not raw:
                 continue
-
-            # ✅ V6.4.1: strip interno antes de tudo
             raw = _strip_internal_ocr_tokens(raw)
-
             n = _norm_line(raw)
             if not n:
                 continue
@@ -383,7 +432,6 @@ def clean_content_by_page_using_y_or_fallback(
 
         per_page_simple.append(simple_items)
 
-    # como os seus docs estão com geom_quality ~0, vamos direto pro fallback
     clean, dbg = clean_content_fallback_line_order(per_page_simple, top_n=8, bottom_n=8, repeat_ratio=repeat_ratio)
     dbg["geom_quality"] = geom_quality
     dbg["geom_quality_threshold"] = geom_quality_threshold
@@ -391,7 +439,7 @@ def clean_content_by_page_using_y_or_fallback(
 
 
 # =========================================================
-# Normalização numérica (blindada) — mantém V6.3
+# Normalização numérica
 # =========================================================
 
 OCR_DOT_SPLIT_RE = re.compile(r"(?<!\d)(\d)\s*\.\s*(\d)\s*(\d)(?!\d)")
@@ -462,12 +510,84 @@ def normalize_tables(tables: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]]
 
 
 # =========================================================
-# Azure Function
+# Azure Function App
 # =========================================================
 
 app = func.FunctionApp()
 
 
+# -------------------------
+# ping (volta)
+# -------------------------
+@app.function_name(name="ping")
+@app.route(route="ping", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+def ping(req: func.HttpRequest) -> func.HttpResponse:
+    return func.HttpResponse("pong", status_code=200)
+
+
+# -------------------------
+# params (volta) - lê params.json do pacote
+# -------------------------
+@app.function_name(name="params")
+@app.route(route="params", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
+def params(req: func.HttpRequest) -> func.HttpResponse:
+    # Tenta /home/site/wwwroot/params.json (azure) e depois fallback relativo
+    candidates = [
+        Path("/home/site/wwwroot/params.json"),
+        Path(__file__).resolve().parents[3] / "params.json",  # .../src/govy/extractors -> repo root
+        Path(__file__).resolve().parents[2] / "params.json",
+    ]
+    for p in candidates:
+        try:
+            if p.exists():
+                return func.HttpResponse(p.read_text(encoding="utf-8"), status_code=200, mimetype="application/json")
+        except Exception:
+            continue
+
+    return func.HttpResponse(
+        json.dumps({"error": "params.json not found in deployment package"}, ensure_ascii=False),
+        status_code=500,
+        mimetype="application/json",
+    )
+
+
+# -------------------------
+# upload_edital (volta) - salva em uploads/<uuid>.<ext>
+# -------------------------
+@app.function_name(name="upload_edital")
+@app.route(route="upload_edital", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+def upload_edital(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        filename, data = _parse_multipart_file(req, field_name="file")
+
+        _, ext = os.path.splitext(filename)
+        ext = (ext or ".bin").lower()
+
+        blob_name = f"uploads/{uuid.uuid4().hex}{ext}"
+
+        conn_str = _get_storage_conn_str()
+        container = _get_container_name()
+        bsc = BlobServiceClient.from_connection_string(conn_str)
+
+        blob = bsc.get_blob_client(container=container, blob=blob_name)
+        blob.upload_blob(data, overwrite=True)
+
+        return func.HttpResponse(
+            json.dumps({"blob_name": blob_name}, ensure_ascii=False),
+            status_code=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}, ensure_ascii=False),
+            status_code=500,
+            mimetype="application/json",
+        )
+
+
+# -------------------------
+# parse_layout (com cache/persistência)
+# -------------------------
 @app.function_name(name="parse_layout")
 @app.route(route="parse_layout", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
@@ -478,21 +598,39 @@ def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
             raise ValueError("Campo obrigatório: blob_name")
     except Exception:
         return func.HttpResponse(
-            json.dumps({"error": "Envie JSON: {\"blob_name\": \"arquivo.pdf\"}"}),
+            json.dumps({"error": "Envie JSON: {\"blob_name\": \"uploads/arquivo.pdf\"}"}),
             status_code=400,
             mimetype="application/json",
         )
 
     try:
-        conn_str = os.environ["STORAGE_CONNECTION_STRING"]
-        container = os.environ["BLOB_CONTAINER"]
+        conn_str = _get_storage_conn_str()
+        container = _get_container_name()
 
         bsc = BlobServiceClient.from_connection_string(conn_str)
+        cc = bsc.get_container_client(container)
+
+        base_id = _base_id_from_blob_name(blob_name)
+        parsed_prefix = _prefix("GOVY_PARSED_PREFIX", "parsed")
+        parsed_blob_path = f"{parsed_prefix}/{base_id}.layout.json"
+
+        # cache hit
+        if _enable_cache() and _blob_exists(cc, parsed_blob_path):
+            cached = _download_json(cc, parsed_blob_path)
+            cached["_cache"] = {"hit": True, "blob": parsed_blob_path}
+            return func.HttpResponse(
+                json.dumps(cached, ensure_ascii=False),
+                status_code=200,
+                mimetype="application/json",
+            )
+
         blob = bsc.get_blob_client(container=container, blob=blob_name)
         pdf_bytes = blob.download_blob().readall()
 
-        endpoint = os.environ["DOCINTEL_ENDPOINT"]
-        key = os.environ["DOCINTEL_KEY"]
+        endpoint = _env_first(["DOCINTEL_ENDPOINT", "AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT"], None)
+        key = _env_first(["DOCINTEL_KEY", "AZURE_DOCUMENT_INTELLIGENCE_KEY"], None)
+        if not endpoint or not key:
+            raise RuntimeError("Missing DI env vars (DOCINTEL_ENDPOINT/DOCINTEL_KEY or AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT/AZURE_DOCUMENT_INTELLIGENCE_KEY)")
 
         client = DocumentIntelligenceClient(endpoint=endpoint, credential=AzureKeyCredential(key))
         poller = client.begin_analyze_document(
@@ -541,7 +679,16 @@ def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
             "number_fixes": number_fixes,
             "calibration_debug": calib_debug,
             "cleaning_debug": clean_debug,
+            "_meta": {
+                "created_at": datetime.utcnow().isoformat() + "Z",
+                "source_blob": blob_name,
+                "model": "prebuilt-layout",
+            }
         }
+
+        if _enable_cache():
+            payload["_cache"] = {"hit": False, "blob": parsed_blob_path}
+            _upload_json(cc, parsed_blob_path, payload)
 
         return func.HttpResponse(
             json.dumps(payload, ensure_ascii=False),
@@ -551,20 +698,18 @@ def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
 
     except Exception as e:
         return func.HttpResponse(
-            json.dumps({"error": str(e)}),
+            json.dumps({"error": str(e)}, ensure_ascii=False),
             status_code=500,
             mimetype="application/json",
         )
 
 
+# -------------------------
+# extract_params (com cache/persistência + reuso do parse salvo)
+# -------------------------
 @app.function_name(name="extract_params")
 @app.route(route="extract_params", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def extract_params(req: func.HttpRequest) -> func.HttpResponse:
-    """
-    Pipeline completo (Azure DI -> limpeza -> tabelas -> parâmetros).
-    Espera JSON: {"blob_name": "..."}.
-    Retorna: {"blob_name":..., "params": {...}, "content_clean": "...", "tables_norm": [...]}.
-    """
     try:
         body = req.get_json()
         blob_name = body.get("blob_name")
@@ -577,23 +722,74 @@ def extract_params(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="application/json",
             )
 
-        # ---- baixar PDF do Blob ----
-        blob_service = BlobServiceClient.from_connection_string(os.environ["AZURE_STORAGE_CONNECTION_STRING"])
-        container = os.environ["BLOB_CONTAINER_NAME"]
+        conn_str = _get_storage_conn_str()
+        container = _get_container_name()
+        blob_service = BlobServiceClient.from_connection_string(conn_str)
+        cc = blob_service.get_container_client(container)
+
+        base_id = _base_id_from_blob_name(blob_name)
+        params_prefix = _prefix("GOVY_PARAMS_PREFIX", "params")
+        parsed_prefix = _prefix("GOVY_PARSED_PREFIX", "parsed")
+        params_blob_path = f"{params_prefix}/{base_id}.params.json"
+        parsed_blob_path = f"{parsed_prefix}/{base_id}.layout.json"
+
+        # cache hit params
+        if _enable_cache() and _blob_exists(cc, params_blob_path):
+            cached = _download_json(cc, params_blob_path)
+            cached["_cache"] = {"hit": True, "blob": params_blob_path}
+            return func.HttpResponse(
+                json.dumps(cached, ensure_ascii=False),
+                status_code=200,
+                mimetype="application/json",
+            )
+
+        # reuso do parse salvo (evita DI)
+        if _enable_cache() and _blob_exists(cc, parsed_blob_path):
+            parsed = _download_json(cc, parsed_blob_path)
+            content_clean = parsed.get("content_clean", "")
+            tables_norm = parsed.get("tables_norm", [])
+            number_fixes = parsed.get("number_fixes", [])
+
+            params = extract_all_params(content_clean=content_clean, tables_norm=tables_norm, include_debug=include_debug)
+
+            payload = {
+                "blob_name": blob_name,
+                "params": params,
+                "content_clean": content_clean,
+                "tables_norm": tables_norm,
+                "number_fixes": number_fixes,
+                "_cache": {"hit": False, "used_parsed": True, "parsed_blob": parsed_blob_path},
+            }
+            if include_debug:
+                if "calibration_debug" in parsed:
+                    payload["calibration_debug"] = parsed.get("calibration_debug")
+                if "cleaning_debug" in parsed:
+                    payload["cleaning_debug"] = parsed.get("cleaning_debug")
+
+            if _enable_cache():
+                _upload_json(cc, params_blob_path, payload)
+
+            return func.HttpResponse(
+                json.dumps(payload, ensure_ascii=False),
+                status_code=200,
+                mimetype="application/json",
+            )
+
+        # fallback: comportamento atual (DI + limpeza + extractors)
         blob_client = blob_service.get_blob_client(container=container, blob=blob_name)
         pdf_bytes = blob_client.download_blob().readall()
 
-        # ---- analisar com Azure DI (prebuilt-layout) ----
-        endpoint = os.environ["AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT"]
-        key = os.environ["AZURE_DOCUMENT_INTELLIGENCE_KEY"]
-        client = DocumentIntelligenceClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+        endpoint = _env_first(["AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", "DOCINTEL_ENDPOINT"], None)
+        key = _env_first(["AZURE_DOCUMENT_INTELLIGENCE_KEY", "DOCINTEL_KEY"], None)
+        if not endpoint or not key:
+            raise RuntimeError("Missing DI env vars for extract_params")
 
+        client = DocumentIntelligenceClient(endpoint=endpoint, credential=AzureKeyCredential(key))
         poller = client.begin_analyze_document("prebuilt-layout", pdf_bytes)
         result = poller.result()
 
         content_raw = (result.content or "")
 
-        # tabelas normalizadas (DI)
         tables: List[Dict[str, Any]] = []
         for t_idx, table in enumerate(result.tables or []):
             cells = []
@@ -613,7 +809,8 @@ def extract_params(req: func.HttpRequest) -> func.HttpResponse:
         header_y_max, footer_y_min, calib_debug = calibrate_header_footer_y_v63(result)
         geom_quality = calib_debug.get("geom_quality", 0.0)
 
-        content_clean = remove_header_footer_v63(
+        # Mantive do jeito que estava: se sua versão usa outro método, tratamos depois.
+        content_clean, _ = clean_content_by_page_using_y_or_fallback(
             result,
             header_y_max=header_y_max,
             footer_y_min=footer_y_min,
@@ -629,7 +826,6 @@ def extract_params(req: func.HttpRequest) -> func.HttpResponse:
         payload = {
             "blob_name": blob_name,
             "params": params,
-            # Mantemos para debug/inspeção no front-end simples
             "content_clean": content_clean,
             "tables_norm": tables_norm,
             "number_fixes": number_fixes,
@@ -639,6 +835,10 @@ def extract_params(req: func.HttpRequest) -> func.HttpResponse:
             payload["geom_quality"] = geom_quality
             payload["header_y_max"] = header_y_max
             payload["footer_y_min"] = footer_y_min
+
+        if _enable_cache():
+            payload["_cache"] = {"hit": False, "blob": params_blob_path}
+            _upload_json(cc, params_blob_path, payload)
 
         return func.HttpResponse(
             json.dumps(payload, ensure_ascii=False),

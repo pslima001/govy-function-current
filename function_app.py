@@ -101,3 +101,5 @@ def get_params(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         return _safe_error_response("params", e)
 
+
+# Force redeploy 2026-01-12 14:55:25
