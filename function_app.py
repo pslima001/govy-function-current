@@ -1,42 +1,47 @@
-# function_app.py
-import sys
-import logging
-import traceback
-import json
+﻿import sys
 import os
-from pathlib import Path
+import logging
 
 import azure.functions as func
 
-# ---- Path bootstrap (keeps "src/" importable) ----
-ROOT = Path(__file__).resolve().parent
-SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
-
-# ---- Optional: make log output more visible in Azure Log Stream ----
-logging.basicConfig(level=logging.INFO)
-
-# ---- Handlers (your business logic) ----
-from govy.api.parse_layout import handle_parse_layout
-from govy.api.extract_params import handle_extract_params
-from govy.api.upload_edital import handle_upload_edital
+# Adiciona o diretório raiz ao path
+ROOT = os.path.dirname(os.path.abspath(__file__))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
 app = func.FunctionApp()
 
+# Diagnóstico detalhado
+_diag_info = []
+_diag_info.append(f"ROOT: {ROOT}")
+_diag_info.append(f"sys.path: {sys.path[:5]}")
+_diag_info.append(f"Contents of ROOT: {os.listdir(ROOT) if os.path.exists(ROOT) else 'NOT FOUND'}")
 
-def _safe_error_response(fn_name: str, err: Exception) -> func.HttpResponse:
-    """
-    Logs a full traceback to Azure Log Stream and returns a 500 with a concise message.
-    This avoids "silent 500" failures where you only see Failed without stack trace.
-    """
-    logging.error("%s failed: %s", fn_name, str(err))
-    logging.error("Traceback:\n%s", traceback.format_exc())
-    return func.HttpResponse(
-        f"{fn_name} failed: {type(err).__name__}: {str(err)}",
-        status_code=500,
-        mimetype="text/plain",
-    )
+govy_path = os.path.join(ROOT, "govy")
+_diag_info.append(f"govy exists: {os.path.exists(govy_path)}")
+if os.path.exists(govy_path):
+    _diag_info.append(f"govy contents: {os.listdir(govy_path)}")
+
+api_path = os.path.join(ROOT, "govy", "api")
+_diag_info.append(f"govy/api exists: {os.path.exists(api_path)}")
+if os.path.exists(api_path):
+    _diag_info.append(f"govy/api contents: {os.listdir(api_path)}")
+
+_import_err = None
+try:
+    from govy.api.upload_edital import handle_upload_edital
+    from govy.api.parse_layout import handle_parse_layout
+    from govy.api.extract_params import handle_extract_params
+    _diag_info.append("IMPORTS: SUCCESS")
+except Exception as e:
+    _import_err = repr(e)
+    _diag_info.append(f"IMPORTS: FAILED - {_import_err}")
+    def handle_upload_edital(req: func.HttpRequest) -> func.HttpResponse:
+        return func.HttpResponse(f"Import error: {_import_err}", status_code=500)
+    def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
+        return func.HttpResponse(f"Import error: {_import_err}", status_code=500)
+    def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
+        return func.HttpResponse(f"Import error: {_import_err}", status_code=500)
 
 
 @app.function_name(name="ping")
@@ -45,63 +50,25 @@ def ping(req: func.HttpRequest) -> func.HttpResponse:
     return func.HttpResponse("pong", status_code=200)
 
 
-@app.function_name(name="parse_layout")
-@app.route(route="parse_layout", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
-def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
-    try:
-        return handle_parse_layout(req)
-    except Exception as e:
-        return _safe_error_response("parse_layout", e)
-
-
-@app.function_name(name="extract_params")
-@app.route(route="extract_params", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
-def extract_params(req: func.HttpRequest) -> func.HttpResponse:
-    try:
-        return handle_extract_params(req)
-    except Exception as e:
-        return _safe_error_response("extract_params", e)
+@app.function_name(name="diag")
+@app.route(route="diag", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+def diag(req: func.HttpRequest) -> func.HttpResponse:
+    return func.HttpResponse("\n".join(_diag_info), status_code=200)
 
 
 @app.function_name(name="upload_edital")
 @app.route(route="upload_edital", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def upload_edital(req: func.HttpRequest) -> func.HttpResponse:
-    try:
-        return handle_upload_edital(req)
-    except Exception as e:
-        return _safe_error_response("upload_edital", e)
+    return handle_upload_edital(req)
 
 
-@app.function_name(name="params")
-@app.route(route="params", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
-def get_params(req: func.HttpRequest) -> func.HttpResponse:
-    try:
-        # Caminho correto no Azure Functions
-        base_dir = os.environ.get("AzureWebJobsScriptRoot", os.getcwd())
-        params_path = os.path.join(base_dir, "params.json")
-
-        logging.info("Loading params.json from: %s", params_path)
-
-        if not os.path.exists(params_path):
-            return func.HttpResponse(
-                json.dumps({"error": f"params.json not found at {params_path}"}),
-                status_code=500,
-                mimetype="application/json",
-            )
-
-        with open(params_path, "r", encoding="utf-8") as f:
-            params = json.load(f)
-
-        return func.HttpResponse(
-            json.dumps({"version": "1", "extractors": params}),
-            status_code=200,
-            mimetype="application/json",
-        )
-
-    except Exception as e:
-        return _safe_error_response("params", e)
+@app.function_name(name="parse_layout")
+@app.route(route="parse_layout", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
+    return handle_parse_layout(req)
 
 
-# Force redeploy 2026-01-12 14:55:25
-
-# Force redeploy 2026-01-12 15:25:39
+@app.function_name(name="extract_params")
+@app.route(route="extract_params", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+def extract_params(req: func.HttpRequest) -> func.HttpResponse:
+    return handle_extract_params(req)
