@@ -1,0 +1,84 @@
+﻿name: Build and deploy (ZIP + Azure CLI) - func-govy-parse-test
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required files at repo root
+        run: |
+          ls -la
+          test -f host.json || (echo "ERROR: host.json not found" && exit 1)
+          test -f function_app.py || (echo "ERROR: function_app.py not found" && exit 1)
+          test -f requirements.txt || (echo "ERROR: requirements.txt not found" && exit 1)
+          test -d govy || (echo "ERROR: govy/ not found" && exit 1)
+
+      - name: Create deployment zip
+        run: |
+          zip -r release.zip host.json function_app.py requirements.txt params.json govy
+          echo "=== ZIP CONTENTS ==="
+          unzip -l release.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-app
+          path: release.zip
+
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: python-app
+
+      - name: Login to Azure (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+
+      - name: Deploy via Azure CLI (ZipDeploy method)
+        run: |
+          echo "Deploying release.zip via Azure CLI..."
+          az functionapp deployment source config-zip \
+            --resource-group rg-govy-parse-test-sponsor \
+            --name func-govy-parse-test \
+            --src release.zip \
+            --build-remote \
+            --timeout 600
+          echo "Deploy completed successfully"
+
+      - name: Restart Function App (Stop + Start)
+        run: |
+          echo "Stopping Function App..."
+          az functionapp stop --name func-govy-parse-test --resource-group rg-govy-parse-test-sponsor
+          sleep 10
+          echo "Starting Function App..."
+          az functionapp start --name func-govy-parse-test --resource-group rg-govy-parse-test-sponsor
+          echo "Restart completed"
+
+      - name: Verify deployment
+        run: |
+          echo "Waiting 45 seconds for functions to load..."
+          sleep 45
+          echo "Listing functions:"
+          az functionapp function list \
+            --name func-govy-parse-test \
+            --resource-group rg-govy-parse-test-sponsor \
+            --output table
