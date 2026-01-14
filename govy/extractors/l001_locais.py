@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import re
+import unicodedata
+
+from govy.extractors.config.loader import get_extractor_config
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
@@ -11,6 +14,11 @@ class ExtractResultList:
     values: List[str]
     evidence: Optional[str]
     score: int
+
+
+def _norm(s: str) -> str:
+    s = s.lower()
+    return "".join(ch for ch in unicodedata.normalize("NFKD", s) if not unicodedata.combining(ch))
 
 
 # gatilhos de contexto (entrega/recebimento)
@@ -25,6 +33,16 @@ NEGATIVOS = [
     "prefeitura", "câmara", "camara", "cnpj", "telefone", "tel.", "fax",
     "e-mail", "email", "www", ".gov", "ouvidoria", "secretaria", "gabinete"
 ]
+
+# --- Config via patterns.json (com fallback) ---
+_cfg = get_extractor_config("l001_locais")
+if isinstance(_cfg, dict):
+    GATILHOS = _cfg.get("gatilhos", GATILHOS)
+    NEGATIVOS = _cfg.get("negativos", NEGATIVOS)
+
+# Pré-normaliza listas para casar texto com/sem acento
+GATILHOS_N = [_norm(g) for g in GATILHOS]
+NEGATIVOS_N = [_norm(n) for n in NEGATIVOS]
 
 # padrão de início de logradouro
 LOGRADOURO_RE = re.compile(
@@ -43,29 +61,18 @@ CAND_RE = re.compile(
 def _norm_spaces(s: str) -> str:
     s = (s or "").replace("\uFFFD", "")
     s = re.sub(r"[ \t]+", " ", s)
-    s = re.sub(r"\s*,\s*", ", ", s)
-    return s.strip(" ,;-–—\n\r\t")
-
-
-def _dedup_key(s: str) -> str:
-    s = _norm_spaces(s).lower()
-    # remove CEP
-    s = re.sub(r"\bcep[:\s]*\d{2}\.?\d{3}[-.]?\d{3}\b", "", s, flags=re.I)
-    # remove telefones
-    s = re.sub(r"\b(?:\(?\d{2}\)?\s*)?\d{4,5}[-.\s]?\d{4}\b", "", s)
-    # remove pontuação
-    s = re.sub(r"[^a-z0-9]", "", s)
-    return s
+    s = re.sub(r"\s+", " ", s)
+    return s.strip()
 
 
 def _has_context(window: str) -> bool:
-    w = window.lower()
-    return any(g in w for g in GATILHOS)
+    w = _norm(window)
+    return any(g and g in w for g in GATILHOS_N)
 
 
 def _is_negative(window: str) -> bool:
-    w = window.lower()
-    return any(n in w for n in NEGATIVOS)
+    w = _norm(window)
+    return any(n and n in w for n in NEGATIVOS_N)
 
 
 def _validate_candidate(cand: str) -> bool:
@@ -76,27 +83,22 @@ def _validate_candidate(cand: str) -> bool:
     if not re.search(r"^(rua|r\.|avenida|av\.?|rodovia|rod\.?|estrada|travessa|alameda|largo|praça|praca|br)\b", low):
         return False
 
-    # BR precisa ser BR-### ou BR ### (rodovia)
-    if low.startswith("br") and not re.search(r"^br[-\s]?\d{2,3}\b", low):
+    # heurísticas mínimas: número ou km ou s/n
+    if not re.search(r"(\b\d{1,6}\b|\bkm\b|\bs\/n\b|\bsn\b)", low):
         return False
 
-    # precisa ter número ou s/n ou km
-    if not (re.search(r"\b\d{1,5}\b", c) or re.search(r"\bs\s*/?\s*n\b|\bsn\b", low) or "km" in low):
+    # evita candidatos curtos demais
+    if len(c) < 15:
         return False
 
-    # se parece muito cabeçalho institucional, rejeita
-    if _is_negative(c) and not any(x in low for x in ["rua", "avenida", "estrada", "rodovia", "travessa", "alameda", "praça", "praca", "br"]):
-        return False
-
-    # tamanho mínimo razoável
-    return len(c) >= 18
+    return True
 
 
 def extract_l001(text: str) -> ExtractResultList:
     """
     L001 — Locais de entrega/recebimento
     Estratégia:
-      - procurar “janelas” de contexto com gatilhos (entrega/recebimento)
+      - procurar "janelas" de contexto com gatilhos (entrega/recebimento)
       - dentro dessas janelas, extrair candidatos de endereço por regex
       - validar estrutura mínima (logradouro + número/s/n/km)
       - deduplicar
@@ -112,8 +114,7 @@ def extract_l001(text: str) -> ExtractResultList:
 
     # varre linhas e cria janelas de 8 linhas antes/depois quando achar gatilho
     for i, line in enumerate(lines):
-        low = line.lower()
-        if any(g in low for g in GATILHOS):
+        if any(g and g in _norm(line) for g in GATILHOS_N):
             ini = max(0, i - 8)
             fim = min(len(lines), i + 12)
             window = "\n".join(lines[ini:fim])
@@ -125,32 +126,25 @@ def extract_l001(text: str) -> ExtractResultList:
             # busca endereços na janela
             for m in CAND_RE.finditer(window):
                 cand = _norm_spaces(m.group(0))
-
                 if _validate_candidate(cand):
                     hits.append(cand)
 
             # guarda evidência (primeira janela já ajuda)
-            evidences.append(_norm_spaces(window)[:900])
+            if window and not evidences:
+                evidences.append(window[:800])
 
-    # dedup
-    out: List[str] = []
+    # dedup preservando ordem
     seen = set()
+    uniq: List[str] = []
     for h in hits:
-        k = _dedup_key(h)
-        if not k or len(k) < 18:
-            continue
-        if k in seen:
-            continue
-        seen.add(k)
-        out.append(h)
+        k = _norm(h)
+        if k not in seen:
+            seen.add(k)
+            uniq.append(h)
 
-    # score: baseado em quantos locais encontrados + se teve evidência com gatilho forte
-    score = 0
-    if out:
-        score += 6
-        score += min(6, len(out))  # até +6
-    if evidences:
-        score += 2
+    if not uniq:
+        return ExtractResultList(values=[], evidence=None, score=0)
 
-    evidence = "\n---\n".join(evidences[:2]) if evidences else None
-    return ExtractResultList(values=out, evidence=evidence, score=score)
+    score = 5 + min(10, len(uniq) * 2)
+    evidence = evidences[0] if evidences else None
+    return ExtractResultList(values=uniq, evidence=evidence, score=int(score))

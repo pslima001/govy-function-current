@@ -19,11 +19,11 @@ jobs:
           test -f host.json || (echo "ERROR: host.json not found" && exit 1)
           test -f function_app.py || (echo "ERROR: function_app.py not found" && exit 1)
           test -f requirements.txt || (echo "ERROR: requirements.txt not found" && exit 1)
-          test -d src || (echo "ERROR: src/ not found" && exit 1)
+          test -d govy || (echo "ERROR: govy/ not found" && exit 1)
       
       - name: Create deployment zip
         run: |
-          zip -r release.zip host.json function_app.py requirements.txt params.json src
+          zip -r release.zip host.json function_app.py requirements.txt params.json govy
           echo "=== ZIP CONTENTS ==="
           unzip -l release.zip
       
