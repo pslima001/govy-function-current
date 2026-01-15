@@ -1,4 +1,4 @@
-Ôªø# GOVY.PS1 - Sistema Unificado v2 CORRIGIDO
+# GOVY.PS1 - Sistema Unificado v2 CORRIGIDO
 param(
     [Parameter(Mandatory=$false, Position=0)]
     [ValidateSet('testar', 'ver', 'validar', 'deploy', 'status', 'ajustar', 'help')]
@@ -121,7 +121,7 @@ function Show-Results {
         return
     }
     
-    # Obter cada par√¢metro
+    # Obter cada par‚metro
     $objeto = $params.o001_objeto
     $entrega = $params.e001_entrega  
     $pagamento = $params.pg001_pagamento
@@ -188,7 +188,7 @@ function Show-Results {
     Write-ColorOutput "============================================" 'highlight'
     Write-Host ""
     
-    # Meta info se dispon√≠vel
+    # Meta info se disponÌvel
     if ($Result.meta) {
         Write-Host "Pages: $($Result.meta.page_count) | Tables: $($Result.meta.tables_count)"
         Write-Host ""
@@ -345,3 +345,4 @@ switch ($Comando) {
     'help' { Show-Help }
     default { Show-Help }
 }
+

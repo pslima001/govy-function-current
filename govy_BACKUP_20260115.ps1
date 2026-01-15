@@ -1,4 +1,4 @@
-﻿# GOVY.PS1 - Sistema de Testes v3 FINAL
+# GOVY.PS1 - Sistema de Testes v3 FINAL
 param(
     [Parameter(Mandatory=$false, Position=0)]
     [ValidateSet('testar', 'help')]
@@ -88,3 +88,4 @@ else {
     Write-Host "`nGOVY - SISTEMA DE TESTES DE EDITAIS" -ForegroundColor Cyan
     Write-Host "Uso: .\govy.ps1 testar`n" -ForegroundColor White
 }
+
