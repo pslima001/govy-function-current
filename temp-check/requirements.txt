@@ -9,5 +9,10 @@ azure-storage-blob==12.24.0
 # Utilitários
 python-dotenv>=1.0.0
 
-# Segurança
 cryptography==41.0.7
+
+
+
+
+
+

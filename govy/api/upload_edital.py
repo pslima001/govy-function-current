@@ -1,94 +1,96 @@
-﻿import json
+# govy/api/upload_edital.py
+"""
+Handler para upload de editais PDF.
+
+Última atualização: 15/01/2026
+"""
 import os
+import json
 import uuid
-from typing import Tuple
+import logging
+
 import azure.functions as func
 
-
-def _json(status: int, payload: dict) -> func.HttpResponse:
-    return func.HttpResponse(
-        json.dumps(payload, ensure_ascii=False),
-        status_code=status,
-        mimetype="application/json",
-    )
-
-
-def _parse_multipart_file(req: func.HttpRequest, field_name: str = "file") -> Tuple[str, bytes]:
-    """
-    Extrai arquivo do multipart/form-data sem dependencias extras.
-    Retorna (filename, bytes).
-    """
-    content_type = req.headers.get("content-type") or req.headers.get("Content-Type") or ""
-    if "multipart/form-data" not in content_type.lower():
-        raise ValueError("Expected multipart/form-data")
-
-    body = req.get_body()
-    if not body:
-        raise ValueError("Empty request body")
-
-    msg_bytes = b"Content-Type: " + content_type.encode("utf-8") + b"\r\n\r\n" + body
-
-    import email
-    from email import policy
-
-    msg = email.message_from_bytes(msg_bytes, policy=policy.default)
-
-    if not msg.is_multipart():
-        raise ValueError("Invalid multipart payload")
-
-    for part in msg.iter_parts():
-        cd = part.get("Content-Disposition", "") or ""
-        if f'name="{field_name}"' not in cd:
-            continue
-        filename = part.get_filename() or "upload.pdf"
-        data = part.get_payload(decode=True) or b""
-        if not data:
-            raise ValueError("Empty file")
-        return filename, data
-
-    raise ValueError(f"Missing multipart field: {field_name}")
+logger = logging.getLogger(__name__)
 
 
 def handle_upload_edital(req: func.HttpRequest) -> func.HttpResponse:
     """
-    POST multipart/form-data com campo obrigatorio 'file'
-    Aceita apenas PDF por enquanto.
-    Salva no Blob Storage em uploads/<uuid>.pdf
-    Retorna: { "blob_name": "uploads/<uuid>.pdf" }
+    Faz upload de um arquivo PDF para o Azure Blob Storage.
+    
+    Espera multipart/form-data com campo 'file' contendo o PDF.
+    
+    Returns:
+        JSON com blob_name do arquivo salvo
     """
     try:
-        filename, data = _parse_multipart_file(req, field_name="file")
-    except Exception as e:
-        return _json(400, {"error": str(e)})
-
-    _, ext = os.path.splitext(filename or "")
-    ext = (ext or "").lower()
-
-    if ext != ".pdf":
-        return _json(400, {"error": "Only PDF is accepted for now (.pdf)"})
-
-    if not data.startswith(b"%PDF"):
-        return _json(400, {"error": "File does not look like a valid PDF"})
-
-    conn_str = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-    container = os.getenv("BLOB_CONTAINER_NAME")
-
-    if not conn_str:
-        return _json(500, {"error": "Missing env var: AZURE_STORAGE_CONNECTION_STRING"})
-    if not container:
-        return _json(500, {"error": "Missing env var: BLOB_CONTAINER_NAME"})
-
-    blob_name = f"uploads/{uuid.uuid4().hex}.pdf"
-
-    try:
+        # Importa aqui para evitar erro no startup se variáveis não existirem
         from azure.storage.blob import BlobServiceClient
-        bsc = BlobServiceClient.from_connection_string(conn_str)
-        blob_client = bsc.get_blob_client(container=container, blob=blob_name)
-        blob_client.upload_blob(
-            data,
-            overwrite=True,
-            content_type="application/pdf",
+        
+        # Obtém arquivo do request
+        file = req.files.get("file")
+        if not file:
+            return func.HttpResponse(
+                json.dumps({"error": "Campo 'file' não encontrado no form-data"}),
+                status_code=400,
+                mimetype="application/json"
+            )
+        
+        # Valida extensão
+        filename = file.filename or "documento.pdf"
+        if not filename.lower().endswith(".pdf"):
+            return func.HttpResponse(
+                json.dumps({"error": "Apenas arquivos PDF são aceitos"}),
+                status_code=400,
+                mimetype="application/json"
+            )
+        
+        # Lê conteúdo
+        content = file.read()
+        if not content:
+            return func.HttpResponse(
+                json.dumps({"error": "Arquivo vazio"}),
+                status_code=400,
+                mimetype="application/json"
+            )
+        
+        # Conecta ao Blob Storage
+        conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
+        if not conn_str:
+            return func.HttpResponse(
+                json.dumps({"error": "AZURE_STORAGE_CONNECTION_STRING não configurada"}),
+                status_code=500,
+                mimetype="application/json"
+            )
+        
+        container_name = os.environ.get("BLOB_CONTAINER_NAME", "editais-teste")
+        
+        # Gera nome único
+        unique_id = uuid.uuid4().hex
+        blob_name = f"uploads/{unique_id}.pdf"
+        
+        # Upload
+        blob_service = BlobServiceClient.from_connection_string(conn_str)
+        blob_client = blob_service.get_blob_client(container=container_name, blob=blob_name)
+        blob_client.upload_blob(content, overwrite=True)
+        
+        logger.info(f"Upload OK: {blob_name} ({len(content)} bytes)")
+        
+        return func.HttpResponse(
+            json.dumps({
+                "status": "success",
+                "blob_name": blob_name,
+                "size_bytes": len(content),
+                "original_filename": filename
+            }),
+            status_code=200,
+            mimetype="application/json"
         )
-        return _json(200, {"blob_name": blob_name})
+        
     except Exception as e:
-        return _json(500, {"error": str(e)})
+        logger.exception("Erro no upload_edital")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype="application/json"
+        )

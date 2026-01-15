@@ -1,4 +1,4 @@
-﻿# GOVY.PS1 - Sistema Unificado v2 CORRIGIDO
+﻿# GOVY.PS1 - Sistema Unificado v2
 param(
     [Parameter(Mandatory=$false, Position=0)]
     [ValidateSet('testar', 'ver', 'validar', 'deploy', 'status', 'ajustar', 'help')]
@@ -23,7 +23,6 @@ $Global:CONFIG = @{
     StorageAccount = "stgovyparsetestsponsor"
     Container = "editais-teste"
     PatternsPath = "govy\extractors\config\patterns.json"
-    MasterKey = "30XqJz2yguWbu0GW8sOznfnOobyKTCTR4zKBTkrpSQJyAzFurKKWZg=="
 }
 
 $Global:EXTRACTORS = @{
@@ -36,8 +35,7 @@ $Global:EXTRACTORS = @{
 function Write-ColorOutput {
     param([string]$Message, [string]$Type = 'info')
     $colors = @{'success' = 'Green'; 'error' = 'Red'; 'warning' = 'Yellow'; 'info' = 'Cyan'; 'highlight' = 'Magenta'}
-    $color = if ($colors.ContainsKey($Type)) { $colors[$Type] } else { 'White' }
-    Write-Host $Message -ForegroundColor $color
+    Write-Host $Message -ForegroundColor $colors[$Type]
 }
 
 function Select-PdfFile {
@@ -51,6 +49,17 @@ function Select-PdfFile {
         return $dialog.FileName
     }
     return $null
+}
+
+function Get-FunctionKey {
+    param([string]$FunctionName)
+    try {
+        $keys = az functionapp function keys list --function-name $FunctionName --name $Global:CONFIG.FunctionAppName --resource-group $Global:CONFIG.ResourceGroup --output json | ConvertFrom-Json
+        return $keys.default
+    } catch {
+        Write-ColorOutput "Erro ao obter key: $_" 'error'
+        return $null
+    }
 }
 
 function Upload-Pdf {
@@ -67,7 +76,7 @@ function Upload-Pdf {
     Write-ColorOutput "Fazendo upload de: $fileName" 'info'
     
     try {
-        az storage blob upload --account-name $Global:CONFIG.StorageAccount --container-name $Global:CONFIG.Container --name $blobName --file $FilePath --auth-mode key --output none
+        az storage blob upload --account-name $Global:CONFIG.StorageAccount --container-name $Global:CONFIG.Container --name $blobName --file $FilePath --auth-mode login --output none
         Write-ColorOutput "Upload completo: $blobName" 'success'
         return $blobName
     } catch {
@@ -79,11 +88,10 @@ function Upload-Pdf {
 function Invoke-ExtractParams {
     param([string]$BlobName)
     Write-ColorOutput "Extraindo parametros..." 'info'
-    
-    $key = $Global:CONFIG.MasterKey
+    $key = Get-FunctionKey -FunctionName "extract_params"
+    if (-not $key) { return $null }
     $url = "$($Global:CONFIG.FunctionUrl)/api/extract_params?code=$key"
     $body = @{ blob_name = $BlobName } | ConvertTo-Json
-    
     try {
         $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
         $result = Invoke-RestMethod -Uri $url -Method POST -ContentType "application/json" -Body $body
@@ -92,6 +100,8 @@ function Invoke-ExtractParams {
         return $result
     } catch {
         Write-ColorOutput "Erro na extracao: $($_.Exception.Message)" 'error'
+        
+        # Tentar mostrar detalhes do erro
         if ($_.Exception.Response) {
             $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
             $errorDetails = $reader.ReadToEnd()
@@ -113,98 +123,73 @@ function Show-Results {
     Write-ColorOutput "============================================" 'highlight'
     Write-Host ""
     
-    # Obter params da resposta
-    $params = $Result.params
-    if (-not $params) {
-        Write-ColorOutput "Formato de resposta desconhecido!" 'error'
-        Write-Host ($Result | ConvertTo-Json -Depth 5)
-        return
-    }
-    
-    # Obter cada parâmetro
-    $objeto = $params.o001_objeto
-    $entrega = $params.e001_entrega  
-    $pagamento = $params.pg001_pagamento
-    $locais = $params.l001_locais
-    
-    $encontrados = 0
-    
-    # OBJETO
-    Write-Host ""
-    if ($objeto -and $objeto.status -eq "found") {
-        $valorTrunc = if ($objeto.value.Length -gt 100) { $objeto.value.Substring(0, 100) + "..." } else { $objeto.value }
-        Write-ColorOutput "[OK] OBJETO: $valorTrunc" 'success'
-        Write-Host "     Score: $($objeto.score)"
-        $encontrados++
+    # Objeto
+    $obj = $Result.params.o001_objeto
+    if ($obj.status -eq 'found') {
+        Write-ColorOutput "[OK] OBJETO:" 'success'
+        Write-Host "     $($obj.value.Substring(0, [Math]::Min(150, $obj.value.Length)))..."
+        Write-Host "     Score: $($obj.score)"
     } else {
         Write-ColorOutput "[X] OBJETO: NAO ENCONTRADO" 'error'
     }
-    
-    # PRAZO DE ENTREGA
     Write-Host ""
-    if ($entrega -and $entrega.status -eq "found") {
+    
+    # Prazo de Entrega
+    $entrega = $Result.params.e001_entrega
+    if ($entrega.status -eq 'found') {
         Write-ColorOutput "[OK] PRAZO DE ENTREGA: $($entrega.value)" 'success'
         Write-Host "     Score: $($entrega.score)"
         if ($entrega.evidence) {
-            $ctx = $entrega.evidence.Substring(0, [Math]::Min(150, $entrega.evidence.Length))
-            Write-Host "     Contexto: $ctx..."
+            Write-Host "     Contexto: $($entrega.evidence.Substring(0, [Math]::Min(100, $entrega.evidence.Length)))..."
         }
-        $encontrados++
     } else {
         Write-ColorOutput "[X] PRAZO DE ENTREGA: NAO ENCONTRADO" 'warning'
         Write-Host "     Dica: Abra o PDF e veja como o prazo esta escrito"
+        Write-Host "     Depois: .\govy.ps1 ajustar 'termo-encontrado' -e e001 -t positivo"
     }
-    
-    # PRAZO DE PAGAMENTO
     Write-Host ""
-    if ($pagamento -and $pagamento.status -eq "found") {
+    
+    # Prazo de Pagamento
+    $pagamento = $Result.params.pg001_pagamento
+    if ($pagamento.status -eq 'found') {
         Write-ColorOutput "[OK] PRAZO DE PAGAMENTO: $($pagamento.value)" 'success'
         Write-Host "     Score: $($pagamento.score)"
         if ($pagamento.evidence) {
-            $ctx = $pagamento.evidence.Substring(0, [Math]::Min(150, $pagamento.evidence.Length))
-            Write-Host "     Contexto: $ctx..."
+            Write-Host "     Contexto: $($pagamento.evidence.Substring(0, [Math]::Min(100, $pagamento.evidence.Length)))..."
         }
-        $encontrados++
     } else {
         Write-ColorOutput "[X] PRAZO DE PAGAMENTO: NAO ENCONTRADO" 'warning'
     }
-    
-    # LOCAIS
     Write-Host ""
-    if ($locais -and $locais.status -eq "found") {
-        $valorTrunc = if ($locais.value.Length -gt 100) { $locais.value.Substring(0, 100) + "..." } else { $locais.value }
-        Write-ColorOutput "[OK] LOCAIS: $valorTrunc" 'success'
-        Write-Host "     Score: $($locais.score)"
-        $encontrados++
+    
+    # Locais
+    $locais = $Result.params.l001_locais
+    if ($locais.status -eq 'found') {
+        Write-ColorOutput "[OK] LOCAIS DE ENTREGA: $($locais.values.Count) encontrado(s)" 'success'
+        foreach ($local in $locais.values) {
+            Write-Host "     - $($local.Substring(0, [Math]::Min(80, $local.Length)))..."
+        }
     } else {
         Write-ColorOutput "[X] LOCAIS: NAO ENCONTRADO" 'warning'
     }
     
-    # RESUMO
     Write-Host ""
     Write-ColorOutput "============================================" 'highlight'
-    $corFinal = if ($encontrados -eq 4) { 'success' } else { 'warning' }
-    Write-ColorOutput "Encontrados: $encontrados/4" $corFinal
-    Write-ColorOutput "============================================" 'highlight'
+    Write-Host ""
+    Write-Host "Paginas: $($Result.meta.page_count) | Encontrados: $($Result.meta.found_count)/4"
     Write-Host ""
     
-    # Meta info se disponível
-    if ($Result.meta) {
-        Write-Host "Pages: $($Result.meta.page_count) | Tables: $($Result.meta.tables_count)"
-        Write-Host ""
-    }
-    
-    # Abrir PDF
+    # Abrir PDF automaticamente
     $abrir = Read-Host "Abrir PDF para comparar? (s/n)"
-    if ($abrir -eq 's' -or $abrir -eq 'S') {
+    if ($abrir -eq 's') {
         Start-Process $FilePath
-        Write-ColorOutput "PDF aberto!" 'success'
     }
 }
 
 function Invoke-Testar {
     param([string]$FilePath)
     
+    # Se não passou arquivo, abre dialog
     if (-not $FilePath) {
         Write-ColorOutput "Selecione o PDF para testar..." 'info'
         $FilePath = Select-PdfFile

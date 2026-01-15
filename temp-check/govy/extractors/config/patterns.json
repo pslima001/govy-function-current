@@ -1,0 +1,146 @@
+﻿{
+    "_meta":  {
+                  "versao":  "1.0.0",
+                  "atualizado_em":  "2026-01-13",
+                  "descricao":  "Configuracao centralizada de patterns para extracao de parametros de editais"
+              },
+    "extractors":  {
+                       "e001_entrega":  {
+                                            "id":  "e001",
+                                            "nome":  "Prazo de Entrega",
+                                            "ativo":  true,
+                                            "regex_principal":  "(\\d{1,3})\\s*(?:\\([^)]{0,25}\\))?\\s*dias?\\s*(?:uteis|corridos)?",
+                                            "contexto":  {
+                                                             "positivos":  [
+                                                                               "entrega",
+                                                                               "entregar",
+                                                                               "fornecimento",
+                                                                               "fornecer",
+                                                                               "execucao",
+                                                                               "prestacao",
+                                                                               "servico",
+                                                                               "produto",
+                                                                               "material",
+                                                                               "objeto",
+                                                                               "contrato",
+                                                                               "adjudicado",
+                                                                               "prazo maximo"
+                                                                           ],
+                                                             "negativos":  [
+                                                                               "pagamento",
+                                                                               "pagar",
+                                                                               "liquidacao",
+                                                                               "nota fiscal",
+                                                                               "nf",
+                                                                               "fatura",
+                                                                               "empenho",
+                                                                               "atesto",
+                                                                               "recurso",
+                                                                               "impugna",
+                                                                               "vigencia",
+                                                                               "validade",
+                                                                               "garantia",
+                                                                               "proposta"
+                                                                           ]
+                                                         },
+                                            "threshold_score":  2
+                                        },
+                       "pg001_pagamento":  {
+                                               "id":  "pg001",
+                                               "nome":  "Prazo de Pagamento",
+                                               "ativo":  true,
+                                               "regex_principal":  "(\\d{1,3})\\s*(?:\\([^)]{0,25}\\))?\\s*dias?\\s*(?:uteis|corridos)?",
+                                               "contexto":  {
+                                                                "positivos":  [
+                                                                                  "pagamento",
+                                                                                  "pagar",
+                                                                                  "liquidacao",
+                                                                                  "nota fiscal",
+                                                                                  "nf",
+                                                                                  "fatura",
+                                                                                  "empenho",
+                                                                                  "atesto",
+                                                                                  "liquidar"
+                                                                              ],
+                                                                "negativos":  [
+                                                                                  "entrega",
+                                                                                  "fornecimento",
+                                                                                  "execucao",
+                                                                                  "vigencia",
+                                                                                  "recurso",
+                                                                                  "impugna",
+                                                                                  "amostra",
+                                                                                  "proposta",
+                                                                                  "validade",
+                                                                                  "garantia"
+                                                                              ]
+                                                            },
+                                               "threshold_score":  2
+                                           },
+                       "o001_objeto":  {
+                                           "id":  "o001",
+                                           "nome":  "Objeto da Licitacao",
+                                           "ativo":  true,
+                                           "stop_markers":  [
+                                                                "DA JUSTIFICATIVA",
+                                                                "DO VALOR",
+                                                                "DA VIGENCIA",
+                                                                "DAS CONDICOES",
+                                                                "CRITERIO DE JULGAMENTO",
+                                                                "DA HABILITACAO",
+                                                                "DO PAGAMENTO",
+                                                                "DA ENTREGA",
+                                                                "DOS PRAZOS",
+                                                                "DISPOSICOES GERAIS",
+                                                                "ANEXO I",
+                                                                "TERMO DE REFERENCIA"
+                                                            ],
+                                           "bonus_termos":  [
+                                                                "contratacao",
+                                                                "aquisicao",
+                                                                "registro de precos",
+                                                                "fornecimento",
+                                                                "prestacao de servicos"
+                                                            ]
+                                       },
+                       "l001_locais":  {
+                                           "id":  "l001",
+                                           "nome":  "Locais de Entrega",
+                                           "ativo":  true,
+                                           "gatilhos":  [
+                                                            "local de entrega",
+                                                            "locais de entrega",
+                                                            "endereco de entrega",
+                                                            "local de recebimento",
+                                                            "recebimento",
+                                                            "entrega",
+                                                            "fornecimento",
+                                                            "ponto de entrega"
+                                                        ],
+                                           "negativos":  [
+                                                             "prefeitura",
+                                                             "camara",
+                                                             "cnpj",
+                                                             "telefone",
+                                                             "fax",
+                                                             "email",
+                                                             "www",
+                                                             "ouvidoria",
+                                                             "secretaria",
+                                                             "gabinete"
+                                                         ]
+                                       }
+                   },
+    "historico":  [
+                      {
+                          "data":  "2026-01-13",
+                          "tipo":  "criacao",
+                          "descricao":  "Extracao inicial dos patterns existentes"
+                      },
+                      {
+                          "descricao":  "Adicionado \u0027prazo maximo\u0027 em e001_entrega.positivos",
+                          "tipo":  "add",
+                          "data":  "2026-01-13"
+                      }
+                  ]
+}
