@@ -1,0 +1,115 @@
+name: Deploy to Azure (Fixed)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Create deployment package
+        run: |
+          echo "📦 Creating deployment ZIP..."
+          zip -r deploy.zip host.json function_app.py requirements.txt govy params.json
+          echo "✅ ZIP created"
+          unzip -l deploy.zip | head -20
+      
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: d7bc8372-15fb-45d2-b793-72e2033dcb60
+          tenant-id: 9f4ac9ed-1f93-4899-8822-38bf2eed286c
+          subscription-id: cb37862f-102e-4986-86d2-c21e8331c3d7
+      
+      # 🔥 CRÍTICO: Deletar WEBSITE_RUN_FROM_PACKAGE ANTES do deploy
+      - name: Remove WEBSITE_RUN_FROM_PACKAGE (pre-deploy)
+        run: |
+          echo "🗑️ Removing WEBSITE_RUN_FROM_PACKAGE..."
+          az functionapp config appsettings delete \
+            --name func-govy-parse-test \
+            --resource-group rg-govy-parse-test-sponsor \
+            --setting-names WEBSITE_RUN_FROM_PACKAGE || true
+          echo "✅ Setting removed"
+      
+      - name: Deploy to Azure Functions
+        run: |
+          echo "☁️ Deploying to Azure..."
+          az functionapp deployment source config-zip \
+            --resource-group rg-govy-parse-test-sponsor \
+            --name func-govy-parse-test \
+            --src deploy.zip \
+            --timeout 600
+          echo "✅ Deploy completed"
+      
+      - name: Wait for deployment to settle
+        run: |
+          echo "⏳ Waiting 60 seconds..."
+          sleep 60
+      
+      # 🔥 CRÍTICO: Deletar novamente (caso tenha voltado)
+      - name: Remove WEBSITE_RUN_FROM_PACKAGE (post-deploy)
+        run: |
+          echo "🗑️ Removing WEBSITE_RUN_FROM_PACKAGE again..."
+          az functionapp config appsettings delete \
+            --name func-govy-parse-test \
+            --resource-group rg-govy-parse-test-sponsor \
+            --setting-names WEBSITE_RUN_FROM_PACKAGE || true
+      
+      - name: Restart Function App
+        run: |
+          echo "🔄 Restarting Function App..."
+          az functionapp restart \
+            --name func-govy-parse-test \
+            --resource-group rg-govy-parse-test-sponsor
+          echo "✅ Restart completed"
+      
+      - name: Wait for startup
+        run: |
+          echo "⏳ Waiting 30 seconds for startup..."
+          sleep 30
+      
+      - name: Verify deployment
+        run: |
+          echo "🔍 Verifying deployment..."
+          response=$(curl -s https://func-govy-parse-test-exabasfqgsfgexhd.eastus-01.azurewebsites.net/api/diag)
+          echo "Response: $response"
+          
+          if echo "$response" | grep -q "govy exists: False"; then
+            echo "❌ FAILED: govy folder missing!"
+            exit 1
+          fi
+          
+          if echo "$response" | grep -q "IMPORTS govy.api: FAILED"; then
+            echo "❌ FAILED: imports failed!"
+            exit 1
+          fi
+          
+          if echo "$response" | grep -q "govy exists: True"; then
+            echo "✅ SUCCESS: govy folder deployed!"
+          fi
+          
+          if echo "$response" | grep -q "IMPORTS govy.api: SUCCESS"; then
+            echo "✅ SUCCESS: imports working!"
+          fi
+      
+      - name: List deployed functions
+        run: |
+          echo "📋 Listing functions..."
+          az functionapp function list \
+            --name func-govy-parse-test \
+            --resource-group rg-govy-parse-test-sponsor \
+            --output table
