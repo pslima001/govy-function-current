@@ -5,8 +5,8 @@ Azure Functions - Govy Backend
 Este arquivo define as Azure Functions para processamento de editais.
 FUNCIONAL: Versão estável com 4/4 parâmetros funcionando.
 
-Última atualização: 16/01/2026
-Tag de referência: v1.1-stable
+Última atualização: 15/01/2026
+Tag de referência: v1.0-stable
 """
 import sys
 import os
@@ -49,12 +49,11 @@ try:
     from govy.api.upload_edital import handle_upload_edital
     from govy.api.parse_layout import handle_parse_layout
     from govy.api.extract_params import handle_extract_params
-    from govy.api.get_blob_url import handle_get_blob_url
     _diag_info.append("IMPORTS govy.api: SUCCESS")
 except Exception as e:
     _import_error = repr(e)
     _diag_info.append(f"IMPORTS govy.api: FAILED - {_import_error}")
-
+    
     # Handlers de fallback em caso de erro de import
     def handle_upload_edital(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
@@ -62,22 +61,15 @@ except Exception as e:
             status_code=500,
             mimetype="application/json"
         )
-
+    
     def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             json.dumps({"error": f"Import error: {_import_error}"}),
             status_code=500,
             mimetype="application/json"
         )
-
+    
     def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
-        return func.HttpResponse(
-            json.dumps({"error": f"Import error: {_import_error}"}),
-            status_code=500,
-            mimetype="application/json"
-        )
-
-    def handle_get_blob_url(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             json.dumps({"error": f"Import error: {_import_error}"}),
             status_code=500,
@@ -125,10 +117,3 @@ def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
 def extract_params(req: func.HttpRequest) -> func.HttpResponse:
     """Extração de parâmetros do edital."""
     return handle_extract_params(req)
-
-
-@app.function_name(name="get_blob_url")
-@app.route(route="get_blob_url", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
-def get_blob_url(req: func.HttpRequest) -> func.HttpResponse:
-    """Retorna URL assinada para download de blob (PDF ou JSON)."""
-    return handle_get_blob_url(req)

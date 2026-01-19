@@ -1,0 +1,13 @@
+# Azure Functions
+azure-functions>=1.18.0
+
+# Azure SDK
+azure-core>=1.30.0
+azure-ai-documentintelligence>=1.0.0
+azure-storage-blob==12.24.0
+
+# Utilitários
+python-dotenv>=1.0.0
+
+# Segurança
+cryptography==41.0.7

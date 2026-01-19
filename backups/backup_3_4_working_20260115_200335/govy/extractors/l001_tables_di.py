@@ -5,7 +5,9 @@ L001 - Extrator de Locais de Entrega via Tabelas (Document Intelligence)
 Este arquivo contém a lógica para extrair locais de entrega de TABELAS
 detectadas pelo Azure Document Intelligence.
 
-Última atualização: 16/01/2026
+Última atualização: 15/01/2026
+Responsável pela edição de regras: ChatGPT 5.2
+Responsável pelo deploy: Claude
 """
 from __future__ import annotations
 
@@ -41,6 +43,7 @@ ADDRESS_HINTS = [
     "estrada",
     "km",
     "bairro",
+    "centro",
     "cep",
     "nº",
     "no.",
@@ -59,48 +62,10 @@ TERMOS_NEGATIVOS = [
     "email",
     "site",
     "www",
-    # Termos de orçamento/planilha de custos
-    "agesul",
-    "sinapi",
-    "sicro",
-    "composição",
-    "composicao",
-    "unitário",
-    "unitario",
-    "unidade",
-    "quantidade",
-    "qtd",
-    "valor total",
-    "preço",
-    "preco",
-    "r$",
-    "bdi",
-    "item",
-    "código",
-    "codigo",
-    "descrição",
-    "descricao",
-    "placa de obra",
-    "chapa",
-    "galvanizada",
-    "adesivada",
-    "m2",
-    "m²",
-    "m3",
-    "m³",
-    "un",
-    "kg",
-    "pç",
-    "pc",
-    ":selected:",
-    "sediada",
-    "município",
-    "municipio",
-    "/uf",
 ]
 
 # Tamanho mínimo de texto para considerar como endereço
-MIN_ADDRESS_LENGTH = 20
+MIN_ADDRESS_LENGTH = 12
 
 # Máximo de valores a extrair
 MAX_VALUES = 40
@@ -114,11 +79,9 @@ ADDRESS_HINT_RE = re.compile(
     r"\b(" + "|".join(re.escape(h) for h in ADDRESS_HINTS) + r")\b",
     re.IGNORECASE,
 )
-CEP_RE = re.compile(r"\b\d{2}\.?\d{3}-?\d{3}\b")
-CNPJ_RE = re.compile(r"\b\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}\b")
+CEP_RE = re.compile(r"\b\d{2}\.?(\d{3})-?(\d{3})\b")
+CNPJ_RE = re.compile(r"\b\d{2}\.?(\d{3})\.?(\d{3})/?(\d{4})-?(\d{2})\b")
 NOISE_RE = re.compile(r"^(?:\s*[-_*•]+\s*|\s*)$")
-# Padrão para detectar número de endereço (nº 123, n. 456, etc.)
-NUMERO_ENDERECO_RE = re.compile(r"\b(nº|n\.|no\.?|número|numero)?\s*\d{1,5}\b", re.IGNORECASE)
 
 
 def _norm(s: str) -> str:
@@ -129,7 +92,7 @@ def _norm(s: str) -> str:
 
 
 def _looks_like_address(s: str) -> bool:
-    """Verifica se uma string parece ser um endereço válido."""
+    """Verifica se uma string parece ser um endereço."""
     if not s:
         return False
     
@@ -144,33 +107,16 @@ def _looks_like_address(s: str) -> bool:
         return False
     
     # CNPJ sem contexto de endereço
-    if CNPJ_RE.search(n) and len(n) < 50:
+    if CNPJ_RE.search(n) and len(n) < 40:
         return False
     
-    # Tem termos negativos - REJEITA
+    # Tem termos negativos
     for neg in TERMOS_NEGATIVOS:
         if neg.lower() in n:
             return False
     
-    # Precisa ter indicador de logradouro (rua, av, etc.)
-    has_logradouro = bool(re.search(
-        r"\b(rua|r\.|avenida|av\.?|rodovia|rod\.?|estrada|travessa|alameda|praça|praca)\b",
-        n,
-        re.IGNORECASE
-    ))
-    
-    # Precisa ter número ou s/n ou CEP
-    has_numero = bool(NUMERO_ENDERECO_RE.search(n) or re.search(r"\bs/?n\b", n) or CEP_RE.search(n))
-    
-    # Endereço válido precisa ter logradouro E (número ou CEP)
-    if has_logradouro and has_numero:
-        return True
-    
-    # Fallback: tem CEP válido
-    if CEP_RE.search(n):
-        return True
-    
-    return False
+    # Precisa ter pelo menos um indicador de endereço ou CEP
+    return bool(ADDRESS_HINT_RE.search(n) or CEP_RE.search(n))
 
 
 def extract_l001_from_tables_norm(

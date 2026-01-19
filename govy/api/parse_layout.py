@@ -1,16 +1,13 @@
-· PY
-Copiar
-
-# govy/api/parse_layout.py
+﻿# govy/api/parse_layout.py
 """
 Handler para parsing de layout de PDFs via Azure Document Intelligence.
 
-🆕 ATUALIZAÇÃO 15/01/2026: Sistema de cache para economizar custos
-- Verifica se _parsed.json já existe antes de chamar Document Intelligence
-- Usa parâmetro force_parse=true para forçar re-processamento
+ðŸ†• ATUALIZAÃ‡ÃƒO 15/01/2026: Sistema de cache para economizar custos
+- Verifica se _parsed.json jÃ¡ existe antes de chamar Document Intelligence
+- Usa parÃ¢metro force_parse=true para forÃ§ar re-processamento
 - Economia de ~99% em testes repetidos do mesmo PDF
 
-Última atualização: 15/01/2026
+Ãšltima atualizaÃ§Ã£o: 15/01/2026
 """
 import os
 import json
@@ -26,8 +23,8 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
     """
     Faz parsing do layout de um PDF usando Azure Document Intelligence.
     
-    🆕 CACHE: Se o PDF já foi parseado, retorna o cache existente.
-    Use force_parse=true para forçar re-processamento.
+    ðŸ†• CACHE: Se o PDF jÃ¡ foi parseado, retorna o cache existente.
+    Use force_parse=true para forÃ§ar re-processamento.
     
     Espera JSON: 
     {
@@ -36,11 +33,11 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
     }
     
     Returns:
-        JSON com texto extraído e tabelas normalizadas
+        JSON com texto extraÃ­do e tabelas normalizadas
     """
     try:
         # =================================================================
-        # 1. VALIDAÇÃO DO REQUEST
+        # 1. VALIDAÃ‡ÃƒO DO REQUEST
         # =================================================================
         try:
             body = req.get_json()
@@ -58,7 +55,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
             )
         
         # =================================================================
-        # 2. IMPORTAÇÕES (dentro da função para evitar erro no startup)
+        # 2. IMPORTAÃ‡Ã•ES (dentro da funÃ§Ã£o para evitar erro no startup)
         # =================================================================
         from azure.storage.blob import BlobServiceClient
         from azure.ai.documentintelligence import DocumentIntelligenceClient
@@ -66,7 +63,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         from azure.core.credentials import AzureKeyCredential
         
         # =================================================================
-        # 3. CONFIGURAÇÕES
+        # 3. CONFIGURAÃ‡Ã•ES
         # =================================================================
         conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
         container_name = os.environ.get("BLOB_CONTAINER_NAME", "editais-teste")
@@ -75,14 +72,14 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         
         if not conn_str:
             return func.HttpResponse(
-                json.dumps({"error": "AZURE_STORAGE_CONNECTION_STRING não configurada"}),
+                json.dumps({"error": "AZURE_STORAGE_CONNECTION_STRING nÃ£o configurada"}),
                 status_code=500,
                 mimetype="application/json"
             )
         
         if not di_endpoint or not di_key:
             return func.HttpResponse(
-                json.dumps({"error": "Document Intelligence não configurado (AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT/KEY)"}),
+                json.dumps({"error": "Document Intelligence nÃ£o configurado (AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT/KEY)"}),
                 status_code=500,
                 mimetype="application/json"
             )
@@ -96,7 +93,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         parsed_blob_name = blob_name.replace(".pdf", "_parsed.json")
         
         # =================================================================
-        # 🆕 5. VERIFICAR CACHE EXISTENTE
+        # ðŸ†• 5. VERIFICAR CACHE EXISTENTE
         # =================================================================
         if not force_parse:
             try:
@@ -109,12 +106,12 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
                 cache_data = json.loads(cache_blob_client.download_blob().readall())
                 
                 # Cache encontrado! Retornar sem chamar Document Intelligence
-                logger.info(f"✅ CACHE HIT: {parsed_blob_name} - Economia de custo!")
+                logger.info(f"âœ… CACHE HIT: {parsed_blob_name} - Economia de custo!")
                 
                 return func.HttpResponse(
                     json.dumps({
                         "status": "success",
-                        "source": "cache",  # 🆕 Indica que veio do cache
+                        "source": "cache",  # ðŸ†• Indica que veio do cache
                         "blob_name": blob_name,
                         "parsed_blob": parsed_blob_name,
                         "text_length": len(cache_data.get("texto_completo", "")),
@@ -128,10 +125,10 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
                 )
                 
             except Exception as cache_error:
-                # Cache não existe ou erro ao ler - continuar com processamento normal
-                logger.info(f"📥 CACHE MISS: {parsed_blob_name} - Processando com Document Intelligence...")
+                # Cache nÃ£o existe ou erro ao ler - continuar com processamento normal
+                logger.info(f"ðŸ“¥ CACHE MISS: {parsed_blob_name} - Processando com Document Intelligence...")
         else:
-            logger.info(f"🔄 FORCE PARSE: Ignorando cache por solicitação do usuário")
+            logger.info(f"ðŸ”„ FORCE PARSE: Ignorando cache por solicitaÃ§Ã£o do usuÃ¡rio")
         
         # =================================================================
         # 6. BAIXAR PDF DO BLOB STORAGE
@@ -162,16 +159,16 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
             credential=AzureKeyCredential(di_key)
         )
         
-        logger.info(f"Iniciando análise com Document Intelligence...")
+        logger.info(f"Iniciando anÃ¡lise com Document Intelligence...")
         
         poller = client.begin_analyze_document(
             "prebuilt-layout",
-            analyze_request=AnalyzeDocumentRequest(bytes_source=pdf_bytes),
+            body=pdf_bytes,
             content_type="application/octet-stream"
         )
         result = poller.result()
         
-        logger.info(f"Análise concluída. Processando resultado...")
+        logger.info(f"AnÃ¡lise concluÃ­da. Processando resultado...")
         
         # =================================================================
         # 8. EXTRAIR TEXTO COMPLETO
@@ -204,7 +201,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         
         page_count = len(result.pages) if hasattr(result, "pages") and result.pages else 0
         
-        logger.info(f"Parse OK: {len(texto_completo)} chars, {len(tables_norm)} tabelas, {page_count} páginas")
+        logger.info(f"Parse OK: {len(texto_completo)} chars, {len(tables_norm)} tabelas, {page_count} pÃ¡ginas")
         
         # =================================================================
         # 10. SALVAR RESULTADO NO BLOB STORAGE (CACHE)
@@ -214,7 +211,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
             "texto_completo": texto_completo,
             "tables_norm": tables_norm,
             "page_count": page_count,
-            "parsed_at": datetime.utcnow().isoformat() + "Z"  # 🆕 Timestamp do parse
+            "parsed_at": datetime.utcnow().isoformat() + "Z"  # ðŸ†• Timestamp do parse
         }
         
         result_blob_client = blob_service.get_blob_client(
@@ -226,7 +223,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
             overwrite=True
         )
         
-        logger.info(f"✅ Cache salvo: {parsed_blob_name}")
+        logger.info(f"âœ… Cache salvo: {parsed_blob_name}")
         
         # =================================================================
         # 11. RETORNAR RESPOSTA
@@ -234,7 +231,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             json.dumps({
                 "status": "success",
-                "source": "document_intelligence",  # 🆕 Indica que processou agora
+                "source": "document_intelligence",  # ðŸ†• Indica que processou agora
                 "blob_name": blob_name,
                 "parsed_blob": parsed_blob_name,
                 "text_length": len(texto_completo),
@@ -253,3 +250,5 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             mimetype="application/json"
         )
+
+

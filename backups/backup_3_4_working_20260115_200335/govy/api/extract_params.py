@@ -8,8 +8,8 @@ Este handler usa os extractors em govy/extractors/ para extrair:
 - o001: Objeto da Licitação
 - l001: Locais de Entrega
 
-Última atualização: 16/01/2026
-MODIFICADO: Corrigido bug em l001 - ExtractResultList usa .values não .value
+Última atualização: 15/01/2026
+MODIFICADO: Adicionado retorno de candidatos escolhidos com detalhes
 """
 import os
 import json
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 def _extrair_numero_pagina(texto_completo: str, contexto: str) -> int:
     """
     Tenta identificar o número da página onde o contexto foi encontrado.
-
+    
     Estratégia simples: procura por padrões como "Página X" ou similares
     próximos ao contexto.
     """
@@ -34,13 +34,13 @@ def _extrair_numero_pagina(texto_completo: str, contexto: str) -> int:
         r'p[aá]g\.\s*(\d+)',
         r'fls?\.\s*(\d+)',
     ]
-
+    
     # Tenta encontrar no próprio contexto
     for pattern in patterns:
         match = re.search(pattern, contexto, re.IGNORECASE)
         if match:
             return int(match.group(1))
-
+    
     # Se não encontrou, retorna None
     return None
 
@@ -48,7 +48,7 @@ def _extrair_numero_pagina(texto_completo: str, contexto: str) -> int:
 def _extrair_clausula(contexto: str) -> str:
     """
     Tenta identificar a cláusula/item onde o valor foi encontrado.
-
+    
     Procura por padrões como:
     - "Item 5.1"
     - "Cláusula 3.2"
@@ -58,25 +58,25 @@ def _extrair_clausula(contexto: str) -> str:
         r'(?:item|cláusula|clausula|seção|secao|artigo)\s+([\d\.]+)',
         r'\b(\d+\.\d+(?:\.\d+)?)\b',  # Padrão numérico tipo 5.1 ou 5.1.1
     ]
-
+    
     for pattern in patterns:
         match = re.search(pattern, contexto, re.IGNORECASE)
         if match:
             return match.group(1)
-
+    
     return None
 
 
 def _normalizar_confianca(score: int) -> float:
     """
     Normaliza o score para uma confiança entre 0 e 1.
-
+    
     Score típico varia de 0 a ~15-20.
     Mapeamos para escala 0-1 com saturação em score=15.
     """
     if score <= 0:
         return 0.0
-
+    
     # Mapeia linearmente até score 15 = confiança 1.0
     # Scores maiores também ficam em 1.0
     return min(1.0, score / 15.0)
@@ -85,80 +85,38 @@ def _normalizar_confianca(score: int) -> float:
 def _criar_candidato_escolhido(result, texto_completo: str = None) -> dict:
     """
     Cria o objeto candidato_escolhido com todos os detalhes.
-
+    
     Args:
-        result: ExtractResult do extractor (com .value)
+        result: ExtractResult do extractor
         texto_completo: Texto completo do documento (para extração de página)
-
+    
     Returns:
         Dicionário com estrutura do candidato escolhido
     """
     if not result or not result.value:
         return None
-
+    
     contexto = result.evidence[:500] if result.evidence else None
-
+    
     candidato = {
         "valor": result.value,
         "score": result.score,
         "confianca": _normalizar_confianca(result.score),
         "contexto": contexto,
     }
-
+    
     # Tenta extrair página
     if contexto:
         pagina = _extrair_numero_pagina(texto_completo or "", contexto)
         if pagina:
             candidato["pagina"] = pagina
-
+    
     # Tenta extrair cláusula
     if contexto:
         clausula = _extrair_clausula(contexto)
         if clausula:
             candidato["clausula"] = clausula
-
-    return candidato
-
-
-def _criar_candidato_escolhido_lista(result, texto_completo: str = None) -> dict:
-    """
-    Cria o objeto candidato_escolhido para ExtractResultList (l001).
-
-    Args:
-        result: ExtractResultList do extractor (com .values - lista)
-        texto_completo: Texto completo do documento (para extração de página)
-
-    Returns:
-        Dicionário com estrutura do candidato escolhido
-    """
-    if not result or not result.values:
-        return None
-
-    # Pega o primeiro valor da lista como principal
-    valor_principal = result.values[0] if result.values else None
-    contexto = result.evidence[:500] if result.evidence else None
-
-    candidato = {
-        "valor": valor_principal,
-        "todos_valores": result.values,
-        "total": len(result.values),
-        "score": result.score,
-        "confianca": _normalizar_confianca(result.score),
-        "contexto": contexto,
-    }
-
-    # Tenta extrair página
-    if contexto:
-        pagina = _extrair_numero_pagina(texto_completo or "", contexto)
-        if pagina:
-            candidato["pagina"] = pagina
-
-    # Tenta extrair cláusula
-    if contexto:
-        clausula = _extrair_clausula(contexto)
-        if clausula:
-            candidato["clausula"] = clausula
-
+    
     return candidato
 
 
@@ -254,7 +212,7 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
         try:
             result_e001 = extract_e001(texto_completo)
             candidato = _criar_candidato_escolhido(result_e001, texto_completo)
-
+            
             parametros["e001"] = {
                 "label": "Prazo de Entrega",
                 "encontrado": result_e001.value is not None,
@@ -262,11 +220,11 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
                 "score": result_e001.score,
                 "evidencia": result_e001.evidence[:500] if result_e001.evidence else None
             }
-
-            # Adiciona candidato escolhido
+            
+            # 🆕 Adiciona candidato escolhido
             if candidato:
                 parametros["e001"]["candidato_escolhido"] = candidato
-
+                
         except Exception as e:
             logger.error(f"Erro em e001: {e}")
             parametros["e001"] = {
@@ -279,7 +237,7 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
         try:
             result_pg001 = extract_pg001(texto_completo)
             candidato = _criar_candidato_escolhido(result_pg001, texto_completo)
-
+            
             parametros["pg001"] = {
                 "label": "Prazo de Pagamento",
                 "encontrado": result_pg001.value is not None,
@@ -287,11 +245,11 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
                 "score": result_pg001.score,
                 "evidencia": result_pg001.evidence[:500] if result_pg001.evidence else None
             }
-
-            # Adiciona candidato escolhido
+            
+            # 🆕 Adiciona candidato escolhido
             if candidato:
                 parametros["pg001"]["candidato_escolhido"] = candidato
-
+                
         except Exception as e:
             logger.error(f"Erro em pg001: {e}")
             parametros["pg001"] = {
@@ -304,7 +262,7 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
         try:
             result_o001 = extract_o001(texto_completo)
             candidato = _criar_candidato_escolhido(result_o001, texto_completo)
-
+            
             parametros["o001"] = {
                 "label": "Objeto da Licitação",
                 "encontrado": result_o001.value is not None,
@@ -312,11 +270,11 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
                 "score": result_o001.score,
                 "evidencia": result_o001.evidence[:500] if result_o001.evidence else None
             }
-
-            # Adiciona candidato escolhido
+            
+            # 🆕 Adiciona candidato escolhido
             if candidato:
                 parametros["o001"]["candidato_escolhido"] = candidato
-
+                
         except Exception as e:
             logger.error(f"Erro em o001: {e}")
             parametros["o001"] = {
@@ -338,8 +296,7 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
             if not result_l001 or not result_l001.values:
                 result_l001 = extract_l001(texto_completo)
 
-            # USA A FUNÇÃO CORRETA PARA LISTA
-            candidato = _criar_candidato_escolhido_lista(result_l001, texto_completo) if result_l001 else None
+            candidato = _criar_candidato_escolhido(result_l001, texto_completo) if result_l001 else None
 
             parametros["l001"] = {
                 "label": "Locais de Entrega",
@@ -349,11 +306,11 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
                 "score": result_l001.score if result_l001 else 0,
                 "evidencia": result_l001.evidence[:500] if result_l001 and result_l001.evidence else None
             }
-
-            # Adiciona candidato escolhido
+            
+            # 🆕 Adiciona candidato escolhido
             if candidato:
                 parametros["l001"]["candidato_escolhido"] = candidato
-
+                
         except Exception as e:
             logger.error(f"Erro em l001: {e}")
             parametros["l001"] = {

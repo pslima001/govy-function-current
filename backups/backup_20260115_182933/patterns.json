@@ -1,0 +1,160 @@
+{
+  "e001": {
+    "id": "e001",
+    "label": "Prazo de Entrega",
+    "termos_positivos": [
+      "prazo de entrega",
+      "prazo",
+      "entrega",
+      "entregar",
+      "fornecimento"
+    ],
+    "termos_negativos": [
+      "pagamento",
+      "execuÃ§Ã£o",
+      "validade",
+      "proposta",
+      "prazo de validade",
+      "dotaÃ§Ã£o",
+      "orÃ§amentÃ¡ria",
+      "orÃ§amentaria",
+      "vÃ­nculo",
+      "vinculo",
+      "catmat",
+      "formulÃ¡rio",
+      "formulario",
+      "anexo ii"
+    ],
+    "sinonimos": {
+      "prazo": [
+        "perÃ­odo",
+        "tempo",
+        "lapso"
+      ],
+      "entrega": [
+        "fornecimento",
+        "disponibilizaÃ§Ã£o"
+      ]
+    },
+    "regex_patterns": [
+      "(?i)\\bprazo\\s+de\\s+entrega\\b.{0,120}?\\b(?:e|Ã©)?\\s*(?:de\\s*)?(\\d{1,3})\\s*(?:\\([^)]{2,30}\\)\\s*)?\\b(?:dia|dias)\\b",
+      "(?i)\\bcondi[cÃ§][Ãµo]es\\s+de\\s+entrega\\b.{0,200}?\\bprazo\\s+de\\s+entrega\\b.{0,120}?(\\d{1,3})\\s*(?:\\([^)]{2,30}\\)\\s*)?\\b(?:dia|dias)\\b",
+      "(?i)\\b(entrega|entregar|fornecimento)\\b.{0,80}?\\bem\\s+at[eÃ©]\\s+(\\d{1,3})\\s*(?:\\([^)]{2,30}\\)\\s*)?\\b(?:dia|dias)\\b"
+    ],
+    "peso_contexto_positivo": 2,
+    "peso_contexto_negativo": -1.5,
+    "peso_sinonimo": 1
+  },
+  "pg001": {
+    "id": "pg001",
+    "label": "Prazo de Pagamento",
+    "termos_positivos": [
+      "prazo de pagamento",
+      "pagamento",
+      "pagar",
+      "liquidaÃ§Ã£o",
+      "liquidacao",
+      "quitaÃ§Ã£o",
+      "quitacao"
+    ],
+    "termos_negativos": [
+      "entrega",
+      "fornecimento",
+      "execuÃ§Ã£o do contrato",
+      "execucao do contrato"
+    ],
+    "sinonimos": {
+      "pagamento": [
+        "liquidaÃ§Ã£o",
+        "quitaÃ§Ã£o",
+        "adimplemento"
+      ],
+      "pagar": [
+        "quitar",
+        "liquidar"
+      ]
+    },
+    "regex_patterns": [
+      "(?i)\\bprazo\\s+de\\s+pagamento\\b.{0,160}?(\\d{1,3})(?:Âº|o)?\\s*(?:\\([^)]{2,30}\\)\\s*)?\\b(?:dia|dias)\\s*(?:Ãºteis|uteis)?\\b",
+      "(?i)\\bpagamento\\b.{0,220}?\\bno\\s+(\\d{1,3})(?:Âº|o)?\\s*(?:\\([^)]{2,30}\\)\\s*)?\\b(?:dia|dias)\\s*(?:Ãºtil|util|Ãºteis|uteis)\\b",
+      "(?i)\\bpagamento\\b.{0,220}?\\bem\\s+at[eÃ©]\\s+(\\d{1,3})\\s*(?:\\([^)]{2,30}\\)\\s*)?\\b(?:dia|dias)\\s*(?:Ãºtil|util|Ãºteis|uteis)?\\b",
+      "(?i)\\bpagamento\\b.{0,220}?\\baté\\s+o\\s+(\\d{1,3})[°ºo]?\\s*(?:\\([^)]{2,30}\\)\\s*)?\\b(?:dia|dias)\\b"
+    ],
+    "peso_contexto_positivo": 2,
+    "peso_contexto_negativo": -1.5,
+    "peso_sinonimo": 1
+  },
+  "o001": {
+    "id": "o001",
+    "label": "Objeto da LicitaÃ§Ã£o",
+    "termos_positivos": [
+      "objeto",
+      "aquisiÃ§Ã£o",
+      "contrataÃ§Ã£o",
+      "licitaÃ§Ã£o"
+    ],
+    "termos_negativos": [
+      "prazo",
+      "pagamento",
+      "entrega"
+    ],
+    "sinonimos": {
+      "objeto": [
+        "finalidade",
+        "objetivo"
+      ],
+      "aquisiÃ§Ã£o": [
+        "compra",
+        "obtenÃ§Ã£o"
+      ]
+    },
+    "regex_patterns": [
+      "objeto:\\s*([A-ZÃ€ÃÃ‚ÃƒÃ„Ã…Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃ][^.]*)",
+      "objeto\\s+da\\s+licitaÃ§Ã£o:\\s*([^.]+)",
+      "aquisiÃ§Ã£o\\s+de\\s+([^,\\.]+)"
+    ],
+    "peso_contexto_positivo": 2,
+    "peso_contexto_negativo": -1,
+    "peso_sinonimo": 1
+  },
+  "l001": {
+    "id": "l001",
+    "label": "Locais de Entrega",
+    "termos_positivos": [
+      "local da entrega",
+      "local de entrega",
+      "endereÃ§o de entrega",
+      "entrega",
+      "almoxarifado"
+    ],
+    "termos_negativos": [
+      "prazo",
+      "pagamento",
+      "formulÃ¡rio",
+      "formulario",
+      "proposta",
+      "fornecedor",
+      "identificaÃ§Ã£o do fornecedor",
+      "identificacao do fornecedor",
+      "anexo ii",
+      "catmat"
+    ],
+    "sinonimos": {
+      "local": [
+        "endereÃ§o",
+        "sede",
+        "instalaÃ§Ã£o"
+      ],
+      "entrega": [
+        "fornecimento"
+      ]
+    },
+    "regex_patterns": [
+      "(?i)\\blocal\\b.{0,40}\\bentrega\\b.{0,260}?((?:Rua|R\\.|Avenida|Av\\.|Travessa|Estrada|Rodovia)\\s+[^\\n]{10,260}?(?:\\bCEP\\b\\s*\\d{5}-\\d{3}|\\s[-â€“]\\s*[A-Z]{2}\\b))",
+      "(?i)\\bRua\\s+Jacinto\\s+Madalosso\\b[^\\n]{0,220}"
+    ],
+    "peso_contexto_positivo": 1.5,
+    "peso_contexto_negativo": -1,
+    "peso_sinonimo": 1
+  }
+}
