@@ -41,3 +41,6 @@ release.zip
 # ================================
 .DS_Store
 Thumbs.db
+
+# Arquivos corrompidos/backup
+*_CORRUPTED.py
