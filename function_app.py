@@ -1,134 +1,49 @@
 # function_app.py
 """
 Azure Functions - Govy Backend
-
-Este arquivo define as Azure Functions para processamento de editais.
-FUNCIONAL: Versão estável com 4/4 parâmetros funcionando.
-
-Última atualização: 16/01/2026
-Tag de referência: v1.1-stable
+Registro das funções HTTP
 """
-import sys
-import os
-import logging
-import json
-
 import azure.functions as func
 
-# Adiciona o diretório raiz ao path para imports
-ROOT = os.path.dirname(os.path.abspath(__file__))
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
+app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
-# Inicializa o app
-app = func.FunctionApp()
-
-# =============================================================================
-# DIAGNÓSTICO DE STARTUP
-# =============================================================================
-_diag_info = []
-_diag_info.append(f"ROOT: {ROOT}")
-_diag_info.append(f"sys.path[0:3]: {sys.path[:3]}")
-
-# Verifica estrutura de diretórios
-govy_path = os.path.join(ROOT, "govy")
-_diag_info.append(f"govy exists: {os.path.exists(govy_path)}")
-
-extractors_path = os.path.join(ROOT, "govy", "extractors")
-_diag_info.append(f"govy/extractors exists: {os.path.exists(extractors_path)}")
-
-if os.path.exists(extractors_path):
-    _diag_info.append(f"extractors contents: {os.listdir(extractors_path)}")
-
-# =============================================================================
-# IMPORTS DOS HANDLERS
-# =============================================================================
-_import_error = None
-
-try:
-    from govy.api.upload_edital import handle_upload_edital
-    from govy.api.parse_layout import handle_parse_layout
-    from govy.api.extract_params import handle_extract_params
-    from govy.api.get_blob_url import handle_get_blob_url
-    _diag_info.append("IMPORTS govy.api: SUCCESS")
-except Exception as e:
-    _import_error = repr(e)
-    _diag_info.append(f"IMPORTS govy.api: FAILED - {_import_error}")
-
-    # Handlers de fallback em caso de erro de import
-    def handle_upload_edital(req: func.HttpRequest) -> func.HttpResponse:
-        return func.HttpResponse(
-            json.dumps({"error": f"Import error: {_import_error}"}),
-            status_code=500,
-            mimetype="application/json"
-        )
-
-    def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
-        return func.HttpResponse(
-            json.dumps({"error": f"Import error: {_import_error}"}),
-            status_code=500,
-            mimetype="application/json"
-        )
-
-    def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
-        return func.HttpResponse(
-            json.dumps({"error": f"Import error: {_import_error}"}),
-            status_code=500,
-            mimetype="application/json"
-        )
-
-    def handle_get_blob_url(req: func.HttpRequest) -> func.HttpResponse:
-        return func.HttpResponse(
-            json.dumps({"error": f"Import error: {_import_error}"}),
-            status_code=500,
-            mimetype="application/json"
-        )
-
-# =============================================================================
-# FUNÇÕES AZURE
-# =============================================================================
-
-@app.function_name(name="ping")
-@app.route(route="ping", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+# Ping
+@app.route(route="ping", methods=["GET"])
 def ping(req: func.HttpRequest) -> func.HttpResponse:
-    """Healthcheck - retorna 'pong' se o serviço está funcionando."""
     return func.HttpResponse("pong", status_code=200)
 
-
-@app.function_name(name="diag")
-@app.route(route="diag", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+# Diag
+@app.route(route="diag", methods=["GET"])
 def diag(req: func.HttpRequest) -> func.HttpResponse:
-    """Diagnóstico - retorna informações sobre o ambiente."""
-    return func.HttpResponse(
-        "\n".join(_diag_info),
-        status_code=200,
-        mimetype="text/plain"
-    )
+    from govy.api.diag import handle_diag
+    return handle_diag(req)
 
-
-@app.function_name(name="upload_edital")
-@app.route(route="upload_edital", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+# Upload Edital
+@app.route(route="upload_edital", methods=["POST"])
 def upload_edital(req: func.HttpRequest) -> func.HttpResponse:
-    """Upload de edital PDF para processamento."""
+    from govy.api.upload_edital import handle_upload_edital
     return handle_upload_edital(req)
 
-
-@app.function_name(name="parse_layout")
-@app.route(route="parse_layout", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+# Parse Layout
+@app.route(route="parse_layout", methods=["POST"])
 def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
-    """Parse do layout do documento via Azure Document Intelligence."""
+    from govy.api.parse_layout import handle_parse_layout
     return handle_parse_layout(req)
 
-
-@app.function_name(name="extract_params")
-@app.route(route="extract_params", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+# Extract Params
+@app.route(route="extract_params", methods=["POST"])
 def extract_params(req: func.HttpRequest) -> func.HttpResponse:
-    """Extração de parâmetros do edital."""
+    from govy.api.extract_params import handle_extract_params
     return handle_extract_params(req)
 
-
-@app.function_name(name="get_blob_url")
-@app.route(route="get_blob_url", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+# Get Blob URL
+@app.route(route="get_blob_url", methods=["POST"])
 def get_blob_url(req: func.HttpRequest) -> func.HttpResponse:
-    """Retorna URL assinada para download de blob (PDF ou JSON)."""
+    from govy.api.get_blob_url import handle_get_blob_url
     return handle_get_blob_url(req)
+
+# Consult LLMs (NOVO)
+@app.route(route="consult_llms", methods=["POST"])
+def consult_llms(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.consult_llms import handle_consult_llms
+    return handle_consult_llms(req)

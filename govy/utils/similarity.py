@@ -8,18 +8,6 @@ def normalizar_para_comparacao(texto: str) -> str:
     texto = texto.lower()
     texto = re.sub(r'[^\w\s]', ' ', texto)
     texto = re.sub(r'\d+', '', texto)
-    stopwords = {'o', 'a', 'os', 'as', 'um', 'uma', 'de',
-@"
-import re
-import unicodedata
-from typing import List
-
-def normalizar_para_comparacao(texto: str) -> str:
-    texto = unicodedata.normalize('NFKD', texto)
-    texto = ''.join(c for c in texto if not unicodedata.combining(c))
-    texto = texto.lower()
-    texto = re.sub(r'[^\w\s]', ' ', texto)
-    texto = re.sub(r'\d+', '', texto)
     stopwords = {'o', 'a', 'os', 'as', 'um', 'uma', 'de', 'da', 'do', 'das', 'dos', 'em', 'na', 'no', 'para', 'por', 'com', 'e', 'ou', 'que', 'se', 'prazo', 'dias', 'dia', 'uteis', 'corridos'}
     palavras = [p for p in texto.split() if p not in stopwords and len(p) > 2]
     return ' '.join(palavras).strip()
