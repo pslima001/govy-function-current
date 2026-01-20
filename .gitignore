@@ -44,3 +44,11 @@ Thumbs.db
 
 # Arquivos corrompidos/backup
 *_CORRUPTED.py
+
+aplicar_correcoes_feedback.ps1
+patch_*.py
+*.bak
+
+aplicar_correcoes_feedback.ps1
+patch_*.py
+*.bak
