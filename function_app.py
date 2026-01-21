@@ -3,10 +3,10 @@
 Azure Functions - Govy Backend
 
 Este arquivo define as Azure Functions para processamento de editais.
-FUNCIONAL: Versão estável com 4/4 parâmetros funcionando.
+FUNCIONAL: VersÃƒÆ’Ã‚Â£o estÃƒÆ’Ã‚Â¡vel com 4/4 parÃƒÆ’Ã‚Â¢metros funcionando.
 
-Última atualização: 16/01/2026
-Tag de referência: v1.1-stable
+ÃƒÆ’Ã…Â¡ltima atualizaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o: 16/01/2026
+Tag de referÃƒÆ’Ã‚Âªncia: v1.1-stable
 """
 import sys
 import os
@@ -15,7 +15,7 @@ import json
 
 import azure.functions as func
 
-# Adiciona o diretório raiz ao path para imports
+# Adiciona o diretÃƒÆ’Ã‚Â³rio raiz ao path para imports
 ROOT = os.path.dirname(os.path.abspath(__file__))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
@@ -24,13 +24,13 @@ if ROOT not in sys.path:
 app = func.FunctionApp()
 
 # =============================================================================
-# DIAGNÓSTICO DE STARTUP
+# DIAGNÃƒÆ’Ã¢â‚¬Å“STICO DE STARTUP
 # =============================================================================
 _diag_info = []
 _diag_info.append(f"ROOT: {ROOT}")
 _diag_info.append(f"sys.path[0:3]: {sys.path[:3]}")
 
-# Verifica estrutura de diretórios
+# Verifica estrutura de diretÃƒÆ’Ã‚Â³rios
 govy_path = os.path.join(ROOT, "govy")
 _diag_info.append(f"govy exists: {os.path.exists(govy_path)}")
 
@@ -50,6 +50,7 @@ try:
     from govy.api.parse_layout import handle_parse_layout
     from govy.api.extract_params import handle_extract_params
     from govy.api.get_blob_url import handle_get_blob_url
+    from govy.api.consult_llms import handle_consult_llms
     _diag_info.append("IMPORTS govy.api: SUCCESS")
 except Exception as e:
     _import_error = repr(e)
@@ -85,20 +86,20 @@ except Exception as e:
         )
 
 # =============================================================================
-# FUNÇÕES AZURE
+# FUNÃƒÆ’Ã¢â‚¬Â¡ÃƒÆ’Ã¢â‚¬Â¢ES AZURE
 # =============================================================================
 
 @app.function_name(name="ping")
 @app.route(route="ping", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
 def ping(req: func.HttpRequest) -> func.HttpResponse:
-    """Healthcheck - retorna 'pong' se o serviço está funcionando."""
+    """Healthcheck - retorna 'pong' se o serviÃƒÆ’Ã‚Â§o estÃƒÆ’Ã‚Â¡ funcionando."""
     return func.HttpResponse("pong", status_code=200)
 
 
 @app.function_name(name="diag")
 @app.route(route="diag", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
 def diag(req: func.HttpRequest) -> func.HttpResponse:
-    """Diagnóstico - retorna informações sobre o ambiente."""
+    """DiagnÃƒÆ’Ã‚Â³stico - retorna informaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes sobre o ambiente."""
     return func.HttpResponse(
         "\n".join(_diag_info),
         status_code=200,
@@ -123,7 +124,7 @@ def parse_layout(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name(name="extract_params")
 @app.route(route="extract_params", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def extract_params(req: func.HttpRequest) -> func.HttpResponse:
-    """Extração de parâmetros do edital."""
+    """ExtraÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â£o de parÃƒÆ’Ã‚Â¢metros do edital."""
     return handle_extract_params(req)
 
 
@@ -132,3 +133,10 @@ def extract_params(req: func.HttpRequest) -> func.HttpResponse:
 def get_blob_url(req: func.HttpRequest) -> func.HttpResponse:
     """Retorna URL assinada para download de blob (PDF ou JSON)."""
     return handle_get_blob_url(req)
+
+
+@app.function_name(name="consult_llms")
+@app.route(route="consult_llms", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+def consult_llms(req: func.HttpRequest) -> func.HttpResponse:
+    """Consulta multiplas LLMs para validar e escolher o melhor candidato."""
+    return handle_consult_llms(req)

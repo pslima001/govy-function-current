@@ -1,15 +1,3 @@
-﻿import re
-import unicodedata
-from typing import List
-
-def normalizar_para_comparacao(texto: str) -> str:
-    texto = unicodedata.normalize('NFKD', texto)
-    texto = ''.join(c for c in texto if not unicodedata.combining(c))
-    texto = texto.lower()
-    texto = re.sub(r'[^\w\s]', ' ', texto)
-    texto = re.sub(r'\d+', '', texto)
-    stopwords = {'o', 'a', 'os', 'as', 'um', 'uma', 'de',
-@"
 import re
 import unicodedata
 from typing import List

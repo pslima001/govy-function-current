@@ -1,4 +1,4 @@
-﻿import os
+import os
 import json
 import logging
 import time
@@ -68,15 +68,29 @@ def _parse_json_response(content: str) -> dict:
 def _criar_prompt(parametro: str, candidatos: List[dict]) -> str:
     descricao = DESCRICOES_PARAMETROS.get(parametro, f"Parametro {parametro}")
     candidatos_fmt = formatar_candidatos(candidatos)
-    return f'''Voce e um especialista em licitacoes. Analise os candidatos para "{parametro}".
+    return f'''Voce e um especialista em analise de editais de licitacoes publicas brasileiras.
+
+TAREFA: Analisar os candidatos extraidos para o parametro "{parametro}".
 
 PARAMETRO: {descricao}
 
-CANDIDATOS:
+CANDIDATOS EXTRAIDOS:
 {candidatos_fmt}
 
-Escolha o MELHOR candidato (1-{len(candidatos)}) ou 0 se nenhum for adequado.
-Responda APENAS com JSON: {{"escolha": N, "valor_normalizado": "valor", "justificativa": "motivo", "confianca": 0.0-1.0}}'''
+REGRAS DE DECISAO:
+1. Escolha o candidato (1-{len(candidatos)}) que REALMENTE corresponde ao parametro solicitado.
+2. RETORNE 0 (NENHUM) se:
+   - Nenhum candidato corresponde ao parametro
+   - Os textos sao genericos demais (ex: "conforme edital", "ver anexo")
+   - O contexto indica que o valor se refere a OUTRO parametro (ex: prazo de pagamento quando pediu prazo de entrega)
+   - O texto e um cabecalho, indice ou sumario
+   - Nao ha informacao suficiente para determinar o valor correto
+
+IMPORTANTE: E preferivel retornar 0 do que escolher um candidato incorreto.
+Nem todo documento contem todos os parametros - isso e normal.
+
+Responda APENAS com JSON:
+{{"escolha": N, "valor_normalizado": "valor exato ou null", "justificativa": "explicacao breve", "confianca": 0.0-1.0}}'''
 
 def chamar_openai(prompt: str, api_key: str) -> LLMResponse:
     start = time.time()

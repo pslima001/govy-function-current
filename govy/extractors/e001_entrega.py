@@ -1,8 +1,8 @@
-﻿# govy/extractors/e001_entrega.py
+# govy/extractors/e001_entrega.py
 """
 E001 - Extrator de Prazo de Entrega
-VERSAO 2.0 - Retorna TOP 3 candidatos distintos para avaliacao por LLMs
-Ultima atualizacao: 19/01/2026
+VERSAO 2.1 - Correcao: penalizar "inicio da execucao" vs "prazo de entrega/conclusao"
+Ultima atualizacao: 21/01/2026
 """
 from __future__ import annotations
 import re
@@ -32,14 +32,6 @@ def _normalizar_texto(s: str) -> str:
 def _limpar_encoding(s: str) -> str:
     if not s:
         return ""
-    replacements = {
-        '\u00c3\u00a7': 'c', '\u00c3\u00a3': 'a', '\u00c3\u00a1': 'a', '\u00c3\u00a0': 'a', '\u00c3\u00a2': 'a',
-        '\u00c3\u00a9': 'e', '\u00c3\u00a8': 'e', '\u00c3\u00aa': 'e', '\u00c3\u00ad': 'i', '\u00c3\u00b3': 'o',
-        '\u00c3\u00b4': 'o', '\u00c3\u00b5': 'o', '\u00c3\u00ba': 'u', '\u00c3\u00bc': 'u', '\u00c3\u0083': 'A',
-        '\u00c2\u00ba': 'o', '\u00c2\u00aa': 'a', '\u00c2\u00b0': 'o',
-    }
-    for old, new in replacements.items():
-        s = s.replace(old, new)
     s = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', s)
     s = re.sub(r'\s+', ' ', s)
     return s.strip()
@@ -50,6 +42,7 @@ TERMOS_POSITIVOS = [
     "prazo de entrega", "prazo de fornecimento", "condicoes de entrega",
     "concluido", "conclusao", "prazo de realizacao", "nota de empenho",
     "ordem de servico", "autorizacao de fornecimento", "deverao ser executados",
+    "cronograma", "prazo para conclusao", "prazo de conclusao",
 ]
 
 TERMOS_NEGATIVOS = [
@@ -57,6 +50,9 @@ TERMOS_NEGATIVOS = [
     "atesto", "recurso", "impugna", "vigencia", "validade", "garantia",
     "proposta", "dotacao", "orcamentaria", "assinatura do contrato",
     "convocacao", "adjudicacao", "homologacao", "credenciamento",
+    "inicio da execucao", "inicio do objeto", "inicio de execucao",
+    "recebimento provisorio", "recebidos provisoriamente",
+    "recebimento definitivo", "recebidos definitivamente",
 ]
 
 REGEX_PRINCIPAL = r"(\d{1,3})\s*(?:\([^\)]{0,30}\))?\s*dias?\s*(?:uteis|corridos)?"
@@ -101,6 +97,12 @@ def extract_e001_multi(text: str, max_candidatos: int = 3) -> List[CandidateResu
             score += 2
         if any(f in ctx_lower for f in ["devera ser concluido", "deverao ser executados"]):
             score += 3
+        if "cronograma" in ctx_lower and ("realizacao" in ctx_lower or "servico" in ctx_lower):
+            score += 5
+        if "prazo de" in ctx_lower and "dias corridos" in ctx_lower:
+            score += 2
+        if "inicio" in ctx_lower and ("execucao" in ctx_lower or "objeto" in ctx_lower):
+            score -= 5
         if score >= THRESHOLD_SCORE:
             match_text = match.group(0).lower()
             if "uteis" in match_text:
