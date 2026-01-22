@@ -1,13 +1,8 @@
-# govy/extractors/e001_entrega.py
+﻿# govy/extractors/pg001_pagamento.py
 """
-E001 - Extrator de Prazo de Entrega
-VERSAO 2.1 - Correcao: penalizar "inicio da execucao" vs "prazo de entrega/conclusao"
-Ultima atualizacao: 21/01/2026
-
-CORRECOES v2.1:
-- Adicionado TERMOS_NEGATIVOS: inicio da execucao, inicio do objeto
-- Aumentado bonus para "cronograma", "conclusao", "deverao ser executados"
-- Penaliza contextos que falam de inicio e nao de prazo total
+PG001 - Extrator de Prazo de Pagamento
+VERSAO 2.0 - Retorna TOP 3 candidatos distintos para avaliacao por LLMs
+Ultima atualizacao: 19/01/2026
 """
 from __future__ import annotations
 import re
@@ -37,36 +32,23 @@ def _normalizar_texto(s: str) -> str:
 def _limpar_encoding(s: str) -> str:
     if not s:
         return ""
-    replacements = {
-        '\u00c3\u00a7': 'c', '\u00c3\u00a3': 'a', '\u00c3\u00a1': 'a', '\u00c3\u00a0': 'a', '\u00c3\u00a2': 'a',
-        '\u00c3\u00a9': 'e', '\u00c3\u00a8': 'e', '\u00c3\u00aa': 'e', '\u00c3\u00ad': 'i', '\u00c3\u00b3': 'o',
-        '\u00c3\u00b4': 'o', '\u00c3\u00b5': 'o', '\u00c3\u00ba': 'u', '\u00c3\u00bc': 'u', '\u00c3\u0083': 'A',
-        '\u00c2\u00ba': 'o', '\u00c2\u00aa': 'a', '\u00c2\u00b0': 'o',
-    }
-    for old, new in replacements.items():
-        s = s.replace(old, new)
     s = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', s)
     s = re.sub(r'\s+', ' ', s)
     return s.strip()
 
 TERMOS_POSITIVOS = [
-    "entrega", "entregar", "fornecimento", "fornecer", "execucao", "prestacao",
-    "servico", "produto", "material", "objeto", "contrato", "adjudicado",
-    "prazo de entrega", "prazo de fornecimento", "condicoes de entrega",
-    "concluido", "conclusao", "prazo de realizacao", "nota de empenho",
-    "ordem de servico", "autorizacao de fornecimento", "deverao ser executados",
-    "cronograma", "prazo para conclusao", "prazo de conclusao",
+    "pagamento", "pagar", "liquidacao", "liquidar", "quitacao", "quitar",
+    "nota fiscal", "nf", "fatura", "atesto", "prazo de pagamento",
+    "adimplemento", "credito", "recebimento definitivo",
 ]
 
 TERMOS_NEGATIVOS = [
-    "pagamento", "pagar", "liquidacao", "nota fiscal", "fatura", "empenho",
-    "atesto", "recurso", "impugna", "vigencia", "validade", "garantia",
-    "proposta", "dotacao", "orcamentaria", "assinatura do contrato",
-    "convocacao", "adjudicacao", "homologacao", "credenciamento",
-    # NOVO v2.1: Penalizar "inicio da execucao" que nao e prazo de entrega
-    "inicio da execucao", "inicio do objeto", "inicio de execucao",
-    "recebimento provisorio", "recebidos provisoriamente",
-    "recebimento definitivo", "recebidos definitivamente",
+    "entrega", "entregar", "fornecimento", "execucao", "vigencia",
+    "validade", "garantia", "proposta", "recurso", "impugna",
+    "assinatura do contrato", "assinar o contrato", "convocacao",
+    "adjudicacao", "homologacao", "credenciamento", "cadastro",
+    "regularidade fiscal", "regularizacao", "parcelamento",
+    "habilitacao", "contratacao", "decair o direito",
 ]
 
 REGEX_PRINCIPAL = r"(\d{1,3})\s*(?:\([^\)]{0,30}\))?\s*dias?\s*(?:uteis|corridos)?"
@@ -82,7 +64,7 @@ def _calcular_similaridade(texto1: str, texto2: str) -> float:
         return 0.0
     return len(norm1 & norm2) / len(norm1 | norm2)
 
-def extract_e001_multi(text: str, max_candidatos: int = 3) -> List[CandidateResult]:
+def extract_pg001_multi(text: str, max_candidatos: int = 3) -> List[CandidateResult]:
     if not text:
         return []
     text = _limpar_encoding(text)
@@ -105,25 +87,12 @@ def extract_e001_multi(text: str, max_candidatos: int = 3) -> List[CandidateResu
         for termo in negativos_norm:
             if termo and termo in ctx_norm:
                 score -= PESO_NEGATIVO
-        
-        # Bonus para frases tipicas de prazo de entrega
-        if "prazo" in ctx_lower and ("entrega" in ctx_lower or "fornecimento" in ctx_lower):
+        if "pagamento" in ctx_lower and ("nota fiscal" in ctx_lower or "fatura" in ctx_lower or "atesto" in ctx_lower):
             score += BONUS_FRASE_TIPICA
-        if any(f in ctx_lower for f in ["prazo de execucao", "prazo de fornecimento", "prazo de entrega", "prazo de realizacao"]):
-            score += 2
-        if any(f in ctx_lower for f in ["devera ser concluido", "deverao ser executados"]):
+        if "prazo de pagamento" in ctx_lower or "prazo para pagamento" in ctx_lower:
             score += 3
-        
-        # NOVO v2.1: Bonus alto para cronograma de realizacao (prazo total)
-        if "cronograma" in ctx_lower and ("realizacao" in ctx_lower or "servico" in ctx_lower):
-            score += 5
-        if "prazo de" in ctx_lower and "dias corridos" in ctx_lower:
+        if "liquidacao" in ctx_lower and "nota fiscal" in ctx_lower:
             score += 2
-        
-        # NOVO v2.1: Penalizar fortemente "inicio da execucao"
-        if "inicio" in ctx_lower and ("execucao" in ctx_lower or "objeto" in ctx_lower):
-            score -= 5
-        
         if score >= THRESHOLD_SCORE:
             match_text = match.group(0).lower()
             if "uteis" in match_text:
@@ -146,8 +115,8 @@ def extract_e001_multi(text: str, max_candidatos: int = 3) -> List[CandidateResu
             break
     return selecionados
 
-def extract_e001(text: str) -> ExtractResult:
-    candidatos = extract_e001_multi(text, max_candidatos=1)
+def extract_pg001(text: str) -> ExtractResult:
+    candidatos = extract_pg001_multi(text, max_candidatos=1)
     if candidatos:
         c = candidatos[0]
         return ExtractResult(value=c.value, evidence=c.evidence, score=c.score)

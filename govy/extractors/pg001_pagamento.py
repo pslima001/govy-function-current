@@ -1,8 +1,13 @@
-﻿# govy/extractors/pg001_pagamento.py
+# govy/extractors/pg001_pagamento.py
 """
 PG001 - Extrator de Prazo de Pagamento
-VERSAO 2.0 - Retorna TOP 3 candidatos distintos para avaliacao por LLMs
-Ultima atualizacao: 19/01/2026
+VERSAO 2.1 - Correcao: penalizar recebimento/cronograma, aumentar peso de pagamento
+Ultima atualizacao: 21/01/2026
+
+CORRECOES v2.1:
+- Adicionado TERMOS_NEGATIVOS: cronograma, recebimento provisorio/definitivo, LGPD, defesa, multa
+- Aumentado bonus para frases tipicas: "pagamento sera efetuado", "pagamento sera realizado"
+- Penaliza fortemente contextos de recebimento e cronograma
 """
 from __future__ import annotations
 import re
@@ -39,7 +44,11 @@ def _limpar_encoding(s: str) -> str:
 TERMOS_POSITIVOS = [
     "pagamento", "pagar", "liquidacao", "liquidar", "quitacao", "quitar",
     "nota fiscal", "nf", "fatura", "atesto", "prazo de pagamento",
-    "adimplemento", "credito", "recebimento definitivo",
+    "adimplemento", "credito",
+    # NOVO v2.1: termos mais especificos de pagamento
+    "pagamento sera efetuado", "pagamento sera realizado", "sera pago",
+    "efetuado o pagamento", "realizado o pagamento", "prazo para pagamento",
+    "ordem bancaria", "transferencia bancaria", "deposito bancario",
 ]
 
 TERMOS_NEGATIVOS = [
@@ -49,6 +58,16 @@ TERMOS_NEGATIVOS = [
     "adjudicacao", "homologacao", "credenciamento", "cadastro",
     "regularidade fiscal", "regularizacao", "parcelamento",
     "habilitacao", "contratacao", "decair o direito",
+    # NOVO v2.1: penalizar recebimento (nao e pagamento)
+    "recebimento provisorio", "recebidos provisoriamente",
+    "recebimento definitivo", "recebidos definitivamente",
+    "receber provisoriamente", "receber definitivamente",
+    # NOVO v2.1: penalizar cronograma (e prazo de execucao, nao pagamento)
+    "cronograma", "realizacao dos servicos", "prestacao do servico",
+    "execucao do objeto", "inicio da execucao", "conclusao do servico",
+    # NOVO v2.1: penalizar LGPD, defesa, sancoes
+    "lgpd", "dados pessoais", "defesa do interessado", "aplicacao da multa",
+    "sancao", "sancoes", "penalidade", "penalidades",
 ]
 
 REGEX_PRINCIPAL = r"(\d{1,3})\s*(?:\([^\)]{0,30}\))?\s*dias?\s*(?:uteis|corridos)?"
@@ -87,12 +106,31 @@ def extract_pg001_multi(text: str, max_candidatos: int = 3) -> List[CandidateRes
         for termo in negativos_norm:
             if termo and termo in ctx_norm:
                 score -= PESO_NEGATIVO
+        
+        # Bonus para frases tipicas de pagamento
         if "pagamento" in ctx_lower and ("nota fiscal" in ctx_lower or "fatura" in ctx_lower or "atesto" in ctx_lower):
             score += BONUS_FRASE_TIPICA
         if "prazo de pagamento" in ctx_lower or "prazo para pagamento" in ctx_lower:
             score += 3
         if "liquidacao" in ctx_lower and "nota fiscal" in ctx_lower:
             score += 2
+        
+        # NOVO v2.1: Bonus ALTO para frases especificas de pagamento
+        if any(f in ctx_lower for f in ["pagamento sera efetuado", "pagamento sera realizado", "o pagamento sera"]):
+            score += 5
+        if "ordem bancaria" in ctx_lower or "transferencia bancaria" in ctx_lower:
+            score += 3
+        
+        # NOVO v2.1: Penalizar FORTEMENTE recebimento (provisorio/definitivo)
+        if "receb" in ctx_lower and ("provisori" in ctx_lower or "definitiv" in ctx_lower):
+            score -= 6
+        
+        # NOVO v2.1: Penalizar cronograma de realizacao (nao e pagamento)
+        if "cronograma" in ctx_lower:
+            score -= 5
+        if "realizacao dos servicos" in ctx_lower or "conclusao do servico" in ctx_lower:
+            score -= 4
+        
         if score >= THRESHOLD_SCORE:
             match_text = match.group(0).lower()
             if "uteis" in match_text:

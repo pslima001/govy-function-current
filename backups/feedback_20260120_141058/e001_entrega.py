@@ -1,13 +1,8 @@
-# govy/extractors/e001_entrega.py
+﻿# govy/extractors/e001_entrega.py
 """
 E001 - Extrator de Prazo de Entrega
-VERSAO 2.1 - Correcao: penalizar "inicio da execucao" vs "prazo de entrega/conclusao"
-Ultima atualizacao: 21/01/2026
-
-CORRECOES v2.1:
-- Adicionado TERMOS_NEGATIVOS: inicio da execucao, inicio do objeto
-- Aumentado bonus para "cronograma", "conclusao", "deverao ser executados"
-- Penaliza contextos que falam de inicio e nao de prazo total
+VERSAO 2.0 - Retorna TOP 3 candidatos distintos para avaliacao por LLMs
+Ultima atualizacao: 19/01/2026
 """
 from __future__ import annotations
 import re
@@ -55,7 +50,6 @@ TERMOS_POSITIVOS = [
     "prazo de entrega", "prazo de fornecimento", "condicoes de entrega",
     "concluido", "conclusao", "prazo de realizacao", "nota de empenho",
     "ordem de servico", "autorizacao de fornecimento", "deverao ser executados",
-    "cronograma", "prazo para conclusao", "prazo de conclusao",
 ]
 
 TERMOS_NEGATIVOS = [
@@ -63,10 +57,6 @@ TERMOS_NEGATIVOS = [
     "atesto", "recurso", "impugna", "vigencia", "validade", "garantia",
     "proposta", "dotacao", "orcamentaria", "assinatura do contrato",
     "convocacao", "adjudicacao", "homologacao", "credenciamento",
-    # NOVO v2.1: Penalizar "inicio da execucao" que nao e prazo de entrega
-    "inicio da execucao", "inicio do objeto", "inicio de execucao",
-    "recebimento provisorio", "recebidos provisoriamente",
-    "recebimento definitivo", "recebidos definitivamente",
 ]
 
 REGEX_PRINCIPAL = r"(\d{1,3})\s*(?:\([^\)]{0,30}\))?\s*dias?\s*(?:uteis|corridos)?"
@@ -105,25 +95,12 @@ def extract_e001_multi(text: str, max_candidatos: int = 3) -> List[CandidateResu
         for termo in negativos_norm:
             if termo and termo in ctx_norm:
                 score -= PESO_NEGATIVO
-        
-        # Bonus para frases tipicas de prazo de entrega
         if "prazo" in ctx_lower and ("entrega" in ctx_lower or "fornecimento" in ctx_lower):
             score += BONUS_FRASE_TIPICA
         if any(f in ctx_lower for f in ["prazo de execucao", "prazo de fornecimento", "prazo de entrega", "prazo de realizacao"]):
             score += 2
         if any(f in ctx_lower for f in ["devera ser concluido", "deverao ser executados"]):
             score += 3
-        
-        # NOVO v2.1: Bonus alto para cronograma de realizacao (prazo total)
-        if "cronograma" in ctx_lower and ("realizacao" in ctx_lower or "servico" in ctx_lower):
-            score += 5
-        if "prazo de" in ctx_lower and "dias corridos" in ctx_lower:
-            score += 2
-        
-        # NOVO v2.1: Penalizar fortemente "inicio da execucao"
-        if "inicio" in ctx_lower and ("execucao" in ctx_lower or "objeto" in ctx_lower):
-            score -= 5
-        
         if score >= THRESHOLD_SCORE:
             match_text = match.group(0).lower()
             if "uteis" in match_text:

@@ -47,3 +47,9 @@ def get_blob_url(req: func.HttpRequest) -> func.HttpResponse:
 def consult_llms(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.consult_llms import handle_consult_llms
     return handle_consult_llms(req)
+
+# Extract Params Amplos
+@app.route(route="extract_params_amplos", methods=["POST"])
+def extract_params_amplos(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.extract_params_amplos import handle_extract_params_amplos
+    return handle_extract_params_amplos(req)

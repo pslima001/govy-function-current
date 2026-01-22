@@ -1,4 +1,4 @@
-# govy/extractors/l001_locais.py
+﻿# govy/extractors/l001_locais.py
 """
 L001 - Extrator de Locais de Entrega via Texto
 VERSAO 2.0 - Retorna TOP 3 candidatos distintos para avaliacao por LLMs
