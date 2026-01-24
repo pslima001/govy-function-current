@@ -1,118 +1,132 @@
 """
-r_consorcio - Permite Consórcio?
+r_consorcio - Permite Consorcio?
 ================================
 
-Identifica se o edital permite participação de consórcios.
-
-Padrões comuns:
-- "Não será admitido consórcio"
-- "vedada a participação em consórcio"
-- "pessoas jurídicas reunidas em consórcio" (vedação)
-- "É vedado o consórcio entre empresas"
-- "Será permitida a participação de pessoas jurídicas organizadas em consórcio"
+Identifica se o edital permite participacao de consorcios.
 """
 
 import re
 from .r_base import RegexResult, extract_context, normalize_text, TERMOS_NEGATIVOS_COMUNS
 
 
-# Padrões que indicam VEDADO/NÃO PERMITE
-PATTERNS_NAO = [
-    r'n[ãa]o\s+ser[áa]\s+(?:admitid[oa]|permitid[oa])\s+(?:a\s+participa[çc][ãa]o\s+(?:de|em)\s+)?(?:empresas\s+(?:em\s+)?(?:regime\s+de\s+)?)?cons[óo]rcio',
-    r'n[ãa]o\s+ser[áa]\s+permitid[oa]\s+(?:a\s+)?participa[çc][ãa]o\s+de\s+empresas\s+em\s+(?:regime\s+de\s+)?cons[óo]rcio',
-    r'vedad[oa]\s+(?:a\s+participa[çc][ãa]o\s+(?:de|em)\s+)?cons[óo]rcio',
-    r'[éeé]\s+vedad[oa]\s+(?:o\s+)?cons[óo]rcio',
-    r'cons[óo]rcio\s+(?:n[ãa]o\s+)?(?:permitid[oa]|proibid[oa]|vedad[oa])',
-    r'n[ãa]o\s+(?:ser[áa]\s+)?permitid[oa]\s+(?:a\s+participa[çc][ãa]o\s+(?:de|em)\s+)?cons[óo]rcio',
-    r'n[ãa]o\s+poder[ãa]o\s+participar[^.]*cons[óo]rcio',
-    r'pessoas\s+jur[íi]dicas\s+reunidas\s+em\s+cons[óo]rcio',  # geralmente em lista de vedações
-    r'empresas\s+reunidas\s+em\s+cons[óo]rcio[^.]*vedad',
-    r'participa[çc][ãa]o\s+de\s+empresas\s+em\s+(?:regime\s+de\s+)?cons[óo]rcio[^.]*n[ãa]o',
-    r'empresa[^.]*isoladamente\s+ou\s+em\s+cons[óo]rcio[^.]*(?:n[ãa]o\s+poder|respons[áa]vel)',
+# Padroes de TABELA/PREAMBULO (prioridade maxima)
+PATTERNS_TABELA_NAO = [
+    r'permite\s+(?:a\s+)?participa[cç][aã]o\s+(?:de\s+)?cons[oó]rcio\s*[:\s]*n[aã]o',
+    r'participa[cç][aã]o\s+(?:de\s+)?cons[oó]rcio\s*[:\s]*n[aã]o',
+    r'cons[oó]rcio\s*[:\s]+n[aã]o(?:\s+permit|$)',
+    r'cons[oó]rcio\s*\??\s*n[aã]o\b',
 ]
 
-# Padrões que indicam PERMITIDO
+PATTERNS_TABELA_SIM = [
+    r'permite\s+(?:a\s+)?participa[cç][aã]o\s+(?:de\s+)?cons[oó]rcio\s*[:\s]*sim',
+    r'participa[cç][aã]o\s+(?:de\s+)?cons[oó]rcio\s*[:\s]*sim',
+    r'cons[oó]rcio\s*[:\s]+sim(?:\s|$)',
+]
+
+# Padroes que indicam VEDADO/NAO PERMITE
+PATTERNS_NAO = [
+    r'n[aã]o\s+ser[aá]\s+(?:admitid[oa]|permitid[oa])\s+(?:a\s+participa[cç][aã]o\s+(?:de|em)\s+)?(?:empresas\s+(?:em\s+)?(?:regime\s+de\s+)?)?cons[oó]rcio',
+    r'n[aã]o\s+ser[aá]\s+permitid[oa]\s+(?:a\s+)?participa[cç][aã]o\s+de\s+empresas\s+em\s+(?:regime\s+de\s+)?cons[oó]rcio',
+    r'vedad[oa]\s+(?:a\s+participa[cç][aã]o\s+(?:de|em)\s+)?cons[oó]rcio',
+    r'[eéè]\s+vedad[oa]\s+(?:o\s+)?cons[oó]rcio',
+    r'n[aã]o\s+(?:ser[aá]\s+)?permitid[oa]\s+(?:a\s+participa[cç][aã]o\s+(?:de|em)\s+)?cons[oó]rcio',
+    r'n[aã]o\s+poder[aã]o\s+participar[^.]{0,50}cons[oó]rcio',
+    r'pessoas\s+jur[ií]dicas\s+reunidas\s+em\s+cons[oó]rcio',
+]
+
+# Padroes que indicam PERMITIDO
 PATTERNS_SIM = [
-    r'(?<!n[ãa]o\s)ser[áa]\s+permitid[oa]\s+(?:a\s+participa[çc][ãa]o\s+(?:de|em)\s+)?cons[óo]rcio',
-    r'[éeé]\s+permitid[oa]\s+(?:a\s+participa[çc][ãa]o\s+(?:de|em)\s+)?cons[óo]rcio',
-    r'quando\s+permitid[oa]\s+(?:a\s+participa[çc][ãa]o\s+(?:de|em)\s+)?cons[óo]rcio',
-    r'cons[óo]rcio\s+(?:de\s+empresas\s+)?permitid[oa]',
-    r'admitid[oa]\s+(?:a\s+participa[çc][ãa]o\s+(?:de|em)\s+)?cons[óo]rcio',
-    r'ser[áa]\s+admitid[oa]\s+(?:a\s+participa[çc][ãa]o\s+de\s+empresas\s+em\s+)?cons[óo]rcio',
+    r'(?<!n[aã]o\s)ser[aá]\s+permitid[oa]\s+(?:a\s+participa[cç][aã]o\s+(?:de|em)\s+)?cons[oó]rcio',
+    r'[eéè]\s+permitid[oa]\s+(?:a\s+participa[cç][aã]o\s+(?:de|em)\s+)?cons[oó]rcio',
+    r'cons[oó]rcio\s+(?:de\s+empresas\s+)?permitid[oa]',
+    r'admitid[oa]\s+(?:a\s+participa[cç][aã]o\s+(?:de|em)\s+)?cons[oó]rcio',
+    r'ser[aá]\s+admitid[oa]\s+(?:a\s+participa[cç][aã]o\s+de\s+empresas\s+em\s+)?cons[oó]rcio',
+]
+
+# Padroes CONDICIONAIS (nao contam como SIM)
+PATTERNS_CONDICIONAL = [
+    r'quando\s+permitid[oa]\s+(?:a\s+participa[cç][aã]o\s+(?:de|em)\s+)?cons[oó]rcio',
+    r'caso\s+(?:seja\s+)?permitid[oa]\s+cons[oó]rcio',
+    r'se\s+(?:for\s+)?permitid[oa]\s+cons[oó]rcio',
 ]
 
 
 def extract_r_consorcio(texto: str) -> RegexResult:
     """
-    Identifica se o edital permite consórcio.
-    
-    Returns:
-        RegexResult com valor "SIM" ou "NÃO"
+    Identifica se o edital permite consorcio.
     """
     result = RegexResult()
     texto_norm = normalize_text(texto)
     texto_lower = texto_norm.lower()
-    
+
+    # 1. Primeiro verifica padroes de TABELA (prioridade maxima)
+    for pattern in PATTERNS_TABELA_NAO:
+        match = re.search(pattern, texto_lower, re.IGNORECASE)
+        if match:
+            result.encontrado = True
+            result.valor = "NAO"
+            result.confianca = "alta"
+            result.evidencia = extract_context(texto_norm, match)
+            result.detalhes = {'fonte': 'tabela_preambulo', 'pattern': pattern}
+            return result
+
+    for pattern in PATTERNS_TABELA_SIM:
+        match = re.search(pattern, texto_lower, re.IGNORECASE)
+        if match:
+            result.encontrado = True
+            result.valor = "SIM"
+            result.confianca = "alta"
+            result.evidencia = extract_context(texto_norm, match)
+            result.detalhes = {'fonte': 'tabela_preambulo', 'pattern': pattern}
+            return result
+
+    # 2. Busca padroes normais
     matches_nao = []
     matches_sim = []
-    
-    # Busca padrões de NÃO PERMITE
+
     for pattern in PATTERNS_NAO:
         for match in re.finditer(pattern, texto_lower, re.IGNORECASE):
             contexto = extract_context(texto_norm, match)
             if not any(neg in contexto.lower() for neg in TERMOS_NEGATIVOS_COMUNS):
-                matches_nao.append({
-                    'contexto': contexto,
-                    'pattern': pattern
-                })
-    
-    # Busca padrões de PERMITE
+                matches_nao.append({'contexto': contexto, 'pattern': pattern})
+
     for pattern in PATTERNS_SIM:
         for match in re.finditer(pattern, texto_lower, re.IGNORECASE):
             contexto = extract_context(texto_norm, match)
-            if not any(neg in contexto.lower() for neg in TERMOS_NEGATIVOS_COMUNS):
-                matches_sim.append({
-                    'contexto': contexto,
-                    'pattern': pattern
-                })
-    
+            contexto_lower = contexto.lower()
+            # Filtrar condicionais
+            is_condicional = any(re.search(p, contexto_lower) for p in PATTERNS_CONDICIONAL)
+            if not is_condicional and not any(neg in contexto_lower for neg in TERMOS_NEGATIVOS_COMUNS):
+                matches_sim.append({'contexto': contexto, 'pattern': pattern})
+
     if not matches_nao and not matches_sim:
         return result
-    
-    # Prioriza NÃO (mais comum em editais)
+
+    # Prioriza NAO (mais comum em editais)
     if matches_nao and not matches_sim:
         result.encontrado = True
-        result.valor = "NÃO"
+        result.valor = "NAO"
         result.confianca = "alta" if len(matches_nao) >= 2 else "media"
         result.evidencia = matches_nao[0]['contexto']
-        result.detalhes = {'matches_nao': len(matches_nao), 'matches_sim': len(matches_sim)}
-        return result
-    
-    if matches_sim and not matches_nao:
+    elif matches_sim and not matches_nao:
         result.encontrado = True
         result.valor = "SIM"
         result.confianca = "alta" if len(matches_sim) >= 2 else "media"
         result.evidencia = matches_sim[0]['contexto']
-        result.detalhes = {'matches_nao': len(matches_nao), 'matches_sim': len(matches_sim)}
-        return result
-    
-    # Se tem ambos, confiança baixa - precisa IA
-    if len(matches_nao) > len(matches_sim):
-        result.encontrado = True
-        result.valor = "NÃO"
-        result.confianca = "baixa"
-        result.evidencia = matches_nao[0]['contexto']
     else:
-        result.encontrado = True
-        result.valor = "SIM"
-        result.confianca = "baixa"
-        result.evidencia = matches_sim[0]['contexto']
-    
-    result.detalhes = {
-        'matches_nao': len(matches_nao),
-        'matches_sim': len(matches_sim)
-    }
-    
+        # Conflito - NAO vence por ser mais comum
+        if len(matches_nao) >= len(matches_sim):
+            result.encontrado = True
+            result.valor = "NAO"
+            result.confianca = "baixa"
+            result.evidencia = matches_nao[0]['contexto']
+        else:
+            result.encontrado = True
+            result.valor = "SIM"
+            result.confianca = "baixa"
+            result.evidencia = matches_sim[0]['contexto']
+
+    result.detalhes = {'matches_nao': len(matches_nao), 'matches_sim': len(matches_sim)}
     return result
 
 

@@ -53,3 +53,9 @@ def consult_llms(req: func.HttpRequest) -> func.HttpResponse:
 def extract_params_amplos(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.extract_params_amplos import handle_extract_params_amplos
     return handle_extract_params_amplos(req)
+
+# Extract Items
+@app.route(route="extract_items", methods=["POST"])
+def extract_items(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.extract_items import handle_extract_items
+    return handle_extract_items(req)

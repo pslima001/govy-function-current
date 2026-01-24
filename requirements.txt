@@ -8,6 +8,15 @@ azure-storage-blob==12.24.0
 
 # Utilitários
 python-dotenv>=1.0.0
+pymupdf
 
 # Segurança
 cryptography==41.0.7
+pymupdf
+pymupdf
+pdfplumber
+python-docx
+pandas
+openpyxl
+tabula-py
+xlrd
