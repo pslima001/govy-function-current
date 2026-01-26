@@ -206,15 +206,39 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
         try:
             parsed_data = json.loads(blob_client.download_blob().readall())
         except Exception as e:
-            return func.HttpResponse(
-                json.dumps({
-                    "error": f"Arquivo parseado nao encontrado: {parsed_blob_name}",
-                    "hint": "Execute parse_layout primeiro",
-                    "details": str(e)
-                }),
-                status_code=404,
-                mimetype="application/json"
-            )
+            logger.info(f"Arquivo parseado nao encontrado, executando parse_layout automaticamente...")
+            try:
+                from govy.api.parse_layout import handle_parse_layout
+                
+                class FakeRequest:
+                    def get_json(self):
+                        return {"blob_name": blob_name}
+                
+                parse_result = handle_parse_layout(FakeRequest())
+                
+                if parse_result.status_code != 200:
+                    return func.HttpResponse(
+                        json.dumps({
+                            "error": "Falha ao parsear documento automaticamente",
+                            "details": parse_result.get_body().decode()
+                        }),
+                        status_code=500,
+                        mimetype="application/json"
+                    )
+                
+                parsed_data = json.loads(blob_client.download_blob().readall())
+                logger.info("Parse automatico concluido com sucesso")
+                
+            except Exception as parse_error:
+                return func.HttpResponse(
+                    json.dumps({
+                        "error": "Arquivo parseado nao encontrado e falha no parse automatico",
+                        "hint": "Verifique se o PDF foi enviado corretamente",
+                        "details": str(parse_error)
+                    }),
+                    status_code=500,
+                    mimetype="application/json"
+                )
 
         texto_completo = parsed_data.get("texto_completo", "")
         tables_norm = parsed_data.get("tables_norm", [])

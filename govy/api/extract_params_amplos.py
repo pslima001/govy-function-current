@@ -1,4 +1,4 @@
-﻿# govy/api/extract_params_amplos.py
+# govy/api/extract_params_amplos.py
 import json
 import logging
 import azure.functions as func
