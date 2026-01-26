@@ -4,20 +4,6 @@ import azure.functions as func
 
 def handle_diag(req: func.HttpRequest) -> func.HttpResponse:
     info = []
-    
-    # Teste de imports
-    try:
-        from govy.api.extract_params import handle_extract_params
-        info.append("Import extract_params: OK")
-    except Exception as e:
-        info.append(f"Import extract_params: ERRO - {e}")
-    
-    try:
-        from govy.api.extract_items import handle_extract_items
-        info.append("Import extract_items: OK")
-    except Exception as e:
-        info.append(f"Import extract_items: ERRO - {e}")
-    
     try:
         from azure.storage.blob import BlobServiceClient
         from govy.extractors.e001_entrega import extract_e001_multi
@@ -40,7 +26,7 @@ def handle_diag(req: func.HttpRequest) -> func.HttpResponse:
         candidatos = extract_e001_multi(texto)
         info.append("Step 5: Extract OK - " + str(len(candidatos)) + " candidatos")
         for c in candidatos[:5]:
-            info.append("  " + c["valor"] + " (score=" + str(c["score"]) + ")")
+            info.append("  " + str(c))
             
     except Exception as e:
         info.append(f"Error: {e}")
