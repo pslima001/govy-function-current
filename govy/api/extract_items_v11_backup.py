@@ -1,6 +1,6 @@
-# govy/api/extract_items.py
+﻿# govy/api/extract_items.py
 """
-Extracao de itens de editais - v22: VALIDACAO POS-CONSENSO + ORDENACAO + CELULAS QUEBRADAS
+Extracao de itens de editais - v12: CORRECAO CELULAS QUEBRADAS
 Estrategia:
 1. PyMuPDF    -> tabelas estruturadas
 2. pdfplumber -> tabelas estruturadas  
@@ -8,7 +8,7 @@ Estrategia:
 Consenso: item valido se 2+ camadas concordam
 Custo: $0 (100% Python)
 
-v12/v13 FIXES:
+v12 FIXES:
 - Corrigido bug de celulas quebradas onde primeira letra ficava separada
   Ex: 'A\n(' numa celula e 'CEBROFILINA' em outra
 - Limite de itens aumentado para 800 (era 500)
@@ -354,10 +354,7 @@ def extrair_itens_de_tabelas(tabelas: List[Dict], pagina_limite: int, fonte: str
             if row_idx <= header_idx:
                 continue
             
-            # v22: Só procurar número de item nas primeiras 2 colunas (0 e 1)
-            # Evita confundir números em descrições com números de item
-            for col_idx in range(min(2, len(row))):
-                cell = row[col_idx] if col_idx < len(row) else None
+            for col_idx, cell in enumerate(row):
                 valor = str(cell or "").strip()
                 match = re.match(r'^(\d{1,3})$', valor)
                 if match:
@@ -372,7 +369,6 @@ def extrair_itens_de_tabelas(tabelas: List[Dict], pagina_limite: int, fonte: str
                             "tabela_rows": rows,
                             "mapa": mapa,
                         })
-                        break  # v22: Só uma âncora por linha
     
     # Filtrar por sequencia continua
     numeros = set(a["numero"] for a in todas_ancoras)
@@ -402,9 +398,7 @@ def extrair_itens_de_tabelas(tabelas: List[Dict], pagina_limite: int, fonte: str
             continue
         
         candidatos = ancoras_por_numero[num]
-        # v22: Priorizar a PRIMEIRA ocorrência (página menor, depois row_idx menor)
-        # Isso evita que números de páginas posteriores sobrescrevam os corretos
-        ancora = min(candidatos, key=lambda x: (x["page"], x["row_idx"]))
+        ancora = max(candidatos, key=lambda x: sum(1 for c in x["row_data"] if c))
         
         # v12: Usar nova funcao de reconstrucao
         descricao = reconstruir_descricao_v12(
@@ -504,192 +498,10 @@ def consenso_real(itens_por_fonte: Dict[str, List[Dict]], min_votos: int = 2) ->
         else:
             estatisticas["rejeitados"] += 1
     
-    logger.info(f"v22 CONSENSO: aceitos={estatisticas['aceitos']}, rejeitados={estatisticas['rejeitados']}")
-    logger.info(f"v22 VOTOS: {estatisticas['por_votos']}")
-    
-    # v22 FIX: Ordenar por numero_item antes de retornar
-    itens_finais = sorted(itens_finais, key=lambda x: int(x.get('numero_item', 0)))
+    logger.info(f"v12 CONSENSO: aceitos={estatisticas['aceitos']}, rejeitados={estatisticas['rejeitados']}")
+    logger.info(f"v12 VOTOS: {estatisticas['por_votos']}")
     
     return itens_finais, estatisticas
-
-
-
-
-# =============================================================================
-# v22: VALIDACAO POS-CONSENSO
-# =============================================================================
-
-def detectar_anomalias(itens: List[Dict]) -> Dict:
-    """
-    Detecta anomalias que indicam erro de mapeamento de colunas.
-    
-    Anomalias detectadas:
-    1. Mesmo numero_item com descricoes muito diferentes (duplicata)
-    2. Descricao aparece em multiplos numeros (erro de atribuicao)
-    3. Saltos grandes para tras na sequencia (ex: 520, 521, 1, 522)
-    """
-    anomalias = {
-        "duplicatas_numero": [],
-        "descricoes_repetidas": [],
-        "saltos_sequencia": [],
-        "numeros_suspeitos": []
-    }
-    
-    # 1. Detectar duplicatas de numero_item
-    numeros_vistos = {}
-    for item in itens:
-        num = item.get("numero_item", "")
-        desc = item.get("descricao", "")[:50]
-        if num in numeros_vistos:
-            anomalias["duplicatas_numero"].append({
-                "numero": num,
-                "desc1": numeros_vistos[num],
-                "desc2": desc
-            })
-        else:
-            numeros_vistos[num] = desc
-    
-    # 2. Detectar descricoes que aparecem com numeros muito diferentes
-    desc_para_numeros = {}
-    for item in itens:
-        num = int(item.get("numero_item", 0)) if item.get("numero_item", "").isdigit() else 0
-        # Normalizar descricao (primeiras 30 chars, uppercase, sem espacos extras)
-        desc_norm = " ".join(item.get("descricao", "")[:30].upper().split())
-        if desc_norm:
-            if desc_norm not in desc_para_numeros:
-                desc_para_numeros[desc_norm] = []
-            desc_para_numeros[desc_norm].append(num)
-    
-    for desc, nums in desc_para_numeros.items():
-        if len(nums) > 1:
-            # Verificar se os numeros sao muito distantes
-            nums_sorted = sorted(nums)
-            max_gap = max(nums_sorted[i+1] - nums_sorted[i] for i in range(len(nums_sorted)-1))
-            if max_gap > 100:  # Gap maior que 100 indica erro
-                anomalias["descricoes_repetidas"].append({
-                    "descricao": desc,
-                    "numeros": nums,
-                    "max_gap": max_gap
-                })
-    
-    # 3. Detectar saltos para tras na sequencia original
-    numeros_em_ordem = [int(i.get("numero_item", 0)) for i in itens if i.get("numero_item", "").isdigit()]
-    for i in range(1, len(numeros_em_ordem)):
-        atual = numeros_em_ordem[i]
-        anterior = numeros_em_ordem[i-1]
-        # Se o numero atual é muito menor que o anterior (salto para tras)
-        if atual < anterior - 50:
-            anomalias["saltos_sequencia"].append({
-                "posicao": i,
-                "de": anterior,
-                "para": atual
-            })
-    
-    # 4. Detectar numeros suspeitos (muito pequenos que aparecem no meio/fim)
-    if numeros_em_ordem:
-        mediana = sorted(numeros_em_ordem)[len(numeros_em_ordem)//2]
-        for i, num in enumerate(numeros_em_ordem):
-            # Numero muito pequeno (< 10) aparecendo depois de numeros grandes (> 100)
-            if num < 10 and i > 0:
-                max_anterior = max(numeros_em_ordem[:i])
-                if max_anterior > 100:
-                    anomalias["numeros_suspeitos"].append({
-                        "numero": num,
-                        "posicao_lista": i,
-                        "max_anterior": max_anterior
-                    })
-    
-    # Remover listas vazias
-    return {k: v for k, v in anomalias.items() if v}
-
-
-def corrigir_anomalias(itens: List[Dict], anomalias: Dict) -> Tuple[List[Dict], Dict]:
-    """
-    v22: Corrige anomalias detectadas.
-    
-    Estrategia:
-    - Remove itens com descricao duplicada quando o gap entre numeros > 100
-    - O numero MENOR é considerado erro (provavelmente mapeamento errado QUANT->ITEM)
-    - Loga tudo para auditoria
-    """
-    itens_corrigidos = list(itens)
-    correcoes = {
-        "itens_removidos": [],
-        "itens_mantidos_com_aviso": [],
-        "total_antes": len(itens)
-    }
-    
-    numeros_para_remover = set()
-    
-    # v22: Corrigir descricoes repetidas com gap grande
-    # O numero menor é provavelmente erro de mapeamento
-    if "descricoes_repetidas" in anomalias:
-        for rep in anomalias["descricoes_repetidas"]:
-            nums = sorted(rep["numeros"])
-            # Se gap > 100, remover os numeros menores (provavelmente errados)
-            if rep["max_gap"] > 100:
-                # Encontrar clusters de numeros proximos
-                # Numeros muito menores que a maioria sao suspeitos
-                mediana = nums[len(nums) // 2]
-                for num in nums:
-                    # Se o numero esta muito abaixo da mediana, é suspeito
-                    if num < mediana - 100:
-                        numeros_para_remover.add(str(num))
-                        correcoes["itens_removidos"].append({
-                            "numero": str(num),
-                            "descricao": rep["descricao"][:40],
-                            "motivo": f"Descricao duplicada em {nums}, numero {num} muito menor que mediana {mediana}"
-                        })
-    
-    # Corrigir numeros suspeitos
-    if "numeros_suspeitos" in anomalias:
-        for susp in anomalias["numeros_suspeitos"]:
-            num = str(susp["numero"])
-            if susp["numero"] < 10 and susp["max_anterior"] > 500:
-                if num not in numeros_para_remover:
-                    numeros_para_remover.add(num)
-                    correcoes["itens_removidos"].append({
-                        "numero": num,
-                        "motivo": f"Numero {num} aparece apos itens > {susp['max_anterior']}"
-                    })
-    
-    if numeros_para_remover:
-        itens_corrigidos = [i for i in itens_corrigidos 
-                           if i.get("numero_item") not in numeros_para_remover]
-        logger.info(f"v22: Removidos {len(numeros_para_remover)} itens suspeitos: {sorted(numeros_para_remover)[:20]}")
-    
-    correcoes["total_depois"] = len(itens_corrigidos)
-    
-    return itens_corrigidos, correcoes
-
-
-def validar_pos_consenso(itens: List[Dict], estatisticas: Dict) -> Tuple[List[Dict], Dict]:
-    """
-    v22: Camada de validacao pos-consenso.
-    
-    1. Detecta anomalias
-    2. Tenta corrigir com alta confianca
-    3. Loga tudo para aprendizado futuro
-    """
-    anomalias = detectar_anomalias(itens)
-    
-    if anomalias:
-        logger.warning(f"v22 ANOMALIAS DETECTADAS: {anomalias}")
-        
-        itens_corrigidos, correcoes = corrigir_anomalias(itens, anomalias)
-        
-        if correcoes["itens_removidos"]:
-            logger.info(f"v22 CORRECOES: Removidos {len(correcoes['itens_removidos'])} itens suspeitos")
-        
-        estatisticas_atualizadas = {
-            **estatisticas,
-            "anomalias_detectadas": anomalias,
-            "correcoes_aplicadas": correcoes
-        }
-        
-        return itens_corrigidos, estatisticas_atualizadas
-    
-    return itens, estatisticas
 
 
 # =============================================================================
@@ -697,7 +509,7 @@ def validar_pos_consenso(itens: List[Dict], estatisticas: Dict) -> Tuple[List[Di
 # =============================================================================
 
 def extrair_itens_pdf(pdf_path: str) -> Dict:
-    logger.info("=== EXTRACT_ITEMS v22: FIX CELULAS QUEBRADAS ===")
+    logger.info("=== EXTRACT_ITEMS v12: FIX CELULAS QUEBRADAS ===")
     
     tabelas_pymupdf, texto_pymupdf = extrair_tabelas_pymupdf(pdf_path)
     tabelas_pdfplumber, texto_pdfplumber = extrair_tabelas_pdfplumber(pdf_path)
@@ -743,9 +555,6 @@ def extrair_itens_pdf(pdf_path: str) -> Dict:
     
     itens_finais, stats_consenso = consenso_real(itens_por_fonte, min_votos)
     
-    # v22: Validacao pos-consenso
-    itens_finais, stats_consenso = validar_pos_consenso(itens_finais, stats_consenso)
-    
     numeros = [int(i["numero_item"]) for i in itens_finais if i["numero_item"].isdigit()]
     max_num = max(numeros) if numeros else 0
     numeros_esperados = set(range(1, max_num + 1))
@@ -778,8 +587,8 @@ def extrair_itens_pdf(pdf_path: str) -> Dict:
 # AZURE FUNCTION
 # =============================================================================
 
-def handle_extract_items(req: func.HttpRequest) -> func.HttpResponse:
-    logger.info("=== EXTRACT_ITEMS v22 ===")
+def main(req: func.HttpRequest) -> func.HttpResponse:
+    logger.info("=== EXTRACT_ITEMS v12 ===")
     
     try:
         req_body = req.get_json()
@@ -827,3 +636,4 @@ def handle_extract_items(req: func.HttpRequest) -> func.HttpResponse:
         )
 
 
+handle_extract_items = main
