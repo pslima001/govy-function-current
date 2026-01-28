@@ -92,3 +92,15 @@ def api_juris_validar(req: func.HttpRequest) -> func.HttpResponse:
 def api_juris_buscar(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.juris_buscar import main
     return main(req)
+
+# KB Index Upsert
+@app.route(route="kb/index/upsert", methods=["POST", "OPTIONS"])
+def kb_index_upsert(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_index_upsert import main
+    return main(req)
+
+# KB Search
+@app.route(route="kb/search", methods=["POST", "OPTIONS"])
+def kb_search(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_search import main
+    return main(req)
