@@ -1,4 +1,4 @@
-# function_app.py
+﻿# function_app.py
 """
 Azure Functions - Govy Backend
 Registro das funcoes HTTP
@@ -103,4 +103,10 @@ def kb_index_upsert(req: func.HttpRequest) -> func.HttpResponse:
 @app.route(route="kb/search", methods=["POST", "OPTIONS"])
 def kb_search(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.kb_search import main
+    return main(req)
+
+# KB Effect Classify (2-pass: GPT-4o + Claude Sonnet)
+@app.route(route="kb/effect/classify", methods=["POST", "OPTIONS"])
+def kb_effect_classify(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_effect_classify import main
     return main(req)
