@@ -20,3 +20,8 @@ pandas
 openpyxl
 tabula-py
 xlrd
+psycopg2-binary
+anthropic
+openai
+
+azure-search-documents>=11.4.0

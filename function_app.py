@@ -1,10 +1,9 @@
 # function_app.py
 """
 Azure Functions - Govy Backend
-Registro das funções HTTP
+Registro das funcoes HTTP
 """
 import azure.functions as func
-
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
 # Ping
@@ -42,7 +41,7 @@ def get_blob_url(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.get_blob_url import handle_get_blob_url
     return handle_get_blob_url(req)
 
-# Consult LLMs (NOVO)
+# Consult LLMs
 @app.route(route="consult_llms", methods=["POST"])
 def consult_llms(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.consult_llms import handle_consult_llms
@@ -59,3 +58,37 @@ def extract_params_amplos(req: func.HttpRequest) -> func.HttpResponse:
 def extract_items(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.extract_items import handle_extract_items
     return handle_extract_items(req)
+
+# Dicionario API
+@app.route(route="dicionario", methods=["GET", "POST", "DELETE"])
+def dicionario(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.dicionario_api import handle_dicionario
+    return handle_dicionario(req)
+
+# ============================================================
+# JURISPRUDENCIA ENDPOINTS
+# ============================================================
+
+# Juris Upload
+@app.route(route="juris/upload", methods=["POST"])
+def api_juris_upload(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.juris_upload import main
+    return main(req)
+
+# Juris Fichas
+@app.route(route="juris/fichas", methods=["GET"])
+def api_juris_fichas(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.juris_fichas import main
+    return main(req)
+
+# Juris Validar
+@app.route(route="juris/validar", methods=["POST"])
+def api_juris_validar(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.juris_validar import main
+    return main(req)
+
+# Juris Buscar
+@app.route(route="juris/buscar", methods=["POST"])
+def api_juris_buscar(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.juris_buscar import main
+    return main(req)

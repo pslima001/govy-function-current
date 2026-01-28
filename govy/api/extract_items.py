@@ -1,6 +1,6 @@
 # govy/api/extract_items.py
 """
-Extracao de itens de editais - v22: VALIDACAO POS-CONSENSO + ORDENACAO + CELULAS QUEBRADAS
+Extracao de itens de editais - v27: FALLBACK CABECALHO ESTRUTURADO + TABELAS CONTINUACAO
 Estrategia:
 1. PyMuPDF    -> tabelas estruturadas
 2. pdfplumber -> tabelas estruturadas  
@@ -8,10 +8,22 @@ Estrategia:
 Consenso: item valido se 2+ camadas concordam
 Custo: $0 (100% Python)
 
-v12/v13 FIXES:
+v27 MUDANCAS:
+- RECUPERA logica da v15: fallback para cabecalho estruturado
+- Detecta tabelas por cabecalho (DESCRICAO + UNIDADE obrigatorios)
+- Detecta tabelas de CONTINUACAO (sem cabecalho mas mesma estrutura)
+- Fallback ativado quando metodo principal retorna poucos itens ou titulos de secao
+- REGRA CRITICA: novas regras NUNCA devem eliminar regras que funcionavam
+
+HIERARQUIA DE EXTRACAO:
+1. Primeiro: numeros sequenciais (1, 2, 3...) - metodo original
+2. Fallback: cabecalho estruturado (DESCRICAO + UNIDADE) - se 1 falhou
+   - Inclui tabelas com cabecalho
+   - Inclui tabelas de continuacao (sem cabecalho)
+
+v14 FIXES (mantidos):
 - Corrigido bug de celulas quebradas onde primeira letra ficava separada
-  Ex: 'A\n(' numa celula e 'CEBROFILINA' em outra
-- Limite de itens aumentado para 800 (era 500)
+- Limite de itens aumentado para 800
 """
 import os
 import re
@@ -49,6 +61,48 @@ PADROES_CATMAT = ["catmat", "catser", "codigo"]
 
 # v12: Unidades para ignorar na reconstrucao
 UNIDADES_IGNORAR = {'FRS', 'CP', 'AMP', 'TB', 'UN', 'CX', 'CAPS', 'ML', 'MG', 'SCH', 'FLAC.', 'FR/AM', 'FR', 'UNID'}
+
+# =============================================================================
+# v27: CONSTANTES PARA CABECALHO ESTRUTURADO
+# =============================================================================
+
+# Cabecalho DESCRICAO (obrigatorio)
+# Nota: sem acentos para evitar problemas de encoding Windows
+CABECALHO_DESCRICAO = [
+    "descricao", "especificacao", "procedimento", "servico", "produto", 
+    "objeto", "denominacao", "nome", "item"
+]
+
+# Cabecalho UNIDADE (opcional)  
+CABECALHO_UNIDADE = [
+    "unidade", "unid", "un", "und", "u.m", "medida",
+    # Valores tipicos de unidade
+    "frasco", "cp", "comprimido", "tubo", "tb", "metro", "quilo", "kg",
+    "caixa", "cx", "peca", "pc", "bisnaga", "capsula",
+    "seringa", "envelope", "ampola", "creme", "dragea",
+    "litro", "lt", "ml", "mililitro", "kit", "duzia", "dz",
+    "milheiro", "bobina", "blister", "rolo", "cartela", "tambor",
+    "galao", "saco", "lata", "barril", "grama", "g",
+    "mm", "milimetro", "cm", "centimetro",
+    "watt", "w", "kw", "kwh", "frasco-ampola", "diaria", "hora", "hr", "h"
+]
+
+# Cabecalho IDENTIFICACAO (opcional)
+CABECALHO_IDENTIFICACAO = [
+    "codigo", "cod", "item", "ref", "referencia",
+    "catser", "catmat", "sigtap"
+]
+
+# Cabecalho QUANTIDADE (opcional)
+CABECALHO_QUANTIDADE = [
+    "quantidade", "quant", "qtde", "qtd", "qt", "qde"
+]
+
+# Cabecalho VALOR (opcional)
+CABECALHO_VALOR = [
+    "valor", "preco", "unit", "unitario",
+    "total", "custo", "vlr"
+]
 
 
 # =============================================================================
@@ -103,7 +157,7 @@ def reconstruir_descricao_v12(row: List, col_numero: int, mapa: Dict[str, int] =
         
         # v12 FIX: Detectar letra isolada com quebra de linha
         # Padrao: 'A\n(' ou 'M\n(' etc
-        match_letra = re.match(r'^([A-ZÀ-Ú])\s*[\n(]', texto)
+        match_letra = re.match(r'^([A-Z])\s*[\n(]', texto)
         if match_letra:
             letra_isolada = match_letra.group(1)
             continue
@@ -129,7 +183,7 @@ def reconstruir_descricao_v12(row: List, col_numero: int, mapa: Dict[str, int] =
     descricao = re.sub(r'^\s*\(\s*', '', descricao)
     
     # v12: Limpar sufixo de participacao grudado
-    # "100MLAMPLA PARTICIPAÇÃO" -> "100ML (AMPLA PARTICIPAÇÃO"
+    # "100MLAMPLA PARTICIPACAO" -> "100ML (AMPLA PARTICIPACAO"
     descricao = re.sub(r'(\d+(?:MG|ML|MG/ML|UI|MCG))(AMPLA|COTA)', r'\1 (\2', descricao)
     
     return descricao if len(descricao) >= 8 else None
@@ -216,10 +270,11 @@ def extrair_itens_por_texto(texto_por_pagina: Dict[int, str], pagina_limite: int
     
     itens = []
     
+    # Padroes de regex para encontrar itens no texto
     padroes = [
-        re.compile(r'^\s*(\d{1,3})\s*[.\-–)]\s*([A-ZÀ-Ú][A-ZÀ-Ú\s\d,./\-()%+]+)', re.MULTILINE),
-        re.compile(r'[Ii]tem\s*(\d{1,3})\s*[:\-–]\s*([A-ZÀ-Ú][A-Za-zà-ú\s\d,./\-()%+]+)', re.MULTILINE),
-        re.compile(r'^(\d{1,3})\s+([A-ZÀ-Ú]{3,}[A-ZÀ-Ú\s\d,./\-()%+]{10,})', re.MULTILINE),
+        re.compile(r'^\s*(\d{1,3})\s*[.\-)]\s*([A-Z][A-Z\s\d,./\-()%+]+)', re.MULTILINE),
+        re.compile(r'[Ii]tem\s*(\d{1,3})\s*[:\-]\s*([A-Z][A-Za-z\s\d,./\-()%+]+)', re.MULTILINE),
+        re.compile(r'^(\d{1,3})\s+([A-Z]{3,}[A-Z\s\d,./\-()%+]{10,})', re.MULTILINE),
     ]
     
     texto_completo = ""
@@ -354,10 +409,7 @@ def extrair_itens_de_tabelas(tabelas: List[Dict], pagina_limite: int, fonte: str
             if row_idx <= header_idx:
                 continue
             
-            # v22: Só procurar número de item nas primeiras 2 colunas (0 e 1)
-            # Evita confundir números em descrições com números de item
-            for col_idx in range(min(2, len(row))):
-                cell = row[col_idx] if col_idx < len(row) else None
+            for col_idx, cell in enumerate(row):
                 valor = str(cell or "").strip()
                 match = re.match(r'^(\d{1,3})$', valor)
                 if match:
@@ -372,7 +424,6 @@ def extrair_itens_de_tabelas(tabelas: List[Dict], pagina_limite: int, fonte: str
                             "tabela_rows": rows,
                             "mapa": mapa,
                         })
-                        break  # v22: Só uma âncora por linha
     
     # Filtrar por sequencia continua
     numeros = set(a["numero"] for a in todas_ancoras)
@@ -402,9 +453,7 @@ def extrair_itens_de_tabelas(tabelas: List[Dict], pagina_limite: int, fonte: str
             continue
         
         candidatos = ancoras_por_numero[num]
-        # v22: Priorizar a PRIMEIRA ocorrência (página menor, depois row_idx menor)
-        # Isso evita que números de páginas posteriores sobrescrevam os corretos
-        ancora = min(candidatos, key=lambda x: (x["page"], x["row_idx"]))
+        ancora = max(candidatos, key=lambda x: sum(1 for c in x["row_data"] if c))
         
         # v12: Usar nova funcao de reconstrucao
         descricao = reconstruir_descricao_v12(
@@ -504,10 +553,10 @@ def consenso_real(itens_por_fonte: Dict[str, List[Dict]], min_votos: int = 2) ->
         else:
             estatisticas["rejeitados"] += 1
     
-    logger.info(f"v22 CONSENSO: aceitos={estatisticas['aceitos']}, rejeitados={estatisticas['rejeitados']}")
-    logger.info(f"v22 VOTOS: {estatisticas['por_votos']}")
+    logger.info(f"v14 CONSENSO: aceitos={estatisticas['aceitos']}, rejeitados={estatisticas['rejeitados']}")
+    logger.info(f"v14 VOTOS: {estatisticas['por_votos']}")
     
-    # v22 FIX: Ordenar por numero_item antes de retornar
+    # v14 FIX: Ordenar por numero_item antes de retornar
     itens_finais = sorted(itens_finais, key=lambda x: int(x.get('numero_item', 0)))
     
     return itens_finais, estatisticas
@@ -516,7 +565,7 @@ def consenso_real(itens_por_fonte: Dict[str, List[Dict]], min_votos: int = 2) ->
 
 
 # =============================================================================
-# v22: VALIDACAO POS-CONSENSO
+# v14: VALIDACAO POS-CONSENSO
 # =============================================================================
 
 def detectar_anomalias(itens: List[Dict]) -> Dict:
@@ -577,7 +626,7 @@ def detectar_anomalias(itens: List[Dict]) -> Dict:
     for i in range(1, len(numeros_em_ordem)):
         atual = numeros_em_ordem[i]
         anterior = numeros_em_ordem[i-1]
-        # Se o numero atual é muito menor que o anterior (salto para tras)
+        # Se o numero atual e muito menor que o anterior (salto para tras)
         if atual < anterior - 50:
             anomalias["saltos_sequencia"].append({
                 "posicao": i,
@@ -605,67 +654,52 @@ def detectar_anomalias(itens: List[Dict]) -> Dict:
 
 def corrigir_anomalias(itens: List[Dict], anomalias: Dict) -> Tuple[List[Dict], Dict]:
     """
-    v22: Corrige anomalias detectadas.
+    Tenta corrigir anomalias detectadas.
     
-    Estrategia:
-    - Remove itens com descricao duplicada quando o gap entre numeros > 100
-    - O numero MENOR é considerado erro (provavelmente mapeamento errado QUANT->ITEM)
-    - Loga tudo para auditoria
+    Estrategia conservadora:
+    - So corrige se tiver alta confianca
+    - Remove itens claramente errados ao inves de tentar reatribuir
+    - Loga tudo para aprendizado
     """
-    itens_corrigidos = list(itens)
+    itens_corrigidos = itens.copy()
     correcoes = {
         "itens_removidos": [],
-        "itens_mantidos_com_aviso": [],
-        "total_antes": len(itens)
+        "itens_mantidos_com_aviso": []
     }
     
-    numeros_para_remover = set()
-    
-    # v22: Corrigir descricoes repetidas com gap grande
-    # O numero menor é provavelmente erro de mapeamento
-    if "descricoes_repetidas" in anomalias:
-        for rep in anomalias["descricoes_repetidas"]:
-            nums = sorted(rep["numeros"])
-            # Se gap > 100, remover os numeros menores (provavelmente errados)
-            if rep["max_gap"] > 100:
-                # Encontrar clusters de numeros proximos
-                # Numeros muito menores que a maioria sao suspeitos
-                mediana = nums[len(nums) // 2]
-                for num in nums:
-                    # Se o numero esta muito abaixo da mediana, é suspeito
-                    if num < mediana - 100:
-                        numeros_para_remover.add(str(num))
-                        correcoes["itens_removidos"].append({
-                            "numero": str(num),
-                            "descricao": rep["descricao"][:40],
-                            "motivo": f"Descricao duplicada em {nums}, numero {num} muito menor que mediana {mediana}"
-                        })
-    
-    # Corrigir numeros suspeitos
+    # Corrigir numeros suspeitos: remover itens com numero muito baixo 
+    # que aparecem no meio de numeros altos
     if "numeros_suspeitos" in anomalias:
+        numeros_para_remover = set()
         for susp in anomalias["numeros_suspeitos"]:
             num = str(susp["numero"])
+            # So remove se o numero for < 10 e aparece depois de > 500
             if susp["numero"] < 10 and susp["max_anterior"] > 500:
-                if num not in numeros_para_remover:
-                    numeros_para_remover.add(num)
-                    correcoes["itens_removidos"].append({
-                        "numero": num,
-                        "motivo": f"Numero {num} aparece apos itens > {susp['max_anterior']}"
-                    })
+                numeros_para_remover.add(num)
+                correcoes["itens_removidos"].append({
+                    "numero": num,
+                    "motivo": f"Numero {num} aparece apos itens > {susp['max_anterior']}, provavelmente erro de mapeamento"
+                })
+        
+        if numeros_para_remover:
+            itens_corrigidos = [i for i in itens_corrigidos 
+                               if i.get("numero_item") not in numeros_para_remover]
     
-    if numeros_para_remover:
-        itens_corrigidos = [i for i in itens_corrigidos 
-                           if i.get("numero_item") not in numeros_para_remover]
-        logger.info(f"v22: Removidos {len(numeros_para_remover)} itens suspeitos: {sorted(numeros_para_remover)[:20]}")
-    
-    correcoes["total_depois"] = len(itens_corrigidos)
+    # Marcar descricoes repetidas com aviso (nao remove, mas sinaliza)
+    if "descricoes_repetidas" in anomalias:
+        for rep in anomalias["descricoes_repetidas"]:
+            correcoes["itens_mantidos_com_aviso"].append({
+                "descricao": rep["descricao"],
+                "numeros": rep["numeros"],
+                "aviso": "Mesma descricao em numeros distantes - verificar manualmente"
+            })
     
     return itens_corrigidos, correcoes
 
 
 def validar_pos_consenso(itens: List[Dict], estatisticas: Dict) -> Tuple[List[Dict], Dict]:
     """
-    v22: Camada de validacao pos-consenso.
+    v14: Camada de validacao pos-consenso.
     
     1. Detecta anomalias
     2. Tenta corrigir com alta confianca
@@ -674,12 +708,12 @@ def validar_pos_consenso(itens: List[Dict], estatisticas: Dict) -> Tuple[List[Di
     anomalias = detectar_anomalias(itens)
     
     if anomalias:
-        logger.warning(f"v22 ANOMALIAS DETECTADAS: {anomalias}")
+        logger.warning(f"v14 ANOMALIAS DETECTADAS: {anomalias}")
         
         itens_corrigidos, correcoes = corrigir_anomalias(itens, anomalias)
         
         if correcoes["itens_removidos"]:
-            logger.info(f"v22 CORRECOES: Removidos {len(correcoes['itens_removidos'])} itens suspeitos")
+            logger.info(f"v14 CORRECOES: Removidos {len(correcoes['itens_removidos'])} itens suspeitos")
         
         estatisticas_atualizadas = {
             **estatisticas,
@@ -693,11 +727,357 @@ def validar_pos_consenso(itens: List[Dict], estatisticas: Dict) -> Tuple[List[Di
 
 
 # =============================================================================
-# PIPELINE PRINCIPAL v12
+# v27: FALLBACK CABECALHO ESTRUTURADO + TABELAS CONTINUACAO
+# =============================================================================
+
+def normalizar_texto_cabecalho(texto: str) -> str:
+    """Normaliza texto para comparacao de cabecalho."""
+    if not texto:
+        return ""
+    texto = texto.lower().strip()
+    # Remover acentos
+    acentos = {
+        '\xe1': 'a', '\xe0': 'a', '\xe3': 'a', '\xe2': 'a',
+        '\xe9': 'e', '\xe8': 'e', '\xea': 'e',
+        '\xed': 'i', '\xec': 'i', '\xee': 'i',
+        '\xf3': 'o', '\xf2': 'o', '\xf5': 'o', '\xf4': 'o',
+        '\xfa': 'u', '\xf9': 'u', '\xfb': 'u',
+        '\xe7': 'c'
+    }
+    for ac, sem in acentos.items():
+        texto = texto.replace(ac, sem)
+    return texto
+
+
+def detectar_cabecalho_estruturado(row: List) -> Tuple[bool, Dict[str, int]]:
+    """
+    v27: Detecta se uma linha e cabecalho de tabela de itens.
+    
+    Criterio:
+    - DESCRICAO obrigatorio
+    - Pelo menos 1 opcional: UNIDADE, VALOR, QUANTIDADE, IDENTIFICACAO
+    
+    Nota: editais de servicos podem nao ter UNIDADE (ex: CISAMURES)
+    """
+    mapa = {}
+    tem_descricao = False
+    tem_opcional = False
+    
+    for idx, cell in enumerate(row):
+        texto = normalizar_texto_cabecalho(str(cell or ""))
+        if not texto:
+            continue
+        
+        # Verificar DESCRICAO (obrigatorio)
+        if "descricao" not in mapa:
+            for padrao in CABECALHO_DESCRICAO:
+                if normalizar_texto_cabecalho(padrao) in texto:
+                    mapa["descricao"] = idx
+                    tem_descricao = True
+                    break
+        
+        # Verificar UNIDADE (opcional)
+        if "unidade" not in mapa:
+            for padrao in CABECALHO_UNIDADE:
+                if normalizar_texto_cabecalho(padrao) in texto:
+                    mapa["unidade"] = idx
+                    tem_opcional = True
+                    break
+        
+        # Verificar IDENTIFICACAO (opcional)
+        if "identificacao" not in mapa:
+            for padrao in CABECALHO_IDENTIFICACAO:
+                if normalizar_texto_cabecalho(padrao) in texto:
+                    mapa["identificacao"] = idx
+                    tem_opcional = True
+                    break
+        
+        # Verificar QUANTIDADE (opcional)
+        if "quantidade" not in mapa:
+            for padrao in CABECALHO_QUANTIDADE:
+                if normalizar_texto_cabecalho(padrao) in texto:
+                    mapa["quantidade"] = idx
+                    tem_opcional = True
+                    break
+        
+        # Verificar VALOR (opcional)
+        if "valor" not in mapa:
+            for padrao in CABECALHO_VALOR:
+                if normalizar_texto_cabecalho(padrao) in texto:
+                    mapa["valor"] = idx
+                    tem_opcional = True
+                    break
+    
+    # Criterio: DESCRICAO + pelo menos 1 opcional
+    is_valid = tem_descricao and tem_opcional
+    return is_valid, mapa
+
+
+def linha_e_cabecalho_ou_vazia(row: List) -> bool:
+    """
+    v27: Verifica se linha e cabecalho repetido ou vazia.
+    """
+    conteudo = [str(c or "").strip() for c in row]
+    if not any(conteudo):
+        return True
+    
+    texto_row = " ".join(conteudo).lower()
+    
+    # Linha de titulo de especialidade
+    if "especialidade:" in texto_row:
+        return True
+    
+    # Linha de cabecalho
+    if ("codigo" in texto_row or "codigo" in texto_row) and "especifica" in texto_row:
+        return True
+    
+    # Celulas merged (todas iguais)
+    celulas_unicas = set(c for c in conteudo if c)
+    if len(celulas_unicas) == 1 and len(conteudo) > 1:
+        return True
+    
+    return False
+
+
+def detectar_tabela_continuacao(rows: List[List]) -> Tuple[bool, Dict[str, int]]:
+    """
+    v27: Detecta tabelas de continuacao (sem cabecalho mas com dados validos).
+    
+    Criterios:
+    - NAO tem cabecalho nas primeiras linhas
+    - Primeira coluna: identificador curto (<30 chars)
+    - Segunda coluna: texto descritivo (>5 chars)
+    - Pelo menos 2 linhas com essa estrutura
+    """
+    if len(rows) < 1:
+        return False, {}
+    
+    # Verificar se NAO tem cabecalho nas primeiras linhas
+    for row in rows[:2]:
+        texto_row = " ".join(str(c or "") for c in row).lower()
+        if ("codigo" in texto_row or "codigo" in texto_row) and "especifica" in texto_row:
+            return False, {}  # Tem cabecalho, nao e continuacao
+    
+    # Verificar estrutura das linhas de dados
+    linhas_validas = 0
+    
+    for row in rows[:5]:
+        if len(row) < 2:
+            continue
+        
+        col0 = str(row[0] or "").strip()
+        col1 = str(row[1] or "").strip()
+        
+        # Pular linhas de titulo
+        if "especialidade:" in col0.lower():
+            continue
+        
+        # Col0: identificador (nao vazio, nao muito longo)
+        if not col0 or len(col0) < 2 or len(col0) > 30:
+            continue
+        
+        # Col1: texto descritivo (minimo 5 chars)
+        if not col1 or len(col1) < 5:
+            continue
+        
+        linhas_validas += 1
+    
+    # Se pelo menos 2 linhas tem estrutura valida
+    if linhas_validas >= 2:
+        mapa = {
+            "identificacao": 0,
+            "descricao": 1,
+        }
+        # Tentar encontrar coluna de valor
+        for row in rows[:3]:
+            for idx in range(2, min(5, len(row))):
+                cell = str(row[idx] or "")
+                if "r$" in cell.lower() or re.match(r'^[\d,.\s]+$', cell.strip()):
+                    mapa["valor"] = idx
+                    break
+            if "valor" in mapa:
+                break
+        
+        return True, mapa
+    
+    return False, {}
+
+
+def extrair_itens_tabela_estruturada(rows: List[List], header_idx: int, mapa: Dict[str, int], 
+                                      contador_item: int) -> Tuple[List[Dict], int]:
+    """
+    v27: Extrai itens de uma tabela estruturada.
+    Cada linha de dados = 1 item.
+    """
+    itens = []
+    
+    for row_idx, row in enumerate(rows):
+        if row_idx <= header_idx:
+            continue
+        
+        if linha_e_cabecalho_ou_vazia(row):
+            continue
+        
+        # Extrair dados
+        identificador = ""
+        if "identificacao" in mapa and mapa["identificacao"] < len(row):
+            identificador = str(row[mapa["identificacao"]] or "").strip()
+        
+        descricao = ""
+        if "descricao" in mapa and mapa["descricao"] < len(row):
+            descricao = str(row[mapa["descricao"]] or "").strip()
+        
+        # Pular se descricao vazia ou muito curta
+        if not descricao or len(descricao) < 3:
+            continue
+        
+        # Usar identificador ou contador como numero_item
+        numero_item = identificador if identificador else str(contador_item)
+        
+        item = {
+            "numero_item": numero_item,
+            "lote": None,
+            "descricao": descricao.replace('\n', ' ').strip(),
+            "quantidade": None,
+            "unidade": None,
+            "valor_unitario": None,
+            "valor_total": None,
+            "codigo_catmat": None,
+            "codigo_catser": None,
+            "_meta": {
+                "fontes": ["estruturado"],
+                "n_fontes": 1,
+                "consenso": True,
+                "metodo": "cabecalho_estruturado"
+            }
+        }
+        
+        # Extrair campos opcionais
+        if "unidade" in mapa and mapa["unidade"] < len(row):
+            item["unidade"] = str(row[mapa["unidade"]] or "").strip() or None
+        
+        if "quantidade" in mapa and mapa["quantidade"] < len(row):
+            item["quantidade"] = str(row[mapa["quantidade"]] or "").strip() or None
+        
+        if "valor" in mapa and mapa["valor"] < len(row):
+            valor = str(row[mapa["valor"]] or "").strip()
+            if valor:
+                item["valor_unitario"] = valor
+        
+        itens.append(item)
+        contador_item += 1
+    
+    return itens, contador_item
+
+
+def pipeline_fallback_estruturado(tabelas: List[Dict]) -> Tuple[List[Dict], Dict]:
+    """
+    v27: Pipeline de fallback para tabelas estruturadas.
+    
+    Usado quando metodo principal (numeros sequenciais) retorna poucos itens.
+    
+    Processa:
+    1. Tabelas com cabecalho estruturado (DESCRICAO + UNIDADE)
+    2. Tabelas de continuacao (sem cabecalho mas mesma estrutura)
+    """
+    logger.info("v27: Iniciando fallback cabecalho estruturado")
+    
+    todos_itens = []
+    contador_item = 1
+    stats = {
+        "tabelas_com_cabecalho": 0,
+        "tabelas_continuacao": 0,
+        "tabelas_ignoradas": 0
+    }
+    
+    for tabela in tabelas:
+        rows = tabela.get("rows", [])
+        if not rows:
+            continue
+        
+        # Tentar detectar cabecalho estruturado
+        header_idx = -1
+        mapa = {}
+        
+        for i, row in enumerate(rows[:5]):
+            is_valid, detected_mapa = detectar_cabecalho_estruturado(row)
+            if is_valid:
+                header_idx = i
+                mapa = detected_mapa
+                break
+        
+        if header_idx >= 0:
+            # Tabela com cabecalho
+            stats["tabelas_com_cabecalho"] += 1
+            itens, contador_item = extrair_itens_tabela_estruturada(
+                rows, header_idx, mapa, contador_item
+            )
+            todos_itens.extend(itens)
+        else:
+            # Tentar como tabela de continuacao
+            is_continuacao, mapa_cont = detectar_tabela_continuacao(rows)
+            if is_continuacao:
+                stats["tabelas_continuacao"] += 1
+                itens, contador_item = extrair_itens_tabela_estruturada(
+                    rows, -1, mapa_cont, contador_item
+                )
+                todos_itens.extend(itens)
+            else:
+                stats["tabelas_ignoradas"] += 1
+    
+    logger.info(f"v27: Fallback extraiu {len(todos_itens)} itens")
+    logger.info(f"v27: Stats = {stats}")
+    
+    return todos_itens, stats
+
+
+def deve_usar_fallback(itens_finais: List[Dict]) -> bool:
+    """
+    v27: Decide se deve usar fallback estruturado.
+    
+    Criterios:
+    - Poucos itens extraidos (< 10)
+    - Itens parecem ser titulos de secao (descricoes curtas ou palavras tipicas)
+    """
+    if len(itens_finais) < 10:
+        return True
+    
+    # Verificar se itens parecem ser titulos de secao
+    palavras_secao = [
+        "anexo", "habilitacao", "procedimento", "credenciamento",
+        "documentacao", "disposicoes", "objeto",
+        "fundamentacao", "impugnacao"
+    ]
+    
+    itens_suspeitos = 0
+    for item in itens_finais[:20]:  # Verificar primeiros 20
+        desc = item.get("descricao", "").lower()
+        
+        # Descricao muito curta
+        if len(desc) < 30:
+            itens_suspeitos += 1
+            continue
+        
+        # Contem palavras tipicas de secao
+        for palavra in palavras_secao:
+            if palavra in desc:
+                itens_suspeitos += 1
+                break
+    
+    # Se mais de 50% dos itens sao suspeitos, usar fallback
+    if len(itens_finais) > 0 and itens_suspeitos / len(itens_finais) > 0.5:
+        logger.info(f"v27: {itens_suspeitos}/{len(itens_finais)} itens parecem titulos de secao")
+        return True
+    
+    return False
+
+
+# =============================================================================
+# PIPELINE PRINCIPAL v27
 # =============================================================================
 
 def extrair_itens_pdf(pdf_path: str) -> Dict:
-    logger.info("=== EXTRACT_ITEMS v22: FIX CELULAS QUEBRADAS ===")
+    logger.info("=== EXTRACT_ITEMS v27: FALLBACK CABECALHO ESTRUTURADO ===")
     
     tabelas_pymupdf, texto_pymupdf = extrair_tabelas_pymupdf(pdf_path)
     tabelas_pdfplumber, texto_pdfplumber = extrair_tabelas_pdfplumber(pdf_path)
@@ -705,7 +1085,7 @@ def extrair_itens_pdf(pdf_path: str) -> Dict:
     texto_por_pagina = texto_pymupdf or texto_pdfplumber or {}
     
     pagina_limite = detectar_pagina_limite_proposta(texto_por_pagina)
-    logger.info(f"v12: Pagina limite = {pagina_limite}")
+    logger.info(f"v27: Pagina limite = {pagina_limite}")
     
     itens_por_fonte = {}
     camadas_disponiveis = []
@@ -731,28 +1111,57 @@ def extrair_itens_pdf(pdf_path: str) -> Dict:
     
     n_camadas = len(camadas_disponiveis)
     
-    if n_camadas == 0:
+    # v27: Tentar metodo principal primeiro
+    itens_finais = []
+    stats_consenso = {}
+    usou_fallback = False
+    stats_fallback = {}
+    
+    if n_camadas > 0:
+        min_votos = 2 if n_camadas >= 2 else 1
+        itens_finais, stats_consenso = consenso_real(itens_por_fonte, min_votos)
+        itens_finais, stats_consenso = validar_pos_consenso(itens_finais, stats_consenso)
+    
+    # v27: Verificar se deve usar fallback
+    if deve_usar_fallback(itens_finais):
+        logger.info("v27: Ativando fallback cabecalho estruturado")
+        
+        # Usar tabelas do PyMuPDF para fallback (mais confiavel)
+        tabelas_fallback = tabelas_pymupdf or tabelas_pdfplumber or []
+        
+        if tabelas_fallback:
+            itens_fallback, stats_fallback = pipeline_fallback_estruturado(tabelas_fallback)
+            
+            # Usar fallback se encontrou MAIS itens
+            if len(itens_fallback) > len(itens_finais):
+                logger.info(f"v27: Fallback encontrou mais itens ({len(itens_fallback)} > {len(itens_finais)})")
+                itens_finais = itens_fallback
+                usou_fallback = True
+                camadas_disponiveis = ["estruturado"]
+                n_camadas = 1
+    
+    # Resultado final
+    if not itens_finais:
         return {
             "success": False,
-            "error": "Nenhuma camada conseguiu extrair itens",
+            "error": "Nenhum item extraido (metodo principal e fallback falharam)",
             "total_itens": 0,
             "itens": []
         }
     
-    min_votos = 2 if n_camadas >= 2 else 1
+    # Calcular estatisticas
+    numeros = []
+    for item in itens_finais:
+        num_str = item.get("numero_item", "")
+        if num_str.isdigit():
+            numeros.append(int(num_str))
     
-    itens_finais, stats_consenso = consenso_real(itens_por_fonte, min_votos)
-    
-    # v22: Validacao pos-consenso
-    itens_finais, stats_consenso = validar_pos_consenso(itens_finais, stats_consenso)
-    
-    numeros = [int(i["numero_item"]) for i in itens_finais if i["numero_item"].isdigit()]
     max_num = max(numeros) if numeros else 0
-    numeros_esperados = set(range(1, max_num + 1))
+    numeros_esperados = set(range(1, max_num + 1)) if max_num else set()
     numeros_encontrados = set(numeros)
     faltando = numeros_esperados - numeros_encontrados
     
-    return {
+    resultado = {
         "success": True,
         "total_itens": len(itens_finais),
         "pagina_limite_proposta": pagina_limite,
@@ -760,7 +1169,7 @@ def extrair_itens_pdf(pdf_path: str) -> Dict:
         "estatisticas": {
             "camadas_disponiveis": camadas_disponiveis,
             "n_camadas": n_camadas,
-            "min_votos_exigidos": min_votos,
+            "usou_fallback": usou_fallback,
             "por_camada": {
                 "pymupdf": len(itens_por_fonte.get("pymupdf", [])),
                 "pdfplumber": len(itens_por_fonte.get("pdfplumber", [])),
@@ -772,14 +1181,19 @@ def extrair_itens_pdf(pdf_path: str) -> Dict:
             "cobertura": f"{len(numeros_encontrados)}/{max_num}" if max_num else "N/A"
         }
     }
+    
+    if usou_fallback:
+        resultado["estatisticas"]["fallback"] = stats_fallback
+    
+    return resultado
 
 
 # =============================================================================
 # AZURE FUNCTION
 # =============================================================================
 
-def handle_extract_items(req: func.HttpRequest) -> func.HttpResponse:
-    logger.info("=== EXTRACT_ITEMS v22 ===")
+def main(req: func.HttpRequest) -> func.HttpResponse:
+    logger.info("=== EXTRACT_ITEMS v27 ===")
     
     try:
         req_body = req.get_json()
@@ -827,3 +1241,4 @@ def handle_extract_items(req: func.HttpRequest) -> func.HttpResponse:
         )
 
 
+handle_extract_items = main
