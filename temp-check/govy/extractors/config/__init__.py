@@ -1,1 +1,0 @@
-# govy/extractors/config package

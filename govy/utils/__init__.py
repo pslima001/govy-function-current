@@ -1,2 +1,9 @@
-﻿from .similarity import calcular_similaridade, filtrar_candidatos_similares
-from .multi_llm import consultar_llms, obter_api_keys, LLMResponse, ConsensusResult
+﻿"""
+GOVY - Utils para Knowledge Base Jurídica
+SPEC 1.2
+"""
+
+from .juris_constants import *
+from .juris_regex import has_fundamento_legal, extract_legal_references
+from .juris_pipeline import JurisPipeline
+from .review_queue import ReviewQueue, review_queue

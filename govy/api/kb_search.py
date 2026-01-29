@@ -1,30 +1,39 @@
-# govy/api/kb_search.py
 """
-Endpoint de busca na Knowledge Base Juridica
-COM FALLBACK SEQUENCIAL (4 etapas) + EFFECT
-Versao: 2.0
+GOVY - Handler do Endpoint /api/kb/search
+SPEC 1.2 - Knowledge Base Juridica
+
+Busca hibrida com fallback juridico:
+- scenario (1-4) deriva desired_effect automaticamente
+- Fallback jurisdicao: TCE da UF -> TCU -> TCE da regiao -> TCE Brasil
+- Fallback effect: desired_effect -> CONDICIONAL -> NUNCA oposto
+- Filtros por secao e procedural_stage
+- Preferencia: vital > fundamento_legal > tese
 """
+
 import os
 import json
 import logging
+from typing import Dict, Any, List, Optional, Tuple
 import azure.functions as func
-from typing import List, Dict, Any, Optional, Tuple
+from azure.search.documents import SearchClient
+from azure.search.documents.models import VectorizedQuery
+from azure.core.credentials import AzureKeyCredential
+from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
-# ============================================================
-# CONSTANTES
-# ============================================================
+# =============================================================================
+# CONFIGURACAO
+# =============================================================================
 
-UF_TO_REGION = {
-    "SP": "SUDESTE", "RJ": "SUDESTE", "MG": "SUDESTE", "ES": "SUDESTE",
-    "PR": "SUL", "SC": "SUL", "RS": "SUL",
-    "AL": "NORDESTE", "BA": "NORDESTE", "CE": "NORDESTE", "MA": "NORDESTE",
-    "PB": "NORDESTE", "PE": "NORDESTE", "PI": "NORDESTE", "RN": "NORDESTE", "SE": "NORDESTE",
-    "DF": "CENTRO_OESTE", "GO": "CENTRO_OESTE", "MT": "CENTRO_OESTE", "MS": "CENTRO_OESTE",
-    "AC": "NORTE", "AM": "NORTE", "AP": "NORTE", "PA": "NORTE", 
-    "RO": "NORTE", "RR": "NORTE", "TO": "NORTE"
-}
+AZURE_SEARCH_ENDPOINT = os.environ.get("AZURE_SEARCH_ENDPOINT", "https://search-govy-kb.search.windows.net")
+AZURE_SEARCH_API_KEY = os.environ.get("AZURE_SEARCH_API_KEY")
+AZURE_SEARCH_INDEX_NAME = os.environ.get("AZURE_SEARCH_INDEX_NAME", "kb-legal")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+# =============================================================================
+# CONSTANTES SPEC 1.2
+# =============================================================================
 
 SCENARIO_TO_EFFECT = {
     1: "FLEXIBILIZA",
@@ -33,465 +42,344 @@ SCENARIO_TO_EFFECT = {
     4: "RIGORIZA",
 }
 
+UF_TO_REGION = {
+    "SP": "SUDESTE", "RJ": "SUDESTE", "MG": "SUDESTE", "ES": "SUDESTE",
+    "PR": "SUL", "SC": "SUL", "RS": "SUL",
+    "AL": "NORDESTE", "BA": "NORDESTE", "CE": "NORDESTE", "MA": "NORDESTE",
+    "PB": "NORDESTE", "PE": "NORDESTE", "PI": "NORDESTE", "RN": "NORDESTE", "SE": "NORDESTE",
+    "DF": "CENTRO_OESTE", "GO": "CENTRO_OESTE", "MT": "CENTRO_OESTE", "MS": "CENTRO_OESTE",
+    "AC": "NORTE", "AM": "NORTE", "AP": "NORTE", "PA": "NORTE",
+    "RO": "NORTE", "RR": "NORTE", "TO": "NORTE",
+}
 
-def get_region(uf: str) -> Optional[str]:
-    """Retorna a regiao para uma UF."""
-    if not uf:
-        return None
-    return UF_TO_REGION.get(uf.upper())
+SECAO_PRIORITY = ["vital", "fundamento_legal", "tese", "limites", "contexto_minimo"]
 
 
-def generate_embedding(text: str) -> List[float]:
-    """Gera embedding usando OpenAI."""
-    import openai
-    
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY nao configurada")
-    
-    client = openai.OpenAI(api_key=api_key)
-    response = client.embeddings.create(
-        model="text-embedding-3-small",
-        input=text
-    )
+def generate_query_embedding(text: str) -> List[float]:
+    client = OpenAI(api_key=OPENAI_API_KEY)
+    response = client.embeddings.create(model="text-embedding-3-small", input=text)
     return response.data[0].embedding
 
 
-def get_search_client():
-    """Retorna cliente do Azure AI Search."""
-    from azure.core.credentials import AzureKeyCredential
-    from azure.search.documents import SearchClient
-    
-    endpoint = os.environ.get("AZURE_SEARCH_ENDPOINT")
-    api_key = os.environ.get("AZURE_SEARCH_API_KEY")
-    index_name = os.environ.get("AZURE_SEARCH_INDEX_NAME", "kb-legal")
-    
-    if not endpoint or not api_key:
-        raise ValueError("AZURE_SEARCH_ENDPOINT ou AZURE_SEARCH_API_KEY nao configurados")
-    
-    return SearchClient(
-        endpoint=endpoint,
-        index_name=index_name,
-        credential=AzureKeyCredential(api_key)
-    )
-
-
-def build_filter(doc_type: str, effect: str, tribunal: str = None, uf: str = None, 
-                 region: str = None, exclude_uf: str = None, exclude_region: str = None) -> str:
-    """Constroi filtro OData para Azure Search."""
+def build_filter(
+    doc_type: Optional[str] = None,
+    tribunal: Optional[str] = None,
+    uf: Optional[str] = None,
+    region: Optional[str] = None,
+    effect: Optional[str] = None,
+    secao: Optional[List[str]] = None,
+    procedural_stage: Optional[List[str]] = None,
+    is_current: Optional[bool] = None,
+    year_min: Optional[int] = None
+) -> Optional[str]:
     filters = []
     
-    filters.append(f"doc_type eq '{doc_type}'")
-    filters.append(f"effect eq '{effect}'")
-    
+    if doc_type:
+        filters.append(f"doc_type eq '{doc_type}'")
     if tribunal:
         filters.append(f"tribunal eq '{tribunal}'")
-    
     if uf:
         filters.append(f"uf eq '{uf}'")
-    
+    # NAO adicionar uf eq null para TCU - chunks podem ter uf vazio ou null
     if region:
         filters.append(f"region eq '{region}'")
+    if effect:
+        filters.append(f"effect eq '{effect}'")
+    if secao:
+        secao_filters = [f"secao eq '{s}'" for s in secao]
+        filters.append(f"({' or '.join(secao_filters)})")
+    if procedural_stage:
+        stage_filters = [f"procedural_stage eq '{s}'" for s in procedural_stage]
+        filters.append(f"({' or '.join(stage_filters)})")
+    if is_current is not None:
+        filters.append(f"is_current eq {str(is_current).lower()}")
+    if year_min:
+        filters.append(f"year ge {year_min}")
     
-    if exclude_uf:
-        filters.append(f"uf ne '{exclude_uf}'")
-    
-    if exclude_region:
-        filters.append(f"region ne '{exclude_region}'")
-    
-    return " and ".join(filters)
+    return " and ".join(filters) if filters else None
 
 
-def execute_search(search_client, query: str, query_vector: List[float], 
-                   filter_str: str, top_k: int, use_semantic: bool) -> Tuple[List[Dict], Dict]:
-    """Executa busca hibrida no Azure Search."""
-    from azure.search.documents.models import VectorizedQuery
-    
-    vector_query = VectorizedQuery(
-        vector=query_vector,
-        k_nearest_neighbors=top_k,
-        fields="embedding"
-    )
+def execute_search(
+    search_client: SearchClient,
+    query: str,
+    query_vector: Optional[List[float]],
+    filter_str: Optional[str],
+    top_k: int = 10,
+    use_semantic: bool = True,
+    use_vector: bool = True
+) -> List[Dict]:
     
     search_params = {
         "search_text": query,
-        "vector_queries": [vector_query],
-        "filter": filter_str,
         "top": top_k,
-        "select": ["chunk_id", "doc_type", "source", "tribunal", "uf", "region", 
-                   "effect", "title", "content", "citation", "year", "authority_score", "is_current"]
+        "include_total_count": True
     }
+    
+    if filter_str:
+        search_params["filter"] = filter_str
+    
+    if use_vector and query_vector:
+        vector_query = VectorizedQuery(
+            vector=query_vector,
+            k_nearest_neighbors=top_k,
+            fields="embedding"
+        )
+        search_params["vector_queries"] = [vector_query]
     
     if use_semantic:
         search_params["query_type"] = "semantic"
-        search_params["semantic_configuration_name"] = "kb-legal-semantic"
+        search_params["semantic_configuration_name"] = "default"
     
-    results = search_client.search(**search_params)
-    
-    items = []
-    debug_info = {"filter": filter_str, "top_k": top_k}
-    
-    for result in results:
-        item = {
-            "chunk_id": result.get("chunk_id"),
-            "doc_type": result.get("doc_type"),
-            "source": result.get("source"),
-            "tribunal": result.get("tribunal"),
-            "uf": result.get("uf"),
-            "region": result.get("region"),
-            "effect": result.get("effect"),
-            "title": result.get("title"),
-            "content": result.get("content"),
-            "citation": result.get("citation"),
-            "year": result.get("year"),
-            "authority_score": result.get("authority_score"),
-            "is_current": result.get("is_current"),
-            "search_score": result.get("@search.score"),
-            "reranker_score": result.get("@search.reranker_score")
-        }
-        items.append(item)
-    
-    if items:
-        debug_info["top1_score"] = items[0].get("search_score")
-    
-    return items, debug_info
+    try:
+        results = search_client.search(**search_params)
+        
+        docs = []
+        for result in results:
+            doc = dict(result)
+            doc["search_score"] = result.get("@search.score", 0)
+            doc["semantic_score"] = result.get("@search.reranker_score", 0)
+            doc.pop("embedding", None)
+            docs.append(doc)
+        
+        return docs
+    except Exception as e:
+        logger.error(f"Erro na busca: {e}")
+        return []
 
 
-def fallback_search(search_client, query: str, query_vector: List[float],
-                    user_uf: str, desired_effect: str, top_k: int, 
-                    use_semantic: bool) -> Tuple[List[Dict], str, List[Dict]]:
-    """
-    Executa busca com fallback sequencial de 4 etapas.
+def search_with_jurisdiction_fallback(
+    search_client: SearchClient,
+    query: str,
+    query_vector: Optional[List[float]],
+    user_uf: Optional[str],
+    desired_effect: str,
+    secao: Optional[List[str]] = None,
+    procedural_stage: Optional[List[str]] = None,
+    top_k: int = 10,
+    use_semantic: bool = True,
+    use_vector: bool = True
+) -> Tuple[List[Dict], Dict]:
     
-    Etapas PASSADA 1 (desired_effect):
-    1. TCE da UF do usuario
-    2. TCU
-    3. TCE da mesma regiao
-    4. TCE de outras regioes
+    debug_info = {
+        "user_uf": user_uf,
+        "user_region": UF_TO_REGION.get(user_uf) if user_uf else None,
+        "desired_effect": desired_effect,
+        "attempts": [],
+        "mode": "jurisdiction_fallback"
+    }
     
-    Retorna: (resultados, winner_stage, debug_stages)
-    """
-    user_region = get_region(user_uf)
-    debug_stages = []
+    user_region = UF_TO_REGION.get(user_uf) if user_uf else None
     
-    # ============================================================
-    # ETAPA 1: TCE da UF do usuario
-    # ============================================================
+    effects_to_try = [desired_effect]
+    if desired_effect != "CONDICIONAL":
+        effects_to_try.append("CONDICIONAL")
+    
+    jurisdiction_steps = []
     if user_uf:
-        filter_str = build_filter(
-            doc_type="jurisprudencia",
-            effect=desired_effect,
-            tribunal="TCE",
-            uf=user_uf.upper()
-        )
-        results, debug = execute_search(
-            search_client, query, query_vector, filter_str, top_k, use_semantic
-        )
-        debug["stage"] = "TCE_UF"
-        debug["stage_description"] = f"TCE da UF {user_uf}"
-        debug_stages.append(debug)
-        
-        if results:
-            return results, "TCE_UF", debug_stages
-    
-    # ============================================================
-    # ETAPA 2: TCU
-    # ============================================================
-    filter_str = build_filter(
-        doc_type="jurisprudencia",
-        effect=desired_effect,
-        tribunal="TCU"
-    )
-    results, debug = execute_search(
-        search_client, query, query_vector, filter_str, top_k, use_semantic
-    )
-    debug["stage"] = "TCU"
-    debug["stage_description"] = "TCU (federal)"
-    debug_stages.append(debug)
-    
-    if results:
-        return results, "TCU", debug_stages
-    
-    # ============================================================
-    # ETAPA 3: TCE da mesma regiao
-    # ============================================================
-    if user_region and user_uf:
-        filter_str = build_filter(
-            doc_type="jurisprudencia",
-            effect=desired_effect,
-            tribunal="TCE",
-            region=user_region,
-            exclude_uf=user_uf.upper()
-        )
-        results, debug = execute_search(
-            search_client, query, query_vector, filter_str, top_k, use_semantic
-        )
-        debug["stage"] = "TCE_REGION"
-        debug["stage_description"] = f"TCE da regiao {user_region} (exceto {user_uf})"
-        debug_stages.append(debug)
-        
-        if results:
-            return results, "TCE_REGION", debug_stages
-    
-    # ============================================================
-    # ETAPA 4: TCE de outras regioes
-    # ============================================================
+        jurisdiction_steps.append({"name": f"TCE_{user_uf}", "tribunal": "TCE", "uf": user_uf, "region": None})
+    jurisdiction_steps.append({"name": "TCU", "tribunal": "TCU", "uf": None, "region": None})
     if user_region:
-        filter_str = build_filter(
-            doc_type="jurisprudencia",
-            effect=desired_effect,
-            tribunal="TCE",
-            exclude_region=user_region
-        )
-    else:
-        filter_str = build_filter(
-            doc_type="jurisprudencia",
-            effect=desired_effect,
-            tribunal="TCE"
-        )
+        jurisdiction_steps.append({"name": f"TCE_REGION_{user_region}", "tribunal": "TCE", "uf": None, "region": user_region})
+    jurisdiction_steps.append({"name": "TCE_BRASIL", "tribunal": "TCE", "uf": None, "region": None})
     
-    results, debug = execute_search(
-        search_client, query, query_vector, filter_str, top_k, use_semantic
+    for current_effect in effects_to_try:
+        for step in jurisdiction_steps:
+            filter_str = build_filter(
+                doc_type="jurisprudencia",
+                tribunal=step["tribunal"],
+                uf=step["uf"],
+                region=step["region"],
+                effect=current_effect,
+                secao=secao,
+                procedural_stage=procedural_stage,
+                is_current=True
+            )
+            
+            attempt_info = {
+                "jurisdiction": step["name"],
+                "effect": current_effect,
+                "filter": filter_str,
+                "results_count": 0
+            }
+            
+            results = execute_search(
+                search_client=search_client,
+                query=query,
+                query_vector=query_vector,
+                filter_str=filter_str,
+                top_k=top_k,
+                use_semantic=use_semantic,
+                use_vector=use_vector
+            )
+            
+            attempt_info["results_count"] = len(results)
+            debug_info["attempts"].append(attempt_info)
+            
+            if results:
+                debug_info["found_at"] = step["name"]
+                debug_info["found_effect"] = current_effect
+                results.sort(key=lambda x: (
+                    SECAO_PRIORITY.index(x.get("secao")) if x.get("secao") in SECAO_PRIORITY else 99,
+                    -x.get("search_score", 0)
+                ))
+                return results[:top_k], debug_info
+    
+    debug_info["found_at"] = None
+    debug_info["found_effect"] = None
+    return [], debug_info
+
+
+def search_simple(
+    search_client: SearchClient,
+    query: str,
+    query_vector: Optional[List[float]],
+    filters: Dict,
+    top_k: int = 10,
+    use_semantic: bool = True,
+    use_vector: bool = True
+) -> Tuple[List[Dict], Dict]:
+    
+    filter_str = build_filter(
+        doc_type=filters.get("doc_type"),
+        tribunal=filters.get("tribunal"),
+        uf=filters.get("uf"),
+        effect=filters.get("effect"),
+        secao=filters.get("secao"),
+        procedural_stage=filters.get("procedural_stage"),
+        is_current=filters.get("is_current"),
+        year_min=filters.get("year_min")
     )
-    debug["stage"] = "TCE_BR"
-    debug["stage_description"] = "TCE de outras regioes"
-    debug_stages.append(debug)
     
-    if results:
-        return results, "TCE_BR", debug_stages
+    debug_info = {"mode": "simple", "filter": filter_str}
     
-    return [], "NONE", debug_stages
+    results = execute_search(
+        search_client=search_client,
+        query=query,
+        query_vector=query_vector,
+        filter_str=filter_str,
+        top_k=top_k,
+        use_semantic=use_semantic,
+        use_vector=use_vector
+    )
+    
+    return results, debug_info
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    """Handler principal do endpoint search."""
-    
-    # CORS
     if req.method == "OPTIONS":
         return func.HttpResponse(
-            status_code=200,
+            status_code=204,
             headers={
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "POST, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type"
+                "Access-Control-Allow-Headers": "Content-Type",
             }
         )
     
-    try:
-        body = req.get_json()
-    except ValueError:
-        return func.HttpResponse(
-            json.dumps({"status": "error", "message": "JSON invalido"}),
-            status_code=400,
-            mimetype="application/json"
-        )
-    
-    query = body.get("query")
-    if not query:
-        return func.HttpResponse(
-            json.dumps({"status": "error", "message": "Campo 'query' obrigatorio"}),
-            status_code=400,
-            mimetype="application/json"
-        )
-    
-    # Parametros
-    top_k = body.get("top_k", 8)
-    doc_types = body.get("doc_type", ["jurisprudencia"])
-    user_uf = body.get("user_uf")
-    scenario = body.get("scenario")
-    use_semantic = body.get("use_semantic", True)
-    use_vector = body.get("use_vector", True)
-    debug_mode = body.get("debug", False)
-    
-    # Filtros legados (para compatibilidade)
-    filters = body.get("filters", {})
+    cors_headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+    }
     
     try:
-        search_client = get_search_client()
-    except Exception as e:
-        logger.error(f"Erro ao conectar Azure Search: {e}")
-        return func.HttpResponse(
-            json.dumps({"status": "error", "message": f"Erro conexao: {str(e)}"}),
-            status_code=500,
-            mimetype="application/json",
-            headers={"Access-Control-Allow-Origin": "*"}
-        )
-    
-    try:
-        # Gerar embedding da query
-        query_vector = generate_embedding(query) if use_vector else []
-        
-        # ============================================================
-        # MODO FALLBACK SEQUENCIAL (quando scenario informado)
-        # ============================================================
-        if scenario is not None and "jurisprudencia" in doc_types:
-            desired_effect = SCENARIO_TO_EFFECT.get(scenario)
-            if not desired_effect:
-                return func.HttpResponse(
-                    json.dumps({
-                        "status": "error", 
-                        "message": f"Scenario invalido: {scenario}. Aceitos: 1,2,3,4"
-                    }),
-                    status_code=400,
-                    mimetype="application/json",
-                    headers={"Access-Control-Allow-Origin": "*"}
-                )
-            
-            debug_info = {
-                "scenario_used": scenario,
-                "desired_effect_used": desired_effect,
-                "user_uf": user_uf,
-                "user_region": get_region(user_uf) if user_uf else None,
-                "stages": []
-            }
-            
-            # PASSADA 1: com desired_effect
-            results, winner_stage, stages = fallback_search(
-                search_client, query, query_vector, user_uf, 
-                desired_effect, top_k, use_semantic
-            )
-            debug_info["stages"].extend(stages)
-            debug_info["passada1_winner"] = winner_stage
-            
-            # PASSADA 2: se nao achou nada, tentar com CONDICIONAL
-            if not results and desired_effect != "CONDICIONAL":
-                logger.info("Passada 1 vazia, tentando CONDICIONAL")
-                results, winner_stage, stages = fallback_search(
-                    search_client, query, query_vector, user_uf,
-                    "CONDICIONAL", top_k, use_semantic
-                )
-                debug_info["stages"].extend(stages)
-                debug_info["passada2_winner"] = winner_stage
-                debug_info["used_condicional_fallback"] = True
-            else:
-                debug_info["used_condicional_fallback"] = False
-            
-            debug_info["winner_stage"] = winner_stage if results else "NONE"
-            
-            response = {
-                "status": "success",
-                "query": query,
-                "total": len(results),
-                "results": results
-            }
-            
-            if debug_mode:
-                response["debug"] = debug_info
-            
+        try:
+            body = req.get_json()
+        except ValueError:
             return func.HttpResponse(
-                json.dumps(response),
-                status_code=200,
-                mimetype="application/json",
-                headers={"Access-Control-Allow-Origin": "*"}
+                json.dumps({"status": "error", "error": "Invalid JSON"}),
+                status_code=400,
+                headers=cors_headers
             )
         
-        # ============================================================
-        # MODO SIMPLES (sem scenario - compatibilidade)
-        # ============================================================
-        from azure.search.documents.models import VectorizedQuery
-        
-        # Construir filtro simples
-        filter_parts = []
-        
-        if filters.get("doc_type"):
-            doc_type_filters = [f"doc_type eq '{dt}'" for dt in filters["doc_type"]]
-            filter_parts.append(f"({' or '.join(doc_type_filters)})")
-        elif doc_types:
-            doc_type_filters = [f"doc_type eq '{dt}'" for dt in doc_types]
-            filter_parts.append(f"({' or '.join(doc_type_filters)})")
-        
-        if filters.get("tribunal"):
-            tribunal_filters = [f"tribunal eq '{t}'" for t in filters["tribunal"]]
-            filter_parts.append(f"({' or '.join(tribunal_filters)})")
-        
-        if filters.get("uf"):
-            uf_filters = [f"uf eq '{u}'" for u in filters["uf"]]
-            filter_parts.append(f"({' or '.join(uf_filters)})")
-        
-        if filters.get("is_current") is not None:
-            filter_parts.append(f"is_current eq {str(filters['is_current']).lower()}")
-        
-        if filters.get("year_min"):
-            filter_parts.append(f"year ge {filters['year_min']}")
-        
-        if filters.get("effect"):
-            effect_filters = [f"effect eq '{e}'" for e in filters["effect"]]
-            filter_parts.append(f"({' or '.join(effect_filters)})")
-        
-        filter_str = " and ".join(filter_parts) if filter_parts else None
-        
-        # Executar busca
-        search_params = {
-            "search_text": query,
-            "top": top_k,
-            "select": ["chunk_id", "doc_type", "source", "tribunal", "uf", "region",
-                       "effect", "title", "content", "citation", "year", "authority_score", "is_current"]
-        }
-        
-        if filter_str:
-            search_params["filter"] = filter_str
-        
-        if use_vector and query_vector:
-            vector_query = VectorizedQuery(
-                vector=query_vector,
-                k_nearest_neighbors=top_k,
-                fields="embedding"
+        query = body.get("query", "")
+        if not query:
+            return func.HttpResponse(
+                json.dumps({"status": "error", "error": "query e obrigatorio"}),
+                status_code=400,
+                headers=cors_headers
             )
-            search_params["vector_queries"] = [vector_query]
         
-        if use_semantic:
-            search_params["query_type"] = "semantic"
-            search_params["semantic_configuration_name"] = "kb-legal-semantic"
+        scenario = body.get("scenario")
+        user_uf = body.get("user_uf")
+        top_k = body.get("top_k", 10)
+        filters = body.get("filters", {})
+        use_semantic = body.get("use_semantic", True)
+        use_vector = body.get("use_vector", True)
+        debug = body.get("debug", False)
         
-        results = search_client.search(**search_params)
+        if user_uf and user_uf not in UF_TO_REGION:
+            return func.HttpResponse(
+                json.dumps({"status": "error", "error": f"UF invalida: {user_uf}"}),
+                status_code=400,
+                headers=cors_headers
+            )
         
-        items = []
-        for result in results:
-            item = {
-                "chunk_id": result.get("chunk_id"),
-                "doc_type": result.get("doc_type"),
-                "source": result.get("source"),
-                "tribunal": result.get("tribunal"),
-                "uf": result.get("uf"),
-                "region": result.get("region"),
-                "effect": result.get("effect"),
-                "title": result.get("title"),
-                "content": result.get("content"),
-                "citation": result.get("citation"),
-                "year": result.get("year"),
-                "authority_score": result.get("authority_score"),
-                "is_current": result.get("is_current"),
-                "search_score": result.get("@search.score"),
-                "reranker_score": result.get("@search.reranker_score")
-            }
-            items.append(item)
+        query_vector = None
+        if use_vector:
+            try:
+                query_vector = generate_query_embedding(query)
+            except Exception as e:
+                logger.warning(f"Erro ao gerar embedding: {e}")
+                use_vector = False
+        
+        search_client = SearchClient(
+            endpoint=AZURE_SEARCH_ENDPOINT,
+            index_name=AZURE_SEARCH_INDEX_NAME,
+            credential=AzureKeyCredential(AZURE_SEARCH_API_KEY)
+        )
+        
+        if scenario and scenario in SCENARIO_TO_EFFECT:
+            desired_effect = SCENARIO_TO_EFFECT[scenario]
+            results, debug_info = search_with_jurisdiction_fallback(
+                search_client=search_client,
+                query=query,
+                query_vector=query_vector,
+                user_uf=user_uf,
+                desired_effect=desired_effect,
+                secao=filters.get("secao"),
+                procedural_stage=filters.get("procedural_stage"),
+                top_k=top_k,
+                use_semantic=use_semantic,
+                use_vector=use_vector
+            )
+            debug_info["scenario"] = scenario
+        else:
+            results, debug_info = search_simple(
+                search_client=search_client,
+                query=query,
+                query_vector=query_vector,
+                filters=filters,
+                top_k=top_k,
+                use_semantic=use_semantic,
+                use_vector=use_vector
+            )
         
         response = {
             "status": "success",
             "query": query,
-            "total": len(items),
-            "results": items
+            "total": len(results),
+            "results": results,
+            "fallback_info": {
+                "scenario": scenario,
+                "desired_effect": debug_info.get("desired_effect"),
+                "found_at": debug_info.get("found_at"),
+                "found_effect": debug_info.get("found_effect")
+            } if scenario else None
         }
         
-        if debug_mode:
-            response["debug"] = {
-                "filter": filter_str,
-                "semantic": use_semantic,
-                "vector": use_vector
-            }
+        if debug:
+            response["debug"] = debug_info
         
         return func.HttpResponse(
-            json.dumps(response),
+            json.dumps(response, ensure_ascii=False, default=str),
             status_code=200,
-            mimetype="application/json",
-            headers={"Access-Control-Allow-Origin": "*"}
+            headers=cors_headers
         )
         
     except Exception as e:
-        logger.error(f"Erro na busca: {e}")
+        logger.exception(f"Erro no search: {e}")
         return func.HttpResponse(
-            json.dumps({"status": "error", "message": str(e)}),
+            json.dumps({"status": "error", "error": str(e)}),
             status_code=500,
-            mimetype="application/json",
-            headers={"Access-Control-Allow-Origin": "*"}
+            headers=cors_headers
         )

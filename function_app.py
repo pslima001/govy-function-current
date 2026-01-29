@@ -110,3 +110,37 @@ def kb_search(req: func.HttpRequest) -> func.HttpResponse:
 def kb_effect_classify(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.kb_effect_classify import main
     return main(req)
+
+# =============================================================================
+# KB JURIS EXTRACT - SPEC 1.2
+# =============================================================================
+
+# KB Juris Extract All (pipeline completo)
+@app.route(route="kb/juris/extract_all", methods=["POST", "OPTIONS"])
+def kb_juris_extract_all(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import main
+    return main(req)
+
+# KB Juris Review Queue - Listar pendentes
+@app.route(route="kb/juris/review_queue", methods=["GET"])
+def kb_juris_review_list(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import list_review_queue
+    return list_review_queue(req)
+
+# KB Juris Review Queue - Obter item
+@app.route(route="kb/juris/review_queue/{item_id}", methods=["GET"])
+def kb_juris_review_get(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import get_review_item
+    return get_review_item(req)
+
+# KB Juris Review Queue - Aprovar item
+@app.route(route="kb/juris/review_queue/{item_id}/approve", methods=["POST"])
+def kb_juris_review_approve(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import approve_review_item
+    return approve_review_item(req)
+
+# KB Juris Review Queue - Rejeitar item
+@app.route(route="kb/juris/review_queue/{item_id}/reject", methods=["POST"])
+def kb_juris_review_reject(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import reject_review_item
+    return reject_review_item(req)

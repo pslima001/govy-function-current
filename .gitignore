@@ -52,3 +52,9 @@ patch_*.py
 aplicar_correcoes_feedback.ps1
 patch_*.py
 *.bak
+
+# ================================
+# Local backups e scripts
+# ================================
+backups/
+scripts/
