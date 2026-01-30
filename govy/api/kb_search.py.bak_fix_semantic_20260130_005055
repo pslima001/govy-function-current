@@ -1,4 +1,4 @@
-﻿"""
+"""
 GOVY - Handler do Endpoint /api/kb/search
 SPEC 1.2 - Knowledge Base Juridica
 
@@ -128,7 +128,7 @@ def execute_search(
     
     if use_semantic:
         search_params["query_type"] = "semantic"
-        search_params["semantic_configuration_name"] = "semantic-config"
+        search_params["semantic_configuration_name = "semantic-config"
     
     try:
         results = search_client.search(**search_params)
@@ -383,4 +383,3 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             headers=cors_headers
         )
-

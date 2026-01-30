@@ -22,15 +22,6 @@ from azure.search.documents import SearchClient
 from azure.core.credentials import AzureKeyCredential
 from openai import OpenAI
 
-# Fonte unica de normalizacao (definitivo)
-try:
-    from govy.utils.juris_constants import normalize_chunk_for_upsert
-except ImportError as e:
-    import logging
-    logging.warning(f"Falha ao importar normalize_chunk_for_upsert: {e}")
-    def normalize_chunk_for_upsert(chunk, tribunal=None):
-        return chunk  # Fallback: retorna chunk sem modificar
-
 logger = logging.getLogger(__name__)
 
 # =============================================================================
@@ -346,7 +337,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         except ValueError:
             return func.HttpResponse(
                 json.dumps({"status": "error", "error": "Invalid JSON"}),
-                status_code=200,  # Definitivo: nao quebra pipeline
+                status_code=400,
                 headers=cors_headers
             )
         
@@ -356,7 +347,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         if not chunks:
             return func.HttpResponse(
                 json.dumps({"status": "error", "error": "Nenhum chunk fornecido"}),
-                status_code=200,  # Definitivo: nao quebra pipeline
+                status_code=400,
                 headers=cors_headers
             )
         
@@ -365,8 +356,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         valid_chunks = []
         
         for i, chunk in enumerate(chunks):
-            # Normalizar/clamp ANTES de validar
-            chunk = normalize_chunk_for_upsert(chunk, tribunal=chunk.get("tribunal"))
             errors = validate_chunk(chunk, i)
             if errors:
                 validation_errors.extend(errors)
@@ -383,7 +372,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     "errors": [],
                     "validation_errors": validation_errors
                 }),
-                status_code=200,  # Definitivo: nao quebra pipeline
+                status_code=400,
                 headers=cors_headers
             )
         

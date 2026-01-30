@@ -1,9 +1,13 @@
-﻿"""
-GOVY - Utils para Knowledge Base Jurídica
+"""
+GOVY - Utils para Knowledge Base Juridica
 SPEC 1.2
+
+IMPORTANT: Este arquivo deve ser side-effect free.
+NAO importar modulos pesados aqui.
+Use imports explicitos nos arquivos que precisam:
+  from govy.utils.juris_constants import ...
+  from govy.utils.juris_pipeline import JurisPipeline
+  from govy.utils.review_queue import ReviewQueue
 """
 
-from .juris_constants import *
-from .juris_regex import has_fundamento_legal, extract_legal_references
-from .juris_pipeline import JurisPipeline
-from .review_queue import ReviewQueue, review_queue
+__all__ = []
