@@ -144,3 +144,34 @@ def kb_juris_review_approve(req: func.HttpRequest) -> func.HttpResponse:
 def kb_juris_review_reject(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.kb_juris_extract import reject_review_item
     return reject_review_item(req)
+
+
+# ==============================================================================
+# KB JURIS - LISTS & STATS
+# ==============================================================================
+
+@app.function_name(name="kb_juris_approved_list")
+@app.route(route="kb/juris/approved", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
+def kb_juris_approved_list(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import list_approved_items
+    return list_approved_items(req)
+
+@app.function_name(name="kb_juris_blocked_list")
+@app.route(route="kb/juris/blocked", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
+def kb_juris_blocked_list(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import list_blocked_items
+    return list_blocked_items(req)
+
+@app.function_name(name="kb_juris_rejected_list")
+@app.route(route="kb/juris/rejected", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
+def kb_juris_rejected_list(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import list_rejected_items
+    return list_rejected_items(req)
+
+@app.function_name(name="kb_juris_stats")
+@app.route(route="kb/juris/stats", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
+def kb_juris_stats(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.kb_juris_extract import get_queue_stats
+    return get_queue_stats(req)
+
+
