@@ -1,6 +1,6 @@
-"""
+﻿"""
 GOVY - Handler do Endpoint /api/kb/search
-SPEC 1.2 - Knowledge Base Juridica
+SPEC 1.3 - Knowledge Base Juridica (Golden Path)
 
 Busca hibrida com fallback juridico:
 - scenario (1-4) deriva desired_effect automaticamente
@@ -16,6 +16,13 @@ FALLBACK AUTOMATICO DE MODO (v3.1 - 30/01/2026):
 - TCU: ignora uf/region no filtro (REGRA #3)
 - top_k limitado a 50
 """
+
+# ===========================================================================
+# GOLDEN PATH - DO NOT CHANGE WITHOUT SPEC UPDATE
+# SPEC: SPEC_KB_PIPELINE_v1.3.md
+# ===========================================================================
+
+KB_PIPELINE_VERSION = "1.3"
 
 import os
 import json
@@ -538,3 +545,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             headers=cors_headers
         )
+

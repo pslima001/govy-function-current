@@ -1,3 +1,9 @@
+﻿# ===========================================================================
+# GOLDEN PATH - DO NOT CHANGE WITHOUT SPEC UPDATE
+# SPEC: SPEC_KB_PIPELINE_v1.3.md
+# ===========================================================================
+
+KB_PIPELINE_VERSION = "1.3"
 # juris_constants.py - Constantes e Enums para KB Juridica GOVY
 # Versao: 2.0 | Data: 29/01/2026
 # ATUALIZADO: Mappings completos baseados em valores reais medidos nos FAILs

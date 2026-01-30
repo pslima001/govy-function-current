@@ -1,6 +1,6 @@
-"""
+﻿"""
 GOVY - Handler do Endpoint /api/kb/index/upsert
-SPEC 1.2 - Knowledge Base Juridica
+SPEC 1.3 (Golden Path) - Knowledge Base Juridica
 
 Indexa chunks no Azure AI Search com validacao dos novos campos:
 - secao (obrigatorio para jurisprudencia)
@@ -11,6 +11,13 @@ Indexa chunks no Azure AI Search com validacao dos novos campos:
 - effect
 - region (derivado de UF para TCE, null para TCU)
 """
+
+# ===========================================================================
+# GOLDEN PATH - DO NOT CHANGE WITHOUT SPEC UPDATE
+# SPEC: SPEC_KB_PIPELINE_v1.3.md
+# ===========================================================================
+
+KB_PIPELINE_VERSION = "1.3"
 
 import os
 import json
@@ -43,7 +50,7 @@ AZURE_SEARCH_INDEX_NAME = os.environ.get("AZURE_SEARCH_INDEX_NAME", "kb-legal")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 # =============================================================================
-# CONSTANTES E VALIDACAO - SPEC 1.2
+# CONSTANTES E VALIDACAO - SPEC 1.3 (Golden Path)
 # =============================================================================
 
 # Mapeamento UF -> Region (IBGE)
@@ -80,7 +87,7 @@ REQUIRED_FIELDS_JURISPRUDENCIA = ["chunk_id", "doc_type", "content", "tribunal",
 
 def validate_chunk(chunk: Dict, index: int) -> List[str]:
     """
-    Valida um chunk conforme SPEC 1.2.
+    Valida um chunk conforme SPEC 1.3 (Golden Path).
     
     Retorna lista de erros (vazia se valido).
     """
@@ -179,7 +186,7 @@ def prepare_chunk_for_index(chunk: Dict) -> Dict:
         if doc.get(field) == "":
             doc[field] = None
     
-    # Campos do indice (SPEC 1.2)
+    # Campos do indice (SPEC 1.3 (Golden Path))
     index_fields = [
         "chunk_id", "doc_type", "source", "tribunal", "uf", "region",
         "title", "content", "citation", "year", "authority_score", "is_current",
@@ -410,3 +417,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             headers=cors_headers
         )
+
