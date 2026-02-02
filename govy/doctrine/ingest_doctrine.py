@@ -1,0 +1,75 @@
+import json
+import os
+import azure.functions as func
+from azure.storage.blob import BlobServiceClient
+
+from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_process_once
+
+
+def handle_ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    Ingestão de doutrina (processa uma vez):
+      - lê DOCX do container DOCTRINE_CONTAINER_NAME
+      - salva JSON processado no DOCTRINE_PROCESSED_CONTAINER_NAME
+    """
+    try:
+        data = req.get_json()
+    except Exception:
+        return func.HttpResponse(
+            json.dumps({"error": "Envie JSON válido."}, ensure_ascii=False),
+            status_code=400,
+            mimetype="application/json",
+        )
+
+    conn = os.getenv("AZURE_STORAGE_CONNECTION_STRING") or os.getenv("AzureWebJobsStorage")
+    if not conn:
+        return func.HttpResponse(
+            json.dumps({"error": "Missing storage connection string env var."}, ensure_ascii=False),
+            status_code=500,
+            mimetype="application/json",
+        )
+
+    required = [
+        "blob_name",
+        "etapa_processo",
+        "tema_principal",
+        "autor", "obra", "edicao", "ano", "capitulo", "secao",
+    ]
+    missing = [k for k in required if k not in data]
+    if missing:
+        return func.HttpResponse(
+            json.dumps({"error": "Campos obrigatórios ausentes.", "missing": missing}, ensure_ascii=False),
+            status_code=400,
+            mimetype="application/json",
+        )
+
+    ingest_req = DoctrineIngestRequest(
+        blob_name=str(data["blob_name"]),
+        etapa_processo=str(data["etapa_processo"]),
+        tema_principal=str(data["tema_principal"]),
+        autor=str(data["autor"]),
+        obra=str(data["obra"]),
+        edicao=str(data["edicao"]),
+        ano=int(data["ano"]),
+        capitulo=str(data["capitulo"]),
+        secao=str(data["secao"]),
+        force_reprocess=bool(data.get("force_reprocess", False)),
+    )
+
+    container_source = os.getenv("DOCTRINE_CONTAINER_NAME", "doutrina")
+    container_processed = os.getenv("DOCTRINE_PROCESSED_CONTAINER_NAME", "doutrina-processed")
+
+    blob_service = BlobServiceClient.from_connection_string(conn)
+
+    result = ingest_doctrine_process_once(
+        blob_service=blob_service,
+        container_source=container_source,
+        container_processed=container_processed,
+        req=ingest_req,
+    )
+
+    return func.HttpResponse(
+        json.dumps(result, ensure_ascii=False),
+        status_code=200,
+        mimetype="application/json",
+    )

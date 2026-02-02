@@ -4,6 +4,7 @@ Azure Functions - Govy Backend
 Registro das funcoes HTTP
 """
 import azure.functions as func
+
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
 # Ping
@@ -64,6 +65,22 @@ def extract_items(req: func.HttpRequest) -> func.HttpResponse:
 def dicionario(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.dicionario_api import handle_dicionario
     return handle_dicionario(req)
+
+# ============================================================
+# DOUTRINA ENDPOINTS (Habilitação - primeira doutrina)
+# ============================================================
+
+# Upload Doctrine (DOCX)
+@app.route(route="upload_doctrine", methods=["POST"])
+def upload_doctrine(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.upload_doctrine import handle_upload_doctrine
+    return handle_upload_doctrine(req)
+
+# Ingest Doctrine (processa uma vez)
+@app.route(route="ingest_doctrine", methods=["POST"])
+def ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.ingest_doctrine import handle_ingest_doctrine
+    return handle_ingest_doctrine(req)
 
 # ============================================================
 # JURISPRUDENCIA ENDPOINTS
@@ -145,7 +162,6 @@ def kb_juris_review_reject(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.kb_juris_extract import reject_review_item
     return reject_review_item(req)
 
-
 # ==============================================================================
 # KB JURIS - LISTS & STATS
 # ==============================================================================
@@ -173,5 +189,3 @@ def kb_juris_rejected_list(req: func.HttpRequest) -> func.HttpResponse:
 def kb_juris_stats(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.kb_juris_extract import get_queue_stats
     return get_queue_stats(req)
-
-
