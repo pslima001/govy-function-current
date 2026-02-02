@@ -54,7 +54,7 @@ def handle_ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
             autor=data.get("autor", ""),
             obra=data.get("obra", ""),
             edicao=data.get("edicao", ""),
-            ano=int(data.get("ano", 0) or 0)
+            ano=int(data.get("ano", 0) or 0),
             capitulo=data.get("capitulo", ""),
             secao=data.get("secao", ""),
             force_reprocess=bool(data.get("force_reprocess", False)),
