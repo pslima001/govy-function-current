@@ -37,7 +37,7 @@ def handle_ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
             "blob_name",
             "etapa_processo",
             "tema_principal",
-            "autor", "obra", "edicao", "ano", "capitulo", "secao",
+            
         ]
         missing = [k for k in required if k not in data]
         if missing:
@@ -51,12 +51,12 @@ def handle_ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
             blob_name=str(data["blob_name"]),
             etapa_processo=str(data["etapa_processo"]),
             tema_principal=str(data["tema_principal"]),
-            autor=str(data["autor"]),
-            obra=str(data["obra"]),
-            edicao=str(data["edicao"]),
-            ano=int(data["ano"]),
-            capitulo=str(data["capitulo"]),
-            secao=str(data["secao"]),
+            autor=data.get("autor", ""),
+            obra=data.get("obra", ""),
+            edicao=data.get("edicao", ""),
+            ano=int(data.get("ano", 0) or 0)
+            capitulo=data.get("capitulo", ""),
+            secao=data.get("secao", ""),
             force_reprocess=bool(data.get("force_reprocess", False)),
         )
 
