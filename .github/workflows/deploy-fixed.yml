@@ -52,6 +52,7 @@ jobs:
             --resource-group rg-govy-parse-test-sponsor \
             --name func-govy-parse-test \
             --src deploy.zip \
+            --build-remote \
             --timeout 600
           echo "✅ Deploy completed"
       
