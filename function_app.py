@@ -6,6 +6,14 @@ Registro das funcoes HTTP
 import json
 import azure.functions as func
 
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
 # Ping
