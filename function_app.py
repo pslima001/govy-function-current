@@ -70,17 +70,19 @@ def dicionario(req: func.HttpRequest) -> func.HttpResponse:
 # DOUTRINA ENDPOINTS (Habilitação - primeira doutrina)
 # ============================================================
 
-# Upload Doctrine (DOCX)
-@app.route(route="upload_doctrine", methods=["POST"])
+@app.function_name(name="upload_doctrine")
+@app.route(route="upload_doctrine", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def upload_doctrine(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.upload_doctrine import handle_upload_doctrine
     return handle_upload_doctrine(req)
 
-# Ingest Doctrine (processa uma vez)
-@app.route(route="ingest_doctrine", methods=["POST"])
+
+@app.function_name(name="ingest_doctrine")
+@app.route(route="ingest_doctrine", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.ingest_doctrine import handle_ingest_doctrine
     return handle_ingest_doctrine(req)
+
 
 # ============================================================
 # JURISPRUDENCIA ENDPOINTS
