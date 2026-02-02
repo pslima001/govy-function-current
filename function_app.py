@@ -1,4 +1,4 @@
-﻿# function_app.py
+# function_app.py
 """
 Azure Functions - Govy Backend
 Registro das funcoes HTTP
@@ -223,3 +223,106 @@ def kb_juris_rejected_list(req: func.HttpRequest) -> func.HttpResponse:
 def kb_juris_stats(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.kb_juris_extract import get_queue_stats
     return get_queue_stats(req)
+
+# ============================================================
+# DIAGNOSTIC ENDPOINT (Troubleshooting)
+# ============================================================
+
+@app.function_name(name="diagnostic_full")
+@app.route(route="diagnostic_full", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+def diagnostic_full(req: func.HttpRequest) -> func.HttpResponse:
+    """Endpoint de diagnostico completo para troubleshooting"""
+    import os
+    
+    d = {}
+    
+    # Python info
+    d["python_version"] = sys.version
+    d["sys_path"] = sys.path
+    d["cwd"] = os.getcwd()
+    
+    # WWWROOT structure
+    wwwroot = "/home/site/wwwroot"
+    d["wwwroot_exists"] = os.path.exists(wwwroot)
+    
+    if os.path.exists(wwwroot):
+        try:
+            d["wwwroot_contents"] = os.listdir(wwwroot)
+        except Exception as e:
+            d["wwwroot_contents"] = f"ERROR: {str(e)}"
+    
+    # GOVY folder
+    govy_path = os.path.join(wwwroot, "govy")
+    d["govy_exists"] = os.path.exists(govy_path)
+    
+    if os.path.exists(govy_path):
+        try:
+            d["govy_contents"] = os.listdir(govy_path)
+            
+            # Subfolders
+            govy_api = os.path.join(govy_path, "api")
+            govy_doctrine = os.path.join(govy_path, "doctrine")
+            
+            d["govy_api_exists"] = os.path.exists(govy_api)
+            if os.path.exists(govy_api):
+                d["govy_api_files"] = os.listdir(govy_api)[:10]
+            
+            d["govy_doctrine_exists"] = os.path.exists(govy_doctrine)
+            if os.path.exists(govy_doctrine):
+                d["govy_doctrine_files"] = os.listdir(govy_doctrine)[:10]
+        except Exception as e:
+            d["govy_error"] = str(e)
+    
+    # __init__.py files
+    init_files = []
+    for init_path in [
+        os.path.join(wwwroot, "govy", "__init__.py"),
+        os.path.join(wwwroot, "govy", "api", "__init__.py"),
+        os.path.join(wwwroot, "govy", "doctrine", "__init__.py"),
+    ]:
+        init_files.append({
+            "path": init_path.replace(wwwroot, ""),
+            "exists": os.path.exists(init_path)
+        })
+    d["init_files"] = init_files
+    
+    # Import tests
+    import_tests = {}
+    
+    try:
+        import govy as govy_module
+        import_tests["import_govy"] = "OK"
+    except Exception as e:
+        import_tests["import_govy"] = f"FAILED: {str(e)}"
+    
+    try:
+        from govy.api.ingest_doctrine import handle_ingest_doctrine
+        import_tests["import_ingest_doctrine"] = "OK"
+    except Exception as e:
+        import_tests["import_ingest_doctrine"] = f"FAILED: {str(e)}"
+    
+    try:
+        from govy.doctrine import pipeline
+        import_tests["import_pipeline"] = "OK"
+    except Exception as e:
+        import_tests["import_pipeline"] = f"FAILED: {str(e)}"
+    
+    d["import_tests"] = import_tests
+    
+    # Find govy anywhere
+    try:
+        govy_locations = []
+        for root, dirs, files in os.walk(wwwroot):
+            if "govy" in dirs:
+                govy_locations.append(root.replace(wwwroot, ""))
+            if root.count(os.sep) - wwwroot.count(os.sep) > 2:
+                break
+        d["govy_found_at"] = govy_locations if govy_locations else ["NOT_FOUND"]
+    except Exception as e:
+        d["find_govy_error"] = str(e)
+    
+    return func.HttpResponse(
+        body=json.dumps(d, indent=2, ensure_ascii=False),
+        mimetype="application/json",
+        status_code=200
+    )
