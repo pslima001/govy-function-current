@@ -83,6 +83,12 @@ def ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
     from govy.api.ingest_doctrine import handle_ingest_doctrine
     return handle_ingest_doctrine(req)
 
+@app.function_name(name="upload_doctrine_b64")
+@app.route(route="upload_doctrine_b64", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+def upload_doctrine_b64(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.api.upload_doctrine_b64 import handle_upload_doctrine_b64
+    return handle_upload_doctrine_b64(req)
+
 
 # ============================================================
 # JURISPRUDENCIA ENDPOINTS
