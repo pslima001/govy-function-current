@@ -99,4 +99,45 @@ def ingest_doctrine_process_once(
             {
                 "id": f"doutrina::{source_sha}::{ch.chunk_id}",
                 "doc_type": "doutrina",
-                "procedu
+                "procedural_stage": stage.upper(),
+                "tema_principal": theme,
+                "chunk_id": ch.chunk_id,
+                "order": ch.order,
+                "content_raw": ch.content_raw,  # interno (não é para UI)
+                "content_hash": ch.content_hash,
+                "source_sha": source_sha,
+                "created_at": _utc_now_iso(),
+            }
+        )
+
+    payload = {
+        "kind": "doctrine_processed_v1",
+        "status": "processed",
+        "generated_at": _utc_now_iso(),
+        "source": {"container": container_source, "blob_name": req.blob_name, "source_sha": source_sha},
+        "context": {"etapa_processo": stage, "tema_principal": theme},
+        "internal_meta": {
+            "autor": req.autor,
+            "obra": req.obra,
+            "edicao": req.edicao,
+            "ano": req.ano,
+            "capitulo": req.capitulo,
+            "secao": req.secao,
+        },
+        "stats": {"paragraphs": len(raw.paragraphs), "chars": len(raw.text), "chunks": len(chunk_docs)},
+        "chunks": chunk_docs,
+        "public_knowledge": None,
+    }
+
+    proc_blob.upload_blob(
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        overwrite=True,
+        content_settings=ContentSettings(content_type="application/json; charset=utf-8"),
+    )
+
+    return {
+        "status": "processed",
+        "source": {"container": container_source, "blob_name": req.blob_name, "source_sha": source_sha},
+        "processed": {"container": container_processed, "blob_name": processed_name},
+        "stats": payload["stats"],
+    }
