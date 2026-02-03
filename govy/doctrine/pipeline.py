@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 import hashlib
 import logging
+import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Dict, Any, List
@@ -39,8 +40,14 @@ def _safe_stage(s: str) -> str:
     return s or "habilitacao"
 
 def _safe_theme(s: str) -> str:
-    s = (s or "").strip().lower()
-    return s or "tema"
+    """Retorna tema normalizado em UPPER.
+    Path do blob usa .lower() separadamente."""
+    s = (s or "").strip()
+    if not s: 
+        return "TEMA"
+    s = re.sub(r"[\s\-\/]+", "_", s)
+    s = re.sub(r"_+", "_", s).strip("_")
+    return s.upper()
 
 def _processed_blob_name(stage: str, theme: str, source_sha: str) -> str:
     return f"{stage}/{theme}/{source_sha}.json"
@@ -78,19 +85,20 @@ def ingest_doctrine_process_once(
     _ensure_container_exists(blob_service, container_source)
     _ensure_container_exists(blob_service, container_processed)
     stage = _safe_stage(req.etapa_processo)
-    theme = _safe_theme(req.tema_principal)
+    theme_field = _safe_theme(req.tema_principal)        # UPPER, usado no JSON/chunks
+    theme_path = theme_field.lower()                 # lower, usado no path do blob
     src_container = blob_service.get_container_client(container_source)
     src_blob = src_container.get_blob_client(req.blob_name)
     try:
         docx_bytes = src_blob.download_blob().readall()
     except ResourceNotFoundError:
-        logger.error(f"Blob não encontrado: {req.blob_name}")
+        logger.error(f"Blob ã ncontrado: {req.blob_name}")
         raise ValueError(f"Blob não encontrado: {req.blob_name}")
     except Exception as e:
         logger.error(f"Erro ao baixar blob: {e}")
         raise
     source_sha = _sha256_bytes(docx_bytes)
-    processed_name = _processed_blob_name(stage, theme, source_sha)
+    processed_name = _processed_blob_name(stage, theme_path, source_sha)
     proc_container = blob_service.get_container_client(container_processed)
     proc_blob = proc_container.get_blob_client(processed_name)
     if (not req.force_reprocess) and _blob_exists(proc_blob):
@@ -102,7 +110,7 @@ def ingest_doctrine_process_once(
         }
     logger.info("Extraindo texto do DOCX...")
     raw = read_docx_bytes(docx_bytes)
-    logger.info(f"Criando chunks brutos (paragraphs: {len(raw.paragraphs)})...")
+    logger.info(f"Criando chunks brutos (paragraphs: {len(raw.paragraphs)}...")
     chunks = chunk_paragraphs(raw.paragraphs)
     raw_chunk_docs: List[Dict[str, Any]] = []
     for ch in chunks:
@@ -110,7 +118,7 @@ def ingest_doctrine_process_once(
             "id": f"doutrina_raw::{source_sha}::{ch.chunk_id}",
             "doc_type": "doutrina_raw",
             "procedural_stage": stage.upper(),
-            "tema_principal": theme,
+            "tema_principal": theme_field,
             "chunk_id": ch.chunk_id,
             "order": ch.order,
             "content_raw": ch.content_raw,
@@ -137,7 +145,7 @@ def ingest_doctrine_process_once(
     semantic_chunks = extract_semantic_chunks_for_raw_chunks(
         raw_chunks=doctrine_raw_chunks,
         procedural_stage=stage.upper(),
-        tema_principal=theme,
+        tema_principal=theme_field,
         source_sha=source_sha,
         review_status_default="PENDING",
     )
@@ -146,7 +154,7 @@ def ingest_doctrine_process_once(
         "status": "processed",
         "generated_at": _utc_now_iso(),
         "source": {"container": container_source, "blob_name": req.blob_name, "source_sha": source_sha},
-        "context": {"etapa_processo": stage, "tema_principal": theme},
+        "context": {"etapa_processo": stage, "tema_principal": theme_field},
         "internal_meta": {
             "autor": req.autor, "obra": req.obra, "edicao": req.edicao,
             "ano": req.ano, "capitulo": req.capitulo, "secao": req.secao,
