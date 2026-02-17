@@ -1,60 +1,18 @@
-﻿# ================================
-# Python / Virtualenv
-# ================================
-.venv/
-venv/
-ENV/
-env/
+﻿*.bak*
+*.backup*
 __pycache__/
-*.py[cod]
-
-# ================================
-# Azure Functions (local)
-# ================================
-local.settings.json
-.python_packages/
-
-# ================================
-# Build / Deploy artifacts
-# ================================
+.venv/
+*.pyc
+blob_list.txt
+query.json
+test_search.py
+install_doctrine_b_a1.ps1
+aplicar_correcoes_feedback.ps1
 deploy.zip
-release.zip
-*.zip
-
-# ================================
-# IDE / Editor
-# ================================
-.vscode/
-.idea/
-*.code-workspace
-
-# ================================
-# Secrets
-# ================================
-.env
-.env.local
-*.pem
-*.key
-
-# ================================
-# OS
-# ================================
-.DS_Store
-Thumbs.db
-
-# Arquivos corrompidos/backup
-*_CORRUPTED.py
-
-aplicar_correcoes_feedback.ps1
-patch_*.py
-*.bak
-
-aplicar_correcoes_feedback.ps1
-patch_*.py
-*.bak
-
-# ================================
-# Local backups e scripts
-# ================================
-backups/
-scripts/
+local.settings.json
+scripts/__pycache__/
+scripts/lote*
+scripts/test_*
+scripts/validate_*
+scripts/microbatch_manifest_example.json
+tests/__pycache__/

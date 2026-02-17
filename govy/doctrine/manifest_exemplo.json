@@ -1,0 +1,28 @@
+{
+  "default": {
+    "etapa_processo": "habilitacao",
+    "tema_principal": "habilitacao"
+  },
+  "files": {
+    "Art. 62 - HABILITAÇÃO - INTRODUÇÃO.docx": {
+      "etapa_processo": "habilitacao",
+      "tema_principal": "habilitacao",
+      "autor": "INTERNO",
+      "obra": "INTERNO",
+      "edicao": "INTERNO",
+      "ano": 2021,
+      "capitulo": "Art. 62",
+      "secao": "Introdução"
+    },
+    "Art. 65 - HABILITAÇÃO - DEFINIÇÕES.docx": {
+      "etapa_processo": "habilitacao",
+      "tema_principal": "habilitacao",
+      "autor": "INTERNO",
+      "obra": "INTERNO",
+      "edicao": "INTERNO",
+      "ano": 2021,
+      "capitulo": "Art. 65",
+      "secao": "Definições"
+    }
+  }
+}
