@@ -33,7 +33,7 @@ import tempfile
 from typing import List, Dict, Tuple, Optional, Set
 from collections import defaultdict, Counter
 import azure.functions as func
-from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client
 
 logger = logging.getLogger(__name__)
 
@@ -1206,8 +1206,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="application/json"
             )
         
-        conn_str = os.environ.get("AzureWebJobsStorage")
-        blob_service = BlobServiceClient.from_connection_string(conn_str)
+        blob_service = get_blob_service_client()
         container = blob_service.get_container_client(
             os.environ.get("BLOB_CONTAINER_NAME", "editais-teste")
         )

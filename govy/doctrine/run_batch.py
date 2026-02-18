@@ -3,7 +3,7 @@ import json
 import logging
 import os
 from typing import Dict, Any
-from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client
 from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_process_once
 
 logger = logging.getLogger(__name__)
@@ -25,14 +25,11 @@ def _merge_meta(defaults: Dict[str, Any], file_meta: Dict[str, Any]) -> Dict[str
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO)
-    conn = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-    if not conn:
-        raise RuntimeError("AZURE_STORAGE_CONNECTION_STRING não configurada")
     container_source = os.getenv("DOCTRINE_CONTAINER_SOURCE", "doutrina")
     container_processed = os.getenv("DOCTRINE_CONTAINER_PROCESSED", "doutrina-processed")
     manifest_path = os.getenv("DOCTRINE_MANIFEST_JSON", "")
     force_reprocess = os.getenv("DOCTRINE_FORCE_REPROCESS", "false").lower() == "true"
-    blob_service = BlobServiceClient.from_connection_string(conn)
+    blob_service = get_blob_service_client()
     manifest = _load_manifest(manifest_path)
     defaults = manifest.get("default", {})
     file_map = manifest.get("files", {})

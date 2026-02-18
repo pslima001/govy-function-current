@@ -2,7 +2,7 @@ import json
 import os
 import traceback
 import azure.functions as func
-from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client
 
 from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_process_once
 
@@ -22,14 +22,6 @@ def handle_ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse(
                 json.dumps({"error": "Envie JSON válido.", "details": str(e)}, ensure_ascii=False),
                 status_code=400,
-                mimetype="application/json",
-            )
-
-        conn = os.getenv("AZURE_STORAGE_CONNECTION_STRING") or os.getenv("AzureWebJobsStorage")
-        if not conn:
-            return func.HttpResponse(
-                json.dumps({"error": "Missing storage connection string env var."}, ensure_ascii=False),
-                status_code=500,
                 mimetype="application/json",
             )
 
@@ -63,7 +55,7 @@ def handle_ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
         container_source = os.getenv("DOCTRINE_CONTAINER_NAME", "doutrina")
         container_processed = os.getenv("DOCTRINE_PROCESSED_CONTAINER_NAME", "doutrina-processed")
 
-        blob_service = BlobServiceClient.from_connection_string(conn)
+        blob_service = get_blob_service_client()
 
         result = ingest_doctrine_process_once(
             blob_service=blob_service,

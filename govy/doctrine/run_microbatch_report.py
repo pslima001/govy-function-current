@@ -7,7 +7,7 @@ import json
 import os
 import logging
 from datetime import datetime, timezone
-from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client
 from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_process_once
 
 logger = logging.getLogger(__name__)
@@ -19,15 +19,12 @@ def _utc_now_iso():
 
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-    conn = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-    if not conn:
-        raise RuntimeError("AZURE_STORAGE_CONNECTION_STRING nao definida.")
     container_source = os.environ.get("DOCTRINE_CONTAINER_SOURCE", "doutrina")
     container_processed = os.environ.get("DOCTRINE_CONTAINER_PROCESSED", "doutrina-processed")
     force = os.environ.get("DOCTRINE_FORCE_REPROCESS", "false").lower() == "true"
     manifest_path = os.environ.get("DOCTRINE_MICROBATCH_MANIFEST_JSON", "")
     report_path = os.environ.get("DOCTRINE_MICROBATCH_REPORT_PATH", "outputs/microbatch_report_doctrine_v2.json")
-    blob_service = BlobServiceClient.from_connection_string(conn)
+    blob_service = get_blob_service_client()
     if manifest_path and os.path.isfile(manifest_path):
         with open(manifest_path, "r", encoding="utf-8") as f:
             manifest = json.load(f)

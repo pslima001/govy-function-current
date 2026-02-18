@@ -57,7 +57,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         # =================================================================
         # 2. IMPORTAÃ‡Ã•ES (dentro da funÃ§Ã£o para evitar erro no startup)
         # =================================================================
-        from azure.storage.blob import BlobServiceClient
+        from govy.utils.azure_clients import get_blob_service_client
         from azure.ai.documentintelligence import DocumentIntelligenceClient
         from azure.ai.documentintelligence.models import AnalyzeDocumentRequest
         from azure.core.credentials import AzureKeyCredential
@@ -65,18 +65,10 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         # =================================================================
         # 3. CONFIGURAÃ‡Ã•ES
         # =================================================================
-        conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
         container_name = os.environ.get("BLOB_CONTAINER_NAME", "editais-teste")
         di_endpoint = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT")
         di_key = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_KEY")
-        
-        if not conn_str:
-            return func.HttpResponse(
-                json.dumps({"error": "AZURE_STORAGE_CONNECTION_STRING nÃ£o configurada"}),
-                status_code=500,
-                mimetype="application/json"
-            )
-        
+
         if not di_endpoint or not di_key:
             return func.HttpResponse(
                 json.dumps({"error": "Document Intelligence nÃ£o configurado (AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT/KEY)"}),
@@ -87,7 +79,7 @@ def handle_parse_layout(req: func.HttpRequest) -> func.HttpResponse:
         # =================================================================
         # 4. CONECTAR AO BLOB STORAGE
         # =================================================================
-        blob_service = BlobServiceClient.from_connection_string(conn_str)
+        blob_service = get_blob_service_client()
         
         # Nome do arquivo de cache
         parsed_blob_name = blob_name.replace(".pdf", "_parsed.json")

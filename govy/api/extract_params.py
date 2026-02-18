@@ -177,18 +177,10 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
         from govy.extractors.o001_objeto import extract_o001_multi
 
         # Importa Azure SDK
-        from azure.storage.blob import BlobServiceClient
+        from govy.utils.azure_clients import get_blob_service_client
 
         # Configuracoes
-        conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
         container_name = os.environ.get("BLOB_CONTAINER_NAME", "editais-teste")
-
-        if not conn_str:
-            return func.HttpResponse(
-                json.dumps({"error": "AZURE_STORAGE_CONNECTION_STRING nao configurada"}),
-                status_code=500,
-                mimetype="application/json"
-            )
 
         # Determina o nome do arquivo parsed
         if blob_name.endswith("_parsed.json"):
@@ -197,7 +189,7 @@ def handle_extract_params(req: func.HttpRequest) -> func.HttpResponse:
             parsed_blob_name = blob_name.replace(".pdf", "_parsed.json")
 
         # Baixa o JSON parseado
-        blob_service = BlobServiceClient.from_connection_string(conn_str)
+        blob_service = get_blob_service_client()
         blob_client = blob_service.get_blob_client(
             container=container_name,
             blob=parsed_blob_name

@@ -20,6 +20,7 @@ import os
 from datetime import datetime
 
 from azure.storage.blob import BlobServiceClient, ContentSettings
+from govy.utils.azure_clients import get_blob_service_client as _get_main_blob_svc
 
 # Imports locais (lazy para evitar cold start pesado)
 # tce_parser_v3 e mapping_tce_to_kblegal devem estar em govy/api/
@@ -43,10 +44,7 @@ def _get_tce_blob_service() -> BlobServiceClient:
 
 def _get_main_blob_service() -> BlobServiceClient:
     """Client para stgovyparsetestsponsor (kb-raw, filas)."""
-    conn_str = os.environ.get("AzureWebJobsStorage", "")
-    if not conn_str:
-        raise ValueError("AzureWebJobsStorage not configured")
-    return BlobServiceClient.from_connection_string(conn_str)
+    return _get_main_blob_svc()
 
 
 # ============================================================

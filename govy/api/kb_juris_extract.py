@@ -35,10 +35,12 @@ from datetime import datetime
 
 try:
     from azure.storage.blob import BlobServiceClient, ContainerClient
+    from govy.utils.azure_clients import get_blob_service_client as _get_blob_svc
 except ImportError:
     logging.warning("azure-storage-blob nao instalado")
     BlobServiceClient = None
     ContainerClient = None
+    _get_blob_svc = None
 # ==============================================================================
 # IMPORTS - JURIS CONSTANTS
 # ==============================================================================
@@ -125,12 +127,8 @@ def _get_blob_container_client():
     if BlobServiceClient is None:
         raise RuntimeError("azure-storage-blob nao instalado no ambiente")
 
-    conn = os.getenv("AZURE_STORAGE_CONNECTION_STRING") or os.getenv("AzureWebJobsStorage")
-    if not conn:
-        raise RuntimeError("Storage connection string ausente (AZURE_STORAGE_CONNECTION_STRING ou AzureWebJobsStorage)")
-
     container_name = os.getenv("REVIEW_QUEUE_CONTAINER", REVIEW_QUEUE_CONTAINER)
-    bsc = BlobServiceClient.from_connection_string(conn)
+    bsc = _get_blob_svc()
     return bsc.get_container_client(container_name)
 
 def list_queue_items(folder: str, limit: int = 200) -> list:
@@ -257,12 +255,7 @@ def parse_data_julgamento(text: str) -> Optional[str]:
 
 def get_blob_container() -> ContainerClient:
     """Retorna container client para review-queue."""
-    import os
-    conn_str = os.environ.get("AzureWebJobsStorage")
-    if not conn_str:
-        raise ValueError("AzureWebJobsStorage nao configurado")
-    
-    blob_service = BlobServiceClient.from_connection_string(conn_str)
+    blob_service = _get_blob_svc()
     container = blob_service.get_container_client(REVIEW_QUEUE_CONTAINER)
     
     try:

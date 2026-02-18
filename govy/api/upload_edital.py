@@ -30,7 +30,7 @@ def handle_upload_edital(req: func.HttpRequest) -> func.HttpResponse:
     """
     try:
         # Importa aqui para evitar erro no startup se variáveis não existirem
-        from azure.storage.blob import BlobServiceClient
+        from govy.utils.azure_clients import get_blob_service_client
 
         # Obtém arquivo do request
         file = req.files.get("file")
@@ -59,15 +59,6 @@ def handle_upload_edital(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="application/json"
             )
 
-        # Conecta ao Blob Storage
-        conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-        if not conn_str:
-            return func.HttpResponse(
-                json.dumps({"error": "AZURE_STORAGE_CONNECTION_STRING não configurada"}),
-                status_code=500,
-                mimetype="application/json"
-            )
-
         container_name = os.environ.get("BLOB_CONTAINER_NAME", "editais-teste")
 
         # ================================================================
@@ -77,7 +68,7 @@ def handle_upload_edital(req: func.HttpRequest) -> func.HttpResponse:
         blob_name = f"uploads/{content_hash}.pdf"
 
         # Conecta ao Blob Storage
-        blob_service = BlobServiceClient.from_connection_string(conn_str)
+        blob_service = get_blob_service_client()
         blob_client = blob_service.get_blob_client(container=container_name, blob=blob_name)
 
         # Verifica se o arquivo já existe

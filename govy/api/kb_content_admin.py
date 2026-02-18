@@ -20,7 +20,7 @@ from typing import Dict, List, Optional, Any
 from urllib.parse import unquote
 
 import azure.functions as func
-from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client as _get_blob_svc
 
 logger = logging.getLogger(__name__)
 
@@ -31,10 +31,7 @@ KB_RAW_CONTAINER = os.environ.get("KB_RAW_CONTAINER", "kb-raw")
 
 def get_blob_service_client():
     """Obtém cliente do Blob Storage."""
-    conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-    if not conn_str:
-        raise ValueError("AZURE_STORAGE_CONNECTION_STRING não configurada")
-    return BlobServiceClient.from_connection_string(conn_str)
+    return _get_blob_svc()
 
 
 def get_search_client():
