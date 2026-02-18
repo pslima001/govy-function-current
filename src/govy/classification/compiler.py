@@ -139,8 +139,13 @@ def load_ruleset(
     # 5. Validate regex in all tabs
     _validate_all_patterns(merged)
 
-    # 6. Compile classes and procedures
+    # 6. Validate structural schemas for TIE_BREAKERS, DESCARTE, EQUIVALENCES
     tabs = merged.get("tabs", {})
+    _validate_tie_breakers(tabs.get("TIE_BREAKERS", []))
+    _validate_discard_rules(tabs.get("DESCARTE", []))
+    _validate_equivalences(tabs.get("EQUIVALENCES", []))
+
+    # 7. Compile classes and procedures
     compiled_classes = _compile_classes(tabs.get("CLASSES", []))
     compiled_procedures = _compile_procedures(tabs.get("PROCEDURES", []))
 
@@ -354,6 +359,177 @@ def _try_compile_pattern(context: str, strength: str, raw: str) -> None:
         raise RulesetCompilationError(
             f"{context}, {strength} pattern invalid: '{raw}' -> {exc}"
         ) from exc
+
+
+# ---------------------------------------------------------------------------
+# Structural validation (TIE_BREAKERS, DESCARTE, EQUIVALENCES)
+# ---------------------------------------------------------------------------
+
+# Allowed actions and their required fields
+_TB_ALLOWED_ACTIONS = {
+    "upweight_class": ("class_id", "delta"),
+    "downweight_class": ("class_id", "delta"),
+    "force_primary_class": ("class_id",),
+    "add_procedure": ("procedure_id",),
+    "add_secondary_class": ("class_id",),
+    "mark_irrelevant": (),
+}
+
+# Valid source fields for tie-breaker conditions
+_TB_VALID_SOURCES = {
+    "text_head", "caption_raw", "classe_raw", "ementa", "dispositivo",
+}
+
+# Condition keys that contain a list of conditions
+_TB_CONDITION_KEYS = ("when_all", "when_any", "when_none")
+
+
+def _validate_tie_breakers(items: List[Dict[str, Any]]) -> None:
+    """Validate structural schema of TIE_BREAKERS items."""
+    seen_ids: set[str] = set()
+
+    for item in items:
+        rid = item.get("id", "<missing>")
+
+        # Required fields
+        for req in ("id", "then"):
+            if req not in item:
+                raise RulesetCompilationError(
+                    f"TIE_BREAKERS: rule '{rid}' missing required field '{req}'"
+                )
+
+        # Unique id
+        if rid in seen_ids:
+            raise RulesetCompilationError(
+                f"TIE_BREAKERS: duplicate rule id '{rid}'"
+            )
+        seen_ids.add(rid)
+
+        # Must have at least one condition block
+        has_cond = any(item.get(k) for k in _TB_CONDITION_KEYS)
+        if not has_cond:
+            raise RulesetCompilationError(
+                f"TIE_BREAKERS/{rid}: must have at least one of {_TB_CONDITION_KEYS}"
+            )
+
+        # Validate conditions
+        for cond_key in _TB_CONDITION_KEYS:
+            for cond in item.get(cond_key, []):
+                if "source" not in cond or "regex" not in cond:
+                    raise RulesetCompilationError(
+                        f"TIE_BREAKERS/{rid}/{cond_key}: condition must have 'source' and 'regex'"
+                    )
+                if cond["source"] not in _TB_VALID_SOURCES:
+                    raise RulesetCompilationError(
+                        f"TIE_BREAKERS/{rid}/{cond_key}: unknown source '{cond['source']}', "
+                        f"allowed: {sorted(_TB_VALID_SOURCES)}"
+                    )
+
+        # Validate actions
+        then_list = item.get("then", [])
+        if not then_list:
+            raise RulesetCompilationError(
+                f"TIE_BREAKERS/{rid}: 'then' must not be empty"
+            )
+
+        for action_item in then_list:
+            action = action_item.get("action")
+            if action is None:
+                raise RulesetCompilationError(
+                    f"TIE_BREAKERS/{rid}: action item missing 'action' field"
+                )
+            if action not in _TB_ALLOWED_ACTIONS:
+                raise RulesetCompilationError(
+                    f"TIE_BREAKERS/{rid}: unknown action '{action}', "
+                    f"allowed: {sorted(_TB_ALLOWED_ACTIONS)}"
+                )
+            for req_field in _TB_ALLOWED_ACTIONS[action]:
+                if req_field not in action_item:
+                    raise RulesetCompilationError(
+                        f"TIE_BREAKERS/{rid}: action '{action}' requires field '{req_field}'"
+                    )
+
+
+def _validate_discard_rules(items: List[Dict[str, Any]]) -> None:
+    """Validate structural schema of DESCARTE items."""
+    _ALLOWED_DISCARD_ACTIONS = {"mark_irrelevant"}
+    seen_ids: set[str] = set()
+
+    for item in items:
+        rid = item.get("id", "<missing>")
+
+        # Required fields
+        for req in ("id", "action", "match"):
+            if req not in item:
+                raise RulesetCompilationError(
+                    f"DESCARTE: rule '{rid}' missing required field '{req}'"
+                )
+
+        # Unique id
+        if rid in seen_ids:
+            raise RulesetCompilationError(
+                f"DESCARTE: duplicate rule id '{rid}'"
+            )
+        seen_ids.add(rid)
+
+        # Allowed actions
+        action = item["action"]
+        if action not in _ALLOWED_DISCARD_ACTIONS:
+            raise RulesetCompilationError(
+                f"DESCARTE/{rid}: unknown action '{action}', "
+                f"allowed: {sorted(_ALLOWED_DISCARD_ACTIONS)}"
+            )
+
+        # Match must have at least pattern_all or pattern_any
+        match = item["match"]
+        if not isinstance(match, dict):
+            raise RulesetCompilationError(
+                f"DESCARTE/{rid}: 'match' must be a dict"
+            )
+        if not match.get("pattern_all") and not match.get("pattern_any"):
+            raise RulesetCompilationError(
+                f"DESCARTE/{rid}: 'match' must have at least 'pattern_all' or 'pattern_any'"
+            )
+
+
+def _validate_equivalences(items: List[Dict[str, Any]]) -> None:
+    """Validate structural schema of EQUIVALENCES items."""
+    seen_ids: set[str] = set()
+
+    for item in items:
+        rid = item.get("id", "<missing>")
+
+        # Required fields
+        for req in ("id", "baseline_any_of", "rules_primary"):
+            if req not in item:
+                raise RulesetCompilationError(
+                    f"EQUIVALENCES: rule '{rid}' missing required field '{req}'"
+                )
+
+        # Unique id
+        if rid in seen_ids:
+            raise RulesetCompilationError(
+                f"EQUIVALENCES: duplicate rule id '{rid}'"
+            )
+        seen_ids.add(rid)
+
+        # baseline_any_of must be list of lists
+        bao = item["baseline_any_of"]
+        if not isinstance(bao, list) or not bao:
+            raise RulesetCompilationError(
+                f"EQUIVALENCES/{rid}: 'baseline_any_of' must be a non-empty list"
+            )
+        for i, group in enumerate(bao):
+            if not isinstance(group, list) or not group:
+                raise RulesetCompilationError(
+                    f"EQUIVALENCES/{rid}: 'baseline_any_of[{i}]' must be a non-empty list of class IDs"
+                )
+
+        # rules_primary must be a string
+        if not isinstance(item["rules_primary"], str):
+            raise RulesetCompilationError(
+                f"EQUIVALENCES/{rid}: 'rules_primary' must be a string"
+            )
 
 
 # ---------------------------------------------------------------------------

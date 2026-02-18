@@ -288,3 +288,191 @@ def test_production_tce_sp_loads() -> None:
 
     # Core tie-breakers should also be present
     assert "tb_repr_by_parties_header" in tb_ids
+
+
+# --- Test: TIE_BREAKER structural validation ---------------------------------
+
+
+def test_tie_breaker_missing_then(test_rules_dir: Path) -> None:
+    """TIE_BREAKER without 'then' should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["TIE_BREAKERS"][0].pop("then")
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="missing required field 'then'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_tie_breaker_unknown_action(test_rules_dir: Path) -> None:
+    """TIE_BREAKER with unknown action should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["TIE_BREAKERS"][0]["then"] = [{"action": "destroy_everything"}]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="unknown action 'destroy_everything'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_tie_breaker_action_missing_required_field(test_rules_dir: Path) -> None:
+    """upweight_class without 'delta' should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["TIE_BREAKERS"][0]["then"] = [
+        {"action": "upweight_class", "class_id": "alpha"}  # missing delta
+    ]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="requires field 'delta'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_tie_breaker_no_conditions(test_rules_dir: Path) -> None:
+    """TIE_BREAKER without any condition block should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    tb = core["tabs"]["TIE_BREAKERS"][0]
+    for key in ("when_all", "when_any", "when_none"):
+        tb.pop(key, None)
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="must have at least one of"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_tie_breaker_invalid_source(test_rules_dir: Path) -> None:
+    """TIE_BREAKER condition with unknown source should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["TIE_BREAKERS"][0]["when_any"] = [
+        {"source": "nonexistent_field", "regex": "\\btest\\b"}
+    ]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="unknown source 'nonexistent_field'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_tie_breaker_duplicate_id(test_rules_dir: Path) -> None:
+    """TIE_BREAKER with duplicate id should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    dup = dict(core["tabs"]["TIE_BREAKERS"][0])
+    core["tabs"]["TIE_BREAKERS"].append(dup)
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="duplicate rule id"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+# --- Test: DESCARTE structural validation ------------------------------------
+
+
+def test_descarte_missing_action(test_rules_dir: Path) -> None:
+    """DESCARTE without 'action' should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["DESCARTE"] = [{
+        "id": "bad_discard",
+        "match": {"pattern_all": ["\\btest\\b"]}
+    }]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="missing required field 'action'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_descarte_unknown_action(test_rules_dir: Path) -> None:
+    """DESCARTE with unknown action should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["DESCARTE"] = [{
+        "id": "bad_discard",
+        "action": "delete_everything",
+        "match": {"pattern_all": ["\\btest\\b"]}
+    }]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="unknown action 'delete_everything'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_descarte_no_patterns(test_rules_dir: Path) -> None:
+    """DESCARTE match without pattern_all or pattern_any should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["DESCARTE"] = [{
+        "id": "bad_discard",
+        "action": "mark_irrelevant",
+        "match": {"guardrail_none": ["\\btest\\b"]}
+    }]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="must have at least 'pattern_all' or 'pattern_any'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+# --- Test: EQUIVALENCES structural validation --------------------------------
+
+
+def test_equivalences_missing_field(test_rules_dir: Path) -> None:
+    """EQUIVALENCE without 'rules_primary' should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["EQUIVALENCES"] = [{
+        "id": "bad_eq",
+        "baseline_any_of": [["alpha"]]
+        # missing rules_primary
+    }]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="missing required field 'rules_primary'"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_equivalences_empty_baseline(test_rules_dir: Path) -> None:
+    """EQUIVALENCE with empty baseline_any_of should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["EQUIVALENCES"] = [{
+        "id": "bad_eq",
+        "baseline_any_of": [],
+        "rules_primary": "alpha"
+    }]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="must be a non-empty list"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+def test_equivalences_bad_baseline_group(test_rules_dir: Path) -> None:
+    """EQUIVALENCE with non-list group in baseline_any_of should fail."""
+    core_path = test_rules_dir / "core.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["tabs"]["EQUIVALENCES"] = [{
+        "id": "bad_eq",
+        "baseline_any_of": ["alpha"],  # should be [["alpha"]]
+        "rules_primary": "alpha"
+    }]
+    core_path.write_text(json.dumps(core), encoding="utf-8")
+
+    with pytest.raises(RulesetCompilationError, match="must be a non-empty list of class IDs"):
+        load_ruleset("core", rules_dir=test_rules_dir)
+
+
+# --- Test: production rules pass structural validation -----------------------
+
+
+def test_production_structural_validation() -> None:
+    """Production core.json + tce-sp.json should pass all structural validation."""
+    # Core only
+    rs_core = load_ruleset("core")
+    assert len(rs_core.tie_breakers) >= 9
+    assert len(rs_core.discard_rules) == 1
+    assert len(rs_core.equivalences) >= 1
+
+    # With overlay
+    rs_sp = load_ruleset("tce-sp")
+    assert len(rs_sp.tie_breakers) >= 11  # core + overlay
+    assert len(rs_sp.equivalences) >= 2   # core + overlay
