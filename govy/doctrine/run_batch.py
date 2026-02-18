@@ -8,6 +8,7 @@ from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_proces
 
 logger = logging.getLogger(__name__)
 
+
 def _load_manifest(path: str) -> Dict[str, Any]:
     """Manifest opcional com metadados por arquivo."""
     if not path or not os.path.exists(path):
@@ -15,10 +16,12 @@ def _load_manifest(path: str) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def _merge_meta(defaults: Dict[str, Any], file_meta: Dict[str, Any]) -> Dict[str, Any]:
     out = dict(defaults or {})
     out.update(file_meta or {})
     return out
+
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO)
@@ -68,6 +71,7 @@ def main() -> None:
             logger.error(f"Falha ao processar {blob_name}: {e}")
             fail += 1
     logger.info(f"Batch finalizado. processed={ok} already_processed={skipped} failed={fail}")
+
 
 if __name__ == "__main__":
     main()

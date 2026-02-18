@@ -2,6 +2,7 @@ from __future__ import annotations
 import re
 from typing import Dict, Optional
 
+
 def extract_citation_meta(text: str) -> Dict[str, Optional[str]]:
     """Extrai metadados de citação de jurisprudência literal. Não inventa: só extrai o que existe no texto."""
     if not text:

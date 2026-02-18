@@ -1,6 +1,7 @@
 """
 run_microbatch_report.py - Micro-batch com relatorio de qualidade.
 """
+
 from __future__ import annotations
 import json
 import os
@@ -11,8 +12,10 @@ from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_proces
 
 logger = logging.getLogger(__name__)
 
+
 def _utc_now_iso():
     return datetime.now(timezone.utc).isoformat()
+
 
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -64,6 +67,7 @@ def main():
         json.dump(report, f, ensure_ascii=False, indent=2)
     logger.info("Report salvo em: %s", report_path)
 
+
 def _list_blobs(blob_service, container_name, limit=20):
     container = blob_service.get_container_client(container_name)
     blobs = []
@@ -73,6 +77,7 @@ def _list_blobs(blob_service, container_name, limit=20):
             if len(blobs) >= limit:
                 break
     return blobs
+
 
 def _build_report(results):
     processed = sum(1 for r in results if r["result"].get("status") == "processed")
@@ -86,9 +91,16 @@ def _build_report(results):
     return {
         "kind": "doctrine_v2_microbatch_report",
         "generated_at": _utc_now_iso(),
-        "summary": {"total_files": len(results), "processed": processed, "already_processed": already, "failed": failed, "totals": totals},
+        "summary": {
+            "total_files": len(results),
+            "processed": processed,
+            "already_processed": already,
+            "failed": failed,
+            "totals": totals,
+        },
         "details": results,
     }
+
 
 if __name__ == "__main__":
     main()
