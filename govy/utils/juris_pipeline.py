@@ -13,7 +13,7 @@ Caso contrario: fila do juridico
 import os
 import json
 import logging
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, List, Tuple
 from datetime import datetime
 import uuid
 
@@ -22,10 +22,10 @@ from openai import OpenAI
 import anthropic
 
 # Modulos locais
-from .juris_regex import has_fundamento_legal, extract_legal_references
+from .juris_regex import has_fundamento_legal
 from .juris_constants import (
     PROCEDURAL_STAGES, HOLDING_OUTCOMES, REMEDY_TYPES, EFFECTS,
-    PISTAS_PROCEDURAL_STAGE, PISTAS_HOLDING_OUTCOME, PISTAS_REMEDY_TYPE, PISTAS_EFFECT,
+    PISTAS_PROCEDURAL_STAGE,
     CONFIDENCE_THRESHOLD, UF_TO_REGION
 )
 
