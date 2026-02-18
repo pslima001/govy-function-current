@@ -1,8 +1,19 @@
-# Ruff configuration
+# Ruff configuration for GOVY KB Pipeline
 # Phase 2: lint only KB pipeline modules and tests.
 # Expand include as legacy code is cleaned up.
+
+target-version = "py311"
+line-length = 120
 
 include = [
     "govy/utils/juris_*.py",
     "tests/test_juris_*.py",
+]
+
+extend-exclude = [
+    "backups",
+    "govy/api",
+    "govy/doctrine",
+    "govy/extractors",
+    "govy/juris",
 ]

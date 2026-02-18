@@ -82,9 +82,7 @@ def test_paragrafo_unico():
 
 
 def test_generic_text_no_legal():
-    result, matches = has_fundamento_legal(
-        "O licitante foi inabilitado por falta de documentos."
-    )
+    result, matches = has_fundamento_legal("O licitante foi inabilitado por falta de documentos.")
     assert result is False
     assert matches == []
 
@@ -102,9 +100,7 @@ def test_none_text():
 
 
 def test_no_legal_refs_generic():
-    result, matches = has_fundamento_legal(
-        "A empresa não comprovou capacidade técnica."
-    )
+    result, matches = has_fundamento_legal("A empresa não comprovou capacidade técnica.")
     assert result is False
     assert matches == []
 

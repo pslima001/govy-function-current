@@ -259,9 +259,7 @@ AUDIT_SCHEMA = {
 # =============================================================================
 
 
-def build_extraction_prompt(
-    full_text: str, has_legal_refs: bool, legal_refs: List[str]
-) -> str:
+def build_extraction_prompt(full_text: str, has_legal_refs: bool, legal_refs: List[str]) -> str:
     """Constroi prompt para GPT-4o."""
 
     # Formata pistas
@@ -277,9 +275,7 @@ FUNDAMENTO LEGAL DETECTADO:
 Referencias encontradas: {", ".join(legal_refs[:10])}
 Extraia o fundamento_legal com os artigos/leis relevantes para a tese.
 """
-        fundamento_field_instruction = (
-            "3. FUNDAMENTO_LEGAL: Artigos/leis citados (null se nao detectado)\n\n"
-        )
+        fundamento_field_instruction = "3. FUNDAMENTO_LEGAL: Artigos/leis citados (null se nao detectado)\n\n"
     else:
         fundamento_instruction = """
 FUNDAMENTO LEGAL NAO DETECTADO:
@@ -388,19 +384,13 @@ class JurisPipeline:
 
     def __init__(self):
         self.openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        self.anthropic_client = anthropic.Anthropic(
-            api_key=os.environ.get("ANTHROPIC_API_KEY")
-        )
+        self.anthropic_client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
-    def extract_with_gpt4o(
-        self, full_text: str, has_legal_refs: bool, legal_refs: List[str]
-    ) -> Dict[str, Any]:
+    def extract_with_gpt4o(self, full_text: str, has_legal_refs: bool, legal_refs: List[str]) -> Dict[str, Any]:
         """Passo A: Extracao com GPT-4o."""
 
         prompt = build_extraction_prompt(full_text, has_legal_refs, legal_refs)
-        schema = (
-            EXTRACTION_SCHEMA_FULL if has_legal_refs else EXTRACTION_SCHEMA_NO_LEGAL
-        )
+        schema = EXTRACTION_SCHEMA_FULL if has_legal_refs else EXTRACTION_SCHEMA_NO_LEGAL
 
         try:
             response = self.openai_client.chat.completions.create(
@@ -446,9 +436,7 @@ class JurisPipeline:
             )
 
             # Extrai resultado do tool use
-            tool_use = next(
-                (block for block in response.content if block.type == "tool_use"), None
-            )
+            tool_use = next((block for block in response.content if block.type == "tool_use"), None)
 
             if tool_use:
                 result = tool_use.input
@@ -486,9 +474,7 @@ class JurisPipeline:
             if not audit_item.get("agree") and audit_item.get("correction"):
                 if campo in corrected:
                     corrected[campo] = audit_item["correction"]
-                    logger.info(
-                        f"Corrigido {campo}: {extraction.get(campo)} -> {audit_item['correction']}"
-                    )
+                    logger.info(f"Corrigido {campo}: {extraction.get(campo)} -> {audit_item['correction']}")
 
         return corrected
 
@@ -519,9 +505,7 @@ class JurisPipeline:
 
         return True, "Auto-aprovado"
 
-    def process(
-        self, full_text: str, title: str, citation_base: str, doc_meta: Dict
-    ) -> Dict[str, Any]:
+    def process(self, full_text: str, title: str, citation_base: str, doc_meta: Dict) -> Dict[str, Any]:
         """
         Processa jurisprudencia completa.
 
@@ -556,9 +540,7 @@ class JurisPipeline:
         has_legal, legal_refs = has_fundamento_legal(full_text)
         result["has_fundamento_legal"] = has_legal
         result["legal_refs_found"] = legal_refs[:10] if legal_refs else []
-        logger.info(
-            f"[{process_id}] Regex fundamento_legal: {has_legal} ({len(legal_refs)} refs)"
-        )
+        logger.info(f"[{process_id}] Regex fundamento_legal: {has_legal} ({len(legal_refs)} refs)")
 
         # 2. Passo A: Extracao com GPT-4o
         logger.info(f"[{process_id}] Passo A: GPT-4o extracao...")
@@ -576,9 +558,7 @@ class JurisPipeline:
         # Se regex nao disparou, forca fundamento_legal = null
         if not has_legal:
             extraction["fundamento_legal"] = None
-            logger.info(
-                f"[{process_id}] fundamento_legal forcado para null (regex nao disparou)"
-            )
+            logger.info(f"[{process_id}] fundamento_legal forcado para null (regex nao disparou)")
 
         # 3. Passo B: Auditoria com Claude Sonnet
         logger.info(f"[{process_id}] Passo B: Claude auditoria...")
@@ -676,9 +656,7 @@ class JurisPipeline:
                     "doc_type": "jurisprudencia",
                     "tribunal": doc_meta.get("tribunal"),
                     "uf": doc_meta.get("uf"),
-                    "region": UF_TO_REGION.get(doc_meta.get("uf"))
-                    if doc_meta.get("uf")
-                    else None,
+                    "region": UF_TO_REGION.get(doc_meta.get("uf")) if doc_meta.get("uf") else None,
                     "year": doc_meta.get("year"),
                     "source": doc_meta.get("source"),
                     "is_current": doc_meta.get("is_current", True),
@@ -705,8 +683,6 @@ class JurisPipeline:
 
         result["status"] = "approved" if auto_approved else "pending_review"
 
-        logger.info(
-            f"[{process_id}] Processamento concluido: {result['status']} ({len(chunks)} chunks)"
-        )
+        logger.info(f"[{process_id}] Processamento concluido: {result['status']} ({len(chunks)} chunks)")
 
         return result

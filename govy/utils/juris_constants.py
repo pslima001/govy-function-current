@@ -448,15 +448,11 @@ def clamp_enum(value: str, valid_set: set, mappings: dict, fallback: str) -> str
 
 
 def clamp_procedural_stage(value: str) -> str:
-    return clamp_enum(
-        value, VALID_PROCEDURAL_STAGE, PROCEDURAL_STAGE_MAPPINGS, "NAO_CLARO"
-    )
+    return clamp_enum(value, VALID_PROCEDURAL_STAGE, PROCEDURAL_STAGE_MAPPINGS, "NAO_CLARO")
 
 
 def clamp_holding_outcome(value: str) -> str:
-    return clamp_enum(
-        value, VALID_HOLDING_OUTCOME, HOLDING_OUTCOME_MAPPINGS, "NAO_CLARO"
-    )
+    return clamp_enum(value, VALID_HOLDING_OUTCOME, HOLDING_OUTCOME_MAPPINGS, "NAO_CLARO")
 
 
 def clamp_remedy_type(value: str) -> str:
@@ -477,13 +473,9 @@ def normalize_chunk_for_upsert(chunk: dict, tribunal: str = None) -> dict:
     normalized = dict(chunk)
 
     if "procedural_stage" in normalized:
-        normalized["procedural_stage"] = clamp_procedural_stage(
-            normalized.get("procedural_stage")
-        )
+        normalized["procedural_stage"] = clamp_procedural_stage(normalized.get("procedural_stage"))
     if "holding_outcome" in normalized:
-        normalized["holding_outcome"] = clamp_holding_outcome(
-            normalized.get("holding_outcome")
-        )
+        normalized["holding_outcome"] = clamp_holding_outcome(normalized.get("holding_outcome"))
     if "remedy_type" in normalized:
         normalized["remedy_type"] = clamp_remedy_type(normalized.get("remedy_type"))
     if "effect" in normalized:
@@ -520,15 +512,9 @@ def validate_chunk_for_upsert(chunk: dict) -> tuple:
 
     if chunk.get("effect") and chunk["effect"] not in VALID_EFFECT:
         errors.append(f"effect invalido: {chunk['effect']}")
-    if (
-        chunk.get("procedural_stage")
-        and chunk["procedural_stage"] not in VALID_PROCEDURAL_STAGE
-    ):
+    if chunk.get("procedural_stage") and chunk["procedural_stage"] not in VALID_PROCEDURAL_STAGE:
         errors.append(f"procedural_stage invalido: {chunk['procedural_stage']}")
-    if (
-        chunk.get("holding_outcome")
-        and chunk["holding_outcome"] not in VALID_HOLDING_OUTCOME
-    ):
+    if chunk.get("holding_outcome") and chunk["holding_outcome"] not in VALID_HOLDING_OUTCOME:
         errors.append(f"holding_outcome invalido: {chunk['holding_outcome']}")
     if chunk.get("remedy_type") and chunk["remedy_type"] not in VALID_REMEDY_TYPE:
         errors.append(f"remedy_type invalido: {chunk['remedy_type']}")
