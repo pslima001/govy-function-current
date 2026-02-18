@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from typing import List
-import hashlib
+
+# ── Constantes ────────────────────────────────────────────────────────────────
+MAX_CHARS_PER_CHUNK = 3500
+MIN_CHARS_PER_CHUNK = 900
 
 
 @dataclass(frozen=True)
@@ -74,4 +78,26 @@ def chunk_paragraphs(
         buf_len += add
 
     flush()
-    return chunks
+
+    # Dedupe: remove chunks com content_hash identico
+    seen_hashes: set[str] = set()
+    deduped: List[DoctrineChunk] = []
+    for ch in chunks:
+        if ch.content_hash not in seen_hashes:
+            seen_hashes.add(ch.content_hash)
+            deduped.append(ch)
+
+    return deduped
+
+
+def chunk_text(text: str, doc_id: str = "") -> List[DoctrineChunk]:
+    """Convenience: split texto em paragrafos e chunka.
+
+    Args:
+        text: texto bruto completo
+        doc_id: prefixo opcional para chunk_id (nao usado no hash, apenas log)
+    """
+    if not text or not text.strip():
+        return []
+    paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
+    return chunk_paragraphs(paragraphs)

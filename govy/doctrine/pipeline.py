@@ -9,9 +9,9 @@ from typing import Dict, Any, List
 from azure.storage.blob import BlobServiceClient, ContentSettings
 from azure.core.exceptions import ResourceNotFoundError
 from govy.doctrine.reader_docx import read_docx_bytes
-from govy.doctrine.chunker import chunk_paragraphs
-from govy.doctrine.verbatim_classifier import is_verbatim_legal_text
-from govy.doctrine.citation_extractor import extract_citation_meta
+from govy.doctrine.chunker import chunk_paragraphs, chunk_text
+from govy.doctrine.verbatim_classifier import is_verbatim_legal_text, classify as classify_verbatim
+from govy.doctrine.citation_extractor import extract_citation_meta, extract as extract_citation
 from govy.doctrine.semantic import extract_semantic_chunks_for_raw_chunks
 
 logger = logging.getLogger(__name__)
@@ -214,3 +214,91 @@ def ingest_doctrine_process_once(
         "processed": {"container": container_processed, "blob_name": processed_name},
         "stats": payload["stats"],
     }
+
+
+# =============================================================================
+# DoctrinePipeline — pipeline local (sem LLM/Azure) para contratos Phase 3
+# =============================================================================
+
+
+class DoctrinePipeline:
+    """Pipeline local de doutrina. Nao depende de LLM nem Azure."""
+
+    def process(self, raw_text: str, meta: dict) -> Dict[str, Any]:
+        """Processa texto bruto e retorna chunks conforme contrato.
+
+        Args:
+            raw_text: texto completo da doutrina
+            meta: {doc_id, title, author, year, source, etapa_processo, tema_principal, ...}
+
+        Returns:
+            {status, doc_type, chunks, meta, stats}
+        """
+        doc_id = meta.get("doc_id", "unknown")
+        title = meta.get("title", "")
+        author = meta.get("author", "")
+        year = meta.get("year", 0)
+        source = meta.get("source", "")
+
+        if not raw_text or not raw_text.strip():
+            logger.warning(f"[{doc_id}] Texto vazio, retornando sem chunks")
+            return {
+                "status": "empty",
+                "doc_type": "doutrina",
+                "chunks": [],
+                "meta": meta,
+                "stats": {"raw_chunks": 0, "verbatim_chunks": 0, "doctrine_chunks": 0},
+            }
+
+        # 1. Chunking
+        raw_chunks = chunk_text(raw_text, doc_id=doc_id)
+        logger.info(f"[{doc_id}] Chunks brutos: {len(raw_chunks)}")
+
+        # 2. Para cada chunk: citation + verbatim classification
+        chunks_out: List[Dict[str, Any]] = []
+        verbatim_count = 0
+        doctrine_count = 0
+
+        for ch in raw_chunks:
+            # Citation extraction
+            cit = extract_citation(ch.content_raw, meta)
+
+            # Verbatim classification
+            vclass = classify_verbatim(ch.content_raw)
+
+            if vclass["verbatim"]:
+                verbatim_count += 1
+            else:
+                doctrine_count += 1
+
+            chunks_out.append(
+                {
+                    "chunk_id": ch.chunk_id,
+                    "doc_type": "doutrina",
+                    "secao": "verbatim" if vclass["verbatim"] else "doutrina",
+                    "content": ch.content_raw,
+                    "citation": cit["citation_base"],
+                    "confidence": cit["confidence"] if cit["found"] else 1.0,
+                    "approved": True,
+                    "title": title,
+                    "author": author,
+                    "year": year,
+                    "source": source,
+                    "doc_id": doc_id,
+                    "content_hash": ch.content_hash,
+                    "verbatim": vclass["verbatim"],
+                    "verbatim_score": vclass["score"],
+                }
+            )
+
+        return {
+            "status": "approved",
+            "doc_type": "doutrina",
+            "chunks": chunks_out,
+            "meta": meta,
+            "stats": {
+                "raw_chunks": len(raw_chunks),
+                "verbatim_chunks": verbatim_count,
+                "doctrine_chunks": doctrine_count,
+            },
+        }
