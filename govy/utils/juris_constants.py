@@ -61,7 +61,8 @@ VALID_REMEDY_TYPE = {
 VALID_EFFECT = {
     "FLEXIBILIZA",
     "RIGORIZA",
-    "CONDICIONAL"
+    "CONDICIONAL",
+    "NAO_CLARO"
 }
 
 VALID_SECAO = {
@@ -323,8 +324,7 @@ EFFECT_MAPPINGS = {
     "DESDE_QUE": "CONDICIONAL",
     "SE": "CONDICIONAL",
     "DIRETO": "CONDICIONAL",
-    "NAO_APLICAVEL": "CONDICIONAL",
-    "NAO_CLARO": "CONDICIONAL",
+    "NAO_APLICAVEL": "NAO_CLARO",
 }
 
 REMEDY_TYPE_MAPPINGS = {
@@ -452,11 +452,11 @@ def clamp_holding_outcome(value: str) -> str:
 
 
 def clamp_remedy_type(value: str) -> str:
-    return clamp_enum(value, VALID_REMEDY_TYPE, REMEDY_TYPE_MAPPINGS, "ORIENTACAO_GERAL")
+    return clamp_enum(value, VALID_REMEDY_TYPE, REMEDY_TYPE_MAPPINGS, "NAO_CLARO")
 
 
 def clamp_effect(value: str) -> str:
-    return clamp_enum(value, VALID_EFFECT, EFFECT_MAPPINGS, "CONDICIONAL")
+    return clamp_enum(value, VALID_EFFECT, EFFECT_MAPPINGS, "NAO_CLARO")
 
 
 def clamp_secao(value: str) -> str:
