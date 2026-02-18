@@ -4,11 +4,14 @@ param(
 )
 
 Set-Location $RepoPath
+
 Write-Host "Repo: $RepoPath" -ForegroundColor Cyan
 
+# Atualiza main
 git checkout main | Out-Null
 git pull --rebase origin main
 
+# Garante branch de trabalho
 git checkout $WorkBranch 2>$null
 if ($LASTEXITCODE -ne 0) {
   Write-Host "Criando branch $WorkBranch..." -ForegroundColor Yellow
@@ -17,8 +20,10 @@ if ($LASTEXITCODE -ne 0) {
   Write-Host "Branch $WorkBranch encontrada." -ForegroundColor Green
 }
 
+# Puxa branch remota se existir
 git pull --rebase origin $WorkBranch 2>$null
 
+# Ativa venv se existir
 $activate = Join-Path $RepoPath ".venv\Scripts\Activate.ps1"
 if (Test-Path $activate) {
   . $activate
@@ -28,3 +33,4 @@ if (Test-Path $activate) {
 }
 
 Write-Host ("Pronto. Branch atual: " + (git branch --show-current)) -ForegroundColor Green
+

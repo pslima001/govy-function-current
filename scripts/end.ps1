@@ -1,3 +1,4 @@
+# scripts/end.ps1
 param(
   [string]$RepoPath = "C:\govy\repos\govy-function-current",
   [string]$Message = ""
@@ -5,6 +6,7 @@ param(
 
 Set-Location $RepoPath
 
+# Se não houver mudanças, não tenta commitar
 $changes = git status --porcelain
 if (-not $changes) {
   Write-Host "✅ Nada para commitar. Repo limpo." -ForegroundColor Green
