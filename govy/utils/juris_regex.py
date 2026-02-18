@@ -26,10 +26,11 @@ from typing import Tuple, List
 
 FUNDAMENTO_LEGAL_REGEX = re.compile(
     r'(?:'
-    r'art(?:igo)?\.?\s*\d+'                           # art. 62, artigo 63
+    r'art(?:igo)?\.?\s*\d+(?:-[A-Z])?'                # art. 62, artigo 63, art. 37-A
     r'|lei\s+(?:n[°º.]?\s*)?[\d.]+(?:/\d+)?'          # Lei 14.133/2021, Lei nº 8.666/93
+    r'|lei\s+(?:n[°º.]?\s*)?[\d.]+\s+de\s+\d{4}'     # Lei 14.133 de 2021
     r'|decreto\s+(?:n[°º.]?\s*)?[\d.]+(?:/\d+)?'      # Decreto 10.024/2019
-    r'|§\s*\d+'                                        # § 1º, § 2°
+    r'|§\s*\d+[°º]?'                                  # § 1º, § 2°, § 1
     r'|parágrafo\s+único'                              # parágrafo único
     r'|inciso\s+[IVXLCDM]+'                           # inciso IV
     r'|alínea\s+["\']?[a-z]["\']?'                    # alínea "a", alínea b
@@ -37,6 +38,9 @@ FUNDAMENTO_LEGAL_REGEX = re.compile(
     r'|medida\s+provisória'                            # Medida Provisória
     r'|instrução\s+normativa'                          # Instrução Normativa
     r'|súmula\s+(?:n[°º.]?\s*)?\d+'                   # Súmula 247
+    r'|constituição\s+federal'                         # Constituição Federal
+    r'|CF/\d{2,4}'                                     # CF/88
+    r'|CRFB/\d{2,4}'                                   # CRFB/88
     r')',
     re.IGNORECASE
 )
@@ -87,13 +91,14 @@ def extract_legal_references(text: str) -> dict:
         return {"found": False, "references": {}}
     
     patterns = {
-        "artigos": re.compile(r'art(?:igo)?\.?\s*\d+', re.IGNORECASE),
-        "leis": re.compile(r'lei\s+(?:n[°º.]?\s*)?[\d.]+(?:/\d+)?', re.IGNORECASE),
+        "artigos": re.compile(r'art(?:igo)?\.?\s*\d+(?:-[A-Z])?', re.IGNORECASE),
+        "leis": re.compile(r'lei\s+(?:n[°º.]?\s*)?[\d.]+(?:/\d+|\s+de\s+\d{4})?', re.IGNORECASE),
         "decretos": re.compile(r'decreto\s+(?:n[°º.]?\s*)?[\d.]+(?:/\d+)?', re.IGNORECASE),
-        "paragrafos": re.compile(r'(?:§\s*\d+|parágrafo\s+único)', re.IGNORECASE),
+        "paragrafos": re.compile(r'(?:§\s*\d+[°º]?|parágrafo\s+único)', re.IGNORECASE),
         "incisos": re.compile(r'inciso\s+[IVXLCDM]+', re.IGNORECASE),
         "alineas": re.compile(r'alínea\s+["\']?[a-z]["\']?', re.IGNORECASE),
         "sumulas": re.compile(r'súmula\s+(?:n[°º.]?\s*)?\d+', re.IGNORECASE),
+        "constituicao": re.compile(r'(?:constituição\s+federal|CF/\d{2,4}|CRFB/\d{2,4})', re.IGNORECASE),
     }
     
     references = {}
