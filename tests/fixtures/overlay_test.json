@@ -1,0 +1,53 @@
+{
+  "version": "0.0.1-test",
+  "scope": "overlay",
+  "tribunal": "test-tribunal",
+  "globals": {
+    "confidence": {
+      "class_keep_min": 0.8
+    }
+  },
+  "tabs": {
+    "CLASSES": [
+      {
+        "id": "alpha",
+        "patterns": {
+          "strong": ["\\bALPHA_LOCAL\\b"]
+        }
+      },
+      {
+        "id": "beta",
+        "patterns": {
+          "strong": ["\\bBETA_REPLACED\\b"],
+          "_replace": { "strong": true }
+        }
+      }
+    ],
+    "PROCEDURES": [
+      {
+        "id": "proc_test",
+        "patterns": {
+          "strong": ["\\bTEST_PROC_LOCAL\\b"]
+        }
+      }
+    ],
+    "TIE_BREAKERS": [
+      {
+        "id": "tb_overlay_test",
+        "enabled": true,
+        "priority": 110,
+        "when_all": [
+          { "source": "text_head", "regex": "\\bOVERLAY_TRIGGER\\b" }
+        ],
+        "then": [
+          { "action": "force_primary_class", "class_id": "alpha" }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "ruleset_id": "test-overlay",
+    "created_at": "2026-01-01T00:00:00Z",
+    "title": "Test overlay"
+  }
+}

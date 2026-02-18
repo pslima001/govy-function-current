@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Classification Output",
+  "description": "Output contract for TCE document classification (rules engine).",
+  "type": "object",
+  "required": ["tribunal", "doc_id", "primary_class", "rules_confidence", "rules_status", "is_suspect", "ruleset_hash"],
+  "properties": {
+    "tribunal": {
+      "type": "string",
+      "description": "Tribunal identifier (e.g. tce-sp)."
+    },
+    "doc_id": {
+      "type": "string",
+      "description": "Document identifier."
+    },
+    "primary_class": {
+      "type": ["string", "null"],
+      "description": "Primary classification or null if unclassified."
+    },
+    "secondary_classes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional secondary classifications."
+    },
+    "procedures": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Detected procedures/flags (e.g. exame_previo_edital)."
+    },
+    "rules_confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Classification confidence score (0-1)."
+    },
+    "rules_status": {
+      "type": "string",
+      "enum": ["OK_RULES", "LOW_CONF_RULES", "UNCLASSIFIED", "IRRELEVANT_CONTAS"],
+      "description": "Classification status."
+    },
+    "is_suspect": {
+      "type": "boolean",
+      "description": "Whether this classification needs manual review."
+    },
+    "is_irrelevant": {
+      "type": "boolean",
+      "description": "Whether document was marked as irrelevant (e.g. prestação de contas)."
+    },
+    "evidence": {
+      "type": "array",
+      "description": "List of evidence items that contributed to the classification.",
+      "items": {
+        "type": "object",
+        "required": ["class_id", "pattern", "strength", "score_delta"],
+        "properties": {
+          "class_id": {
+            "type": "string",
+            "description": "Class ID this evidence supports."
+          },
+          "pattern": {
+            "type": "string",
+            "description": "Regex pattern that matched."
+          },
+          "strength": {
+            "type": "string",
+            "enum": ["strong", "weak", "negative"],
+            "description": "Pattern strength category."
+          },
+          "snippet": {
+            "type": "string",
+            "description": "Matched text snippet for debugging."
+          },
+          "score_delta": {
+            "type": "number",
+            "description": "Score contribution of this match."
+          }
+        }
+      }
+    },
+    "ruleset_hash": {
+      "type": "string",
+      "description": "SHA256 hash of the compiled ruleset used."
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,522 @@
+{
+  "version": "1.0.0",
+  "created": "2026-02-17",
+  "scope": "core",
+  "description": "Core ruleset (tribunal-agnostic). Classes universais para licitação/contratos + flags de descarte.",
+  "globals": {
+    "regex_flags": ["IGNORECASE", "MULTILINE"],
+    "normalize_accents": true,
+    "confidence": {
+      "class_prefilter_min": 0.85,
+      "class_keep_min": 0.7,
+      "stance_force_neutral_below": 0.7
+    },
+    "quote": {
+      "min_chars": 200,
+      "max_chars": 1800,
+      "dedupe_similarity": 0.9
+    }
+  },
+  "tabs": {
+    "CLASSES": [
+      {
+        "id": "cautelar",
+        "label": "Cautelar / Liminar",
+        "enabled": true,
+        "priority": 90,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bcautelar(es)?\\b",
+            "\\bliminar\\b",
+            "\\bmedida\\s+cautelar\\b",
+            "\\bsusta[cç][aã]o\\b",
+            "\\bsustar\\b",
+            "\\bsuspens[aã]o\\b"
+          ],
+          "weak": [
+            "\\bmedida\\s+de\\s+urg[eê]ncia\\b",
+            "\\befeito\\s+suspensivo\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.95, "weak_hit": 0.7, "neg_hit_penalty": -0.4 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa", "dispositivo"]
+      },
+      {
+        "id": "representacao",
+        "label": "Representação / Denúncia",
+        "enabled": true,
+        "priority": 80,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\btrata-?se\\s+de\\s+representa[cç][aã]o\\b",
+            "\\brepresenta[cç][aã]o\\b\\s+formulad[ao]\\b",
+            "\\bden[uú]ncia\\b",
+            "\\bdenunciante\\b",
+            "\\bdenunciado\\b"
+          ],
+          "weak": [
+            "\\brepresenta[cç][aã]o\\b",
+            "\\brepresentante\\b",
+            "\\brepresentad[ao]\\b"
+          ],
+          "negative": [
+            "\\brepresentante\\s+do\\s+minist[eé]rio\\s+p[uú]blico\\b",
+            "\\bmpc\\b"
+          ]
+        },
+        "confidence_rules": { "strong_hit": 0.96, "weak_hit": 0.68, "neg_hit_penalty": -0.55 },
+        "sources_priority": ["text_head", "caption_raw", "classe_raw", "ementa"]
+      },
+      {
+        "id": "pedido_reconsideracao",
+        "label": "Pedido de Reconsideração",
+        "enabled": true,
+        "priority": 78,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bpedido\\s+de\\s+reconsidera[cç][aã]o\\b"
+          ],
+          "weak": [
+            "\\breconsidera[cç][aã]o\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.95, "weak_hit": 0.65, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "embargos_declaracao",
+        "label": "Embargos de Declaração",
+        "enabled": true,
+        "priority": 75,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bembargos?\\s+de\\s+declara[cç][aã]o\\b"
+          ],
+          "weak": [
+            "\\bembargos\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.96, "weak_hit": 0.65, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "recurso_ordinario",
+        "label": "Recurso Ordinário",
+        "enabled": true,
+        "priority": 70,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\brecurso\\s+ordin[aá]rio\\b"
+          ],
+          "weak": [
+            "\\brecurso\\b"
+          ],
+          "negative": [
+            "\\brecurso\\s+especial\\b"
+          ]
+        },
+        "confidence_rules": { "strong_hit": 0.95, "weak_hit": 0.6, "neg_hit_penalty": -0.4 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "agravo",
+        "label": "Agravo",
+        "enabled": true,
+        "priority": 68,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bagravo\\b",
+            "\\bagravante\\b",
+            "\\bagravado\\b"
+          ],
+          "weak": [],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.9, "weak_hit": 0.6, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "sancoes",
+        "label": "Sanções",
+        "enabled": true,
+        "priority": 72,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\binidoneidade\\b",
+            "\\bsuspens[aã]o\\s+de\\s+licitar\\b",
+            "\\bimpedimento\\s+de\\s+licitar\\b",
+            "\\bmulta\\b",
+            "\\bressarcimento\\b"
+          ],
+          "weak": [
+            "\\bpenalidade\\b",
+            "\\bsan[cç][aã]o\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.92, "weak_hit": 0.62, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa", "dispositivo"]
+      },
+      {
+        "id": "termo_rescisao",
+        "label": "Termo de Rescisão",
+        "enabled": true,
+        "priority": 65,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\btermo\\s+de\\s+rescis[aã]o\\b"
+          ],
+          "weak": [
+            "\\brescis[aã]o\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.95, "weak_hit": 0.7, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "contrato_gestao",
+        "label": "Contrato de Gestão / OS",
+        "enabled": true,
+        "priority": 60,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bcontrato(s)?\\s+de\\s+gest[aã]o\\b"
+          ],
+          "weak": [
+            "\\borganiza[cç][aã]o\\s+social\\b",
+            "\\boscip\\b",
+            "\\boss\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.95, "weak_hit": 0.65, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "convenios_parcerias",
+        "label": "Convênios / Parcerias",
+        "enabled": true,
+        "priority": 55,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bconv[eê]nio\\b",
+            "\\btermo\\s+de\\s+colabora[cç][aã]o\\b",
+            "\\btermo\\s+de\\s+fomento\\b"
+          ],
+          "weak": [
+            "\\bparceria\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.9, "weak_hit": 0.6, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "relatorio_fiscalizacao",
+        "label": "Relatório / Auditoria / Inspeção",
+        "enabled": true,
+        "priority": 50,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\brelat[oó]rio\\s+de\\s+fiscaliza[cç][aã]o\\b",
+            "\\bauditoria\\b",
+            "\\binspe[cç][aã]o\\b"
+          ],
+          "weak": [
+            "\\bfiscaliza[cç][aã]o\\b",
+            "\\brelat[oó]rio\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.95, "weak_hit": 0.6, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "acompanhamento",
+        "label": "Acompanhamento",
+        "enabled": true,
+        "priority": 40,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bacompanhamento\\b"
+          ],
+          "weak": [
+            "\\bfiscaliza[cç][aã]o\\s+concomitante\\b"
+          ],
+          "negative": []
+        },
+        "confidence_rules": { "strong_hit": 0.9, "weak_hit": 0.6, "neg_hit_penalty": -0.3 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "contratos",
+        "label": "Contratos (execução / genérico)",
+        "enabled": true,
+        "priority": 20,
+        "whitelist": true,
+        "patterns": {
+          "strong": [
+            "\\bcontrata[cç][aã]o\\s+direta\\b",
+            "\\baditivo\\b",
+            "\\breajuste\\b",
+            "\\breequil[ií]brio\\b",
+            "\\bpagamento\\b",
+            "\\bmedi[cç][aã]o\\b",
+            "\\bglosa\\b"
+          ],
+          "weak": [
+            "\\bcontratos?\\b",
+            "\\bcontrata[cç][aã]o\\b",
+            "\\bcontratada\\b"
+          ],
+          "negative": [
+            "\\bcontrato(s)?\\s+de\\s+gest[aã]o\\b"
+          ]
+        },
+        "confidence_rules": { "strong_hit": 0.85, "weak_hit": 0.55, "neg_hit_penalty": -0.4 },
+        "sources_priority": ["classe_raw", "caption_raw", "text_head", "ementa"]
+      },
+      {
+        "id": "prestacao_contas",
+        "label": "Prestação de Contas / Contas Anuais (irrelevante para licitantes)",
+        "enabled": true,
+        "priority": 10,
+        "whitelist": false,
+        "patterns": {
+          "strong": [
+            "\\bcontas\\s+anuais\\b",
+            "\\bpresta[cç][aã]o\\s+de\\s+contas\\b",
+            "\\bexerc[ií]cio:\\s*\\d{4}\\b",
+            "\\bordenador(a)?\\s+da\\s+despesa\\b",
+            "\\brespons[aá]vel(?:\\(is\\))?:\\b"
+          ],
+          "weak": [
+            "\\bunidade\\s+gestora\\b",
+            "\\bsecretaria\\s+de\\s+estado\\b"
+          ],
+          "negative": [
+            "\\bedital\\b",
+            "\\bpreg[aã]o\\b",
+            "\\bconcorr[eê]ncia\\b"
+          ]
+        },
+        "confidence_rules": { "strong_hit": 0.95, "weak_hit": 0.65, "neg_hit_penalty": -0.6 },
+        "sources_priority": ["text_head", "caption_raw", "classe_raw", "ementa"]
+      }
+    ],
+
+    "PROCEDURES": [
+      {
+        "id": "exame_previo_edital",
+        "label": "Procedimento: Exame Prévio de Edital",
+        "enabled": true,
+        "priority": 85,
+        "patterns": {
+          "strong": [
+            "\\bEXAMES?\\s+PR[ÉE]VIOS?\\s+DE\\s+EDITAL\\b",
+            "\\bEXAME\\s+PR[ÉE]VIO\\s+DE\\s+EDITAL\\b",
+            "\\bEXAME\\s+PR[ÉE]VIO\\b[\\s\\S]{0,80}\\bEDITAL\\b"
+          ],
+          "weak": [
+            "\\bRETIFICA[CÇ][AÃ]O\\s+DO\\s+EDITAL\\b",
+            "\\bEDITAL\\b[\\s\\S]{0,60}\\bRETIFICA\\w+\\b"
+          ],
+          "negative": []
+        },
+        "scoring": {
+          "strong_hit": 1.0,
+          "weak_hit": 0.75,
+          "neg_hit_penalty": -0.3
+        },
+        "sources_priority": ["text_head", "caption_raw", "classe_raw"]
+      }
+    ],
+
+    "TIE_BREAKERS": [
+      {
+        "id": "tb_repr_by_parties_header",
+        "enabled": true,
+        "priority": 100,
+        "when_any": [
+          { "source": "text_head", "regex": "\\bRepresentante(s)?\\s*:\\b" },
+          { "source": "text_head", "regex": "\\bRepresentado(a)?\\s*:\\b" },
+          { "source": "text_head", "regex": "\\bDenunciante(s)?\\s*:\\b" },
+          { "source": "text_head", "regex": "\\bDenunciado(a)?\\s*:\\b" },
+          { "source": "caption_raw", "regex": "\\brepresenta[cç][aã]o\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "representacao", "delta": 0.20 }
+        ],
+        "notes": "Quando há campos formais de partes, favorecer representacao."
+      },
+      {
+        "id": "tb_recurso_by_term",
+        "enabled": true,
+        "priority": 95,
+        "when_any": [
+          { "source": "text_head", "regex": "\\bPedido\\s+de\\s+Reconsidera[cç][aã]o\\b" },
+          { "source": "text_head", "regex": "\\bRecurso\\s+Ordin[aá]rio\\b" },
+          { "source": "caption_raw", "regex": "\\brecurso\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "recurso_ordinario", "delta": 0.25 }
+        ],
+        "notes": "Rito recursal deve ganhar de representacao/contratos quando explícito."
+      },
+      {
+        "id": "tb_embargos_by_term",
+        "enabled": true,
+        "priority": 94,
+        "when_any": [
+          { "source": "text_head", "regex": "\\bEmbargos?\\s+de\\s+Declara[cç][aã]o\\b" },
+          { "source": "caption_raw", "regex": "\\bembargos\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "embargos_declaracao", "delta": 0.25 }
+        ]
+      },
+      {
+        "id": "tb_cautelar_by_term",
+        "enabled": true,
+        "priority": 93,
+        "when_any": [
+          { "source": "text_head", "regex": "\\b(cautelar|liminar|medida\\s+de\\s+urg[eê]ncia)\\b" },
+          { "source": "caption_raw", "regex": "\\bcautelar\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "cautelar", "delta": 0.25 }
+        ]
+      },
+      {
+        "id": "tb_relatorio_fisc_by_org_units",
+        "enabled": true,
+        "priority": 85,
+        "when_any": [
+          { "source": "text_head", "regex": "\\b(Diretoria|Departamento|Coordenadoria)\\s+de\\s+Fiscaliza[cç][aã]o\\b" },
+          { "source": "text_head", "regex": "\\bRelat[oó]rio\\s+T[eé]cnico\\b" },
+          { "source": "text_head", "regex": "\\bAuditoria\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "relatorio_fiscalizacao", "delta": 0.20 }
+        ],
+        "notes": "Relatórios de fiscalização ganham quando há vocabulário típico de auditoria."
+      },
+      {
+        "id": "tb_acompanhamento_by_followup",
+        "enabled": true,
+        "priority": 75,
+        "when_any": [
+          { "source": "text_head", "regex": "\\b(acompanhamento|monitoramento)\\b" },
+          { "source": "text_head", "regex": "\\b(execuc[aã]o\\s+contratual|fiscaliza[cç][aã]o\\s+do\\s+contrato)\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "acompanhamento", "delta": 0.15 }
+        ]
+      },
+      {
+        "id": "tb_contratos_by_contract_terms",
+        "enabled": true,
+        "priority": 70,
+        "when_any": [
+          { "source": "text_head", "regex": "\\b(aditivo|apostilamento|termo\\s+aditivo|reajuste|reequil[ií]brio)\\b" },
+          { "source": "text_head", "regex": "\\bcontratante\\s*:\\b" },
+          { "source": "text_head", "regex": "\\bcontratada\\s*:\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "contratos", "delta": 0.15 }
+        ],
+        "notes": "Vocabulário contratual reforça 'contratos' versus acompanhamento."
+      },
+      {
+        "id": "tb_contrato_gestao_by_os",
+        "enabled": true,
+        "priority": 65,
+        "when_any": [
+          { "source": "text_head", "regex": "\\bcontrato\\s+de\\s+gest[aã]o\\b" },
+          { "source": "text_head", "regex": "\\b(organiza[cç][aã]o\\s+social|OS\\b)\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "contrato_gestao", "delta": 0.25 },
+          { "action": "downweight_class", "class_id": "contratos", "delta": 0.15 }
+        ]
+      },
+      {
+        "id": "tb_triage_contracts_vs_acomp_vs_fisc",
+        "enabled": true,
+        "priority": 60,
+        "when_any": [
+          { "source": "text_head", "regex": "\\b(fiscaliza[cç][aã]o|auditoria|inspe[cç][aã]o|relat[oó]rio\\s+t[eé]cnico)\\b" },
+          { "source": "text_head", "regex": "\\b(aditivo|apostilamento|reequil[ií]brio|reajuste|glosa|medi[cç][aã]o)\\b" },
+          { "source": "text_head", "regex": "\\b(acompanhamento|monitoramento|determina[cç][aã]o\\s+de\\s+cumprimento)\\b" }
+        ],
+        "then": [
+          { "action": "upweight_class", "class_id": "relatorio_fiscalizacao", "delta": 0.10 },
+          { "action": "upweight_class", "class_id": "contratos", "delta": 0.08 },
+          { "action": "upweight_class", "class_id": "acompanhamento", "delta": 0.08 }
+        ],
+        "notes": "Rule suave: o pick_primary final decide por score/priority; reforços pequenos evitam caos cross-tribunal."
+      }
+    ],
+
+    "EQUIVALENCES": [
+      {
+        "id": "eq_repr_plus_epe_proc",
+        "enabled": true,
+        "description": "Se baseline marcou EPE+Representação e rules marcou Representação + procedure EPE, tratar como equivalente.",
+        "baseline_any_of": [
+          ["exame_previo_edital", "representacao"],
+          ["exame_previo_edital"]
+        ],
+        "rules_primary": "representacao",
+        "requires_procedure": "exame_previo_edital"
+      }
+    ],
+
+    "DESCARTE": [
+      {
+        "id": "discard_contas_anuais",
+        "enabled": true,
+        "description": "Marcar prestação de contas/contas anuais como irrelevante para licitantes.",
+        "action": "mark_irrelevant",
+        "flag": "IRRELEVANT_CONTAS",
+        "match": {
+          "pattern_all": [
+            "\\b(Contas\\s+Anuais|Presta[cç][aã]o\\s+de\\s+Contas)\\b",
+            "\\bExerc[ií]cio\\s*:\\s*20\\d{2}\\b"
+          ],
+          "pattern_any": [
+            "\\b[ÓO]rg[aã]o\\s*:\\b",
+            "\\bRespons[aá]vel\\s*:\\b",
+            "\\bUnidade\\s+Gestora\\b",
+            "\\bOrdenador(a)?\\s+da\\s+Despesa\\b"
+          ],
+          "guardrail_none": [
+            "\\b(edital|preg[aã]o|concorr[eê]ncia|tomada\\s+de\\s+pre[cç]os|registro\\s+de\\s+pre[cç]os|ata\\s+de\\s+registro\\s+de\\s+pre[cç]os)\\b"
+          ]
+        }
+      }
+    ]
+  },
+
+  "meta": {
+    "ruleset_id": "core-v1",
+    "created_at": "2026-02-17T00:00:00Z",
+    "title": "Core rules v1 - universal TCE"
+  }
+}
