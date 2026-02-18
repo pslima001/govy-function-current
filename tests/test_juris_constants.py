@@ -17,6 +17,7 @@ from govy.utils.juris_constants import (
 
 # ── VALID_EFFECT includes NAO_CLARO ──────────────────────────────────────────
 
+
 def test_valid_effect_contains_nao_claro():
     assert "NAO_CLARO" in VALID_EFFECT
 
@@ -27,6 +28,7 @@ def test_valid_effect_contains_all_values():
 
 
 # ── clamp_effect fallback is NAO_CLARO ───────────────────────────────────────
+
 
 def test_clamp_effect_valid_values():
     assert clamp_effect("FLEXIBILIZA") == "FLEXIBILIZA"
@@ -51,6 +53,7 @@ def test_clamp_effect_mappings():
 
 # ── clamp_remedy_type fallback is NAO_CLARO ──────────────────────────────────
 
+
 def test_clamp_remedy_type_valid_values():
     assert clamp_remedy_type("IMPUGNACAO") == "IMPUGNACAO"
     assert clamp_remedy_type("RECURSO") == "RECURSO"
@@ -72,6 +75,7 @@ def test_clamp_remedy_type_mappings():
 
 
 # ── Other clamp functions still work ─────────────────────────────────────────
+
 
 def test_clamp_procedural_stage_basic():
     assert clamp_procedural_stage("EDITAL") == "EDITAL"

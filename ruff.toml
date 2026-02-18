@@ -1,0 +1,8 @@
+# Ruff configuration
+# Phase 2: lint only KB pipeline modules and tests.
+# Expand include as legacy code is cleaned up.
+
+include = [
+    "govy/utils/juris_*.py",
+    "tests/test_juris_*.py",
+]

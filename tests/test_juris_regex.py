@@ -11,6 +11,7 @@ from govy.utils.juris_regex import has_fundamento_legal, extract_legal_reference
 
 # ── has_fundamento_legal: positive cases ─────────────────────────────────────
 
+
 def test_cf88():
     result, matches = has_fundamento_legal("Conforme CF/88, art. 37")
     assert result is True
@@ -79,6 +80,7 @@ def test_paragrafo_unico():
 
 # ── has_fundamento_legal: negative cases ─────────────────────────────────────
 
+
 def test_generic_text_no_legal():
     result, matches = has_fundamento_legal(
         "O licitante foi inabilitado por falta de documentos."
@@ -108,6 +110,7 @@ def test_no_legal_refs_generic():
 
 
 # ── extract_legal_references: categories ─────────────────────────────────────
+
 
 def test_extract_constituicao_category():
     refs = extract_legal_references("art. 37 da Constituição Federal e CF/88")
