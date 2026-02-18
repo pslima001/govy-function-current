@@ -9,6 +9,17 @@ REQUIRED_FILES = [
     "govy/utils/juris_pipeline.py",
     "tests/test_juris_constants.py",
     "tests/test_juris_regex.py",
+    "govy/doctrine/reader_docx.py",
+    "govy/doctrine/chunker.py",
+    "govy/doctrine/verbatim_classifier.py",
+    "govy/doctrine/citation_extractor.py",
+    "govy/doctrine/semantic.py",
+    "govy/doctrine/pipeline.py",
+    "tests/test_doctrine_reader.py",
+    "tests/test_doctrine_chunker.py",
+    "tests/test_doctrine_verbatim.py",
+    "tests/test_doctrine_citation.py",
+    "tests/test_doctrine_semantic.py",
 ]
 
 REQUIRED_DOCS = [
