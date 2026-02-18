@@ -1,18 +1,34 @@
-﻿*.bak*
-*.backup*
+# === Caches & environments ===
 __pycache__/
-.venv/
 *.pyc
+.venv/
+.ruff_cache/
+.pytest_cache/
+
+# === Claude Code local config ===
+.claude/
+
+# === Editor / IDE ===
+.vscode/
+.idea/
+
+# === Temp / drafts ===
+notes/
+repo_inventory.csv
+
+# === Build / deploy artifacts ===
+deploy.zip
+local.settings.json
+*.bak*
+*.backup*
+
+# === Legacy one-off scripts (not part of pipeline) ===
 blob_list.txt
 query.json
 test_search.py
 install_doctrine_b_a1.ps1
 aplicar_correcoes_feedback.ps1
-deploy.zip
-local.settings.json
-scripts/__pycache__/
 scripts/lote*
 scripts/test_*
 scripts/validate_*
 scripts/microbatch_manifest_example.json
-tests/__pycache__/
