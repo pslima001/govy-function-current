@@ -35,8 +35,8 @@ logger = logging.getLogger(__name__)
 # SCHEMAS PARA FUNCTION-CALLING
 # =============================================================================
 
-# Schema GPT-4o (Extracao)
-EXTRACTION_SCHEMA = {
+# Schema GPT-4o (Extracao) - COM fundamento_legal
+EXTRACTION_SCHEMA_FULL = {
     "name": "extract_jurisprudencia",
     "description": "Extrai informacoes estruturadas de jurisprudencia de licitacoes",
     "parameters": {
@@ -80,7 +80,7 @@ EXTRACTION_SCHEMA = {
             "effect": {
                 "type": "string",
                 "enum": EFFECTS,
-                "description": "Efeito da decisao: FLEXIBILIZA (favorece licitante), RIGORIZA (favorece administracao), CONDICIONAL (depende)"
+                "description": "Efeito da decisao: FLEXIBILIZA (favorece licitante), RIGORIZA (favorece administracao), CONDICIONAL (depende), NAO_CLARO"
             },
             "key_facts": {
                 "type": "array",
@@ -101,6 +101,72 @@ EXTRACTION_SCHEMA = {
         "required": ["tese", "vital", "procedural_stage", "holding_outcome", "remedy_type", "effect", "claim_pattern", "confidence"]
     }
 }
+
+# Schema GPT-4o (Extracao) - SEM fundamento_legal (regex nao disparou)
+EXTRACTION_SCHEMA_NO_LEGAL = {
+    "name": "extract_jurisprudencia",
+    "description": "Extrai informacoes estruturadas de jurisprudencia de licitacoes (sem fundamento legal)",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "tese": {
+                "type": "string",
+                "description": "Enunciado/regra principal do caso (1-2 frases)"
+            },
+            "vital": {
+                "type": "string",
+                "description": "Trecho operacional com comando do tribunal, copiavel para peca juridica (ate 200 palavras)"
+            },
+            "limites": {
+                "type": ["string", "null"],
+                "description": "Condicoes, ressalvas ou excecoes ('desde que...', 'salvo...'). NULL se nao houver"
+            },
+            "contexto_minimo": {
+                "type": ["string", "null"],
+                "description": "Fatos essenciais do caso (ate 100 palavras). NULL se nao for relevante"
+            },
+            "procedural_stage": {
+                "type": "string",
+                "enum": PROCEDURAL_STAGES,
+                "description": "Fase do processo licitatorio"
+            },
+            "holding_outcome": {
+                "type": "string",
+                "enum": HOLDING_OUTCOMES,
+                "description": "Resultado/decisao do caso"
+            },
+            "remedy_type": {
+                "type": "string",
+                "enum": REMEDY_TYPES,
+                "description": "Tipo de remedio/instrumento processual"
+            },
+            "effect": {
+                "type": "string",
+                "enum": EFFECTS,
+                "description": "Efeito da decisao: FLEXIBILIZA (favorece licitante), RIGORIZA (favorece administracao), CONDICIONAL (depende), NAO_CLARO"
+            },
+            "key_facts": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "2-4 fatos-chave do caso"
+            },
+            "claim_pattern": {
+                "type": "string",
+                "description": "Padrao de tese em 1 frase (ex: 'exigencia de atestado com quantitativo minimo')"
+            },
+            "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Confianca geral na extracao (0.0 a 1.0)"
+            }
+        },
+        "required": ["tese", "vital", "procedural_stage", "holding_outcome", "remedy_type", "effect", "claim_pattern", "confidence"]
+    }
+}
+
+# Alias para compatibilidade
+EXTRACTION_SCHEMA = EXTRACTION_SCHEMA_FULL
 
 # Schema Claude Sonnet (Auditoria)
 AUDIT_SCHEMA = {
@@ -173,19 +239,21 @@ def build_extraction_prompt(full_text: str, has_legal_refs: bool, legal_refs: Li
         pistas_text += f"  {stage}: {', '.join(keywords[:5])}...\n"
     
     fundamento_instruction = ""
+    fundamento_field_instruction = ""
     if has_legal_refs:
         fundamento_instruction = f"""
 FUNDAMENTO LEGAL DETECTADO:
 Referencias encontradas: {', '.join(legal_refs[:10])}
 Extraia o fundamento_legal com os artigos/leis relevantes para a tese.
 """
+        fundamento_field_instruction = "3. FUNDAMENTO_LEGAL: Artigos/leis citados (null se nao detectado)\n\n"
     else:
         fundamento_instruction = """
 FUNDAMENTO LEGAL NAO DETECTADO:
 Nao foram encontradas referencias explicitas a artigos ou leis.
-Retorne fundamento_legal como null. NAO INVENTE referencias legais.
+NAO extraia fundamento_legal. Este campo NAO esta no schema.
 """
-    
+
     return f"""Voce e um especialista em jurisprudencia de licitacoes publicas brasileiras.
 
 TAREFA: Extrair informacoes estruturadas do texto juridico abaixo.
@@ -197,7 +265,7 @@ TEXTO:
 
 INSTRUCOES:
 
-1. TESE: 
+1. TESE:
    Enunciado/regra principal (1-2 frases objetivas).
    O que o tribunal ENTENDE como regra abstrata.
 
@@ -210,13 +278,11 @@ INSTRUCOES:
    Se o texto nao contiver consequencia pratica clara, retorne vital=null e confidence baixa.
    NAO usar vital como simples reescrita da tese.
 
-3. FUNDAMENTO_LEGAL: Artigos/leis citados (null se nao detectado)
+{fundamento_field_instruction}3. LIMITES: Ressalvas ou condicoes ("desde que...", "salvo...") - null se nao houver
 
-4. LIMITES: Ressalvas ou condicoes ("desde que...", "salvo...") - null se nao houver
+4. CONTEXTO_MINIMO: Fatos essenciais do caso (ate 100 palavras) - null se generico
 
-5. CONTEXTO_MINIMO: Fatos essenciais do caso (ate 100 palavras) - null se generico
-
-6. CLASSIFICACOES: Use as pistas abaixo para maior precisao
+5. CLASSIFICACOES: Use as pistas abaixo para maior precisao
 
 PISTAS PARA PROCEDURAL_STAGE:
 {pistas_text}
@@ -292,14 +358,15 @@ class JurisPipeline:
     
     def extract_with_gpt4o(self, full_text: str, has_legal_refs: bool, legal_refs: List[str]) -> Dict[str, Any]:
         """Passo A: Extracao com GPT-4o."""
-        
+
         prompt = build_extraction_prompt(full_text, has_legal_refs, legal_refs)
-        
+        schema = EXTRACTION_SCHEMA_FULL if has_legal_refs else EXTRACTION_SCHEMA_NO_LEGAL
+
         try:
             response = self.openai_client.chat.completions.create(
                 model="gpt-4o",
                 messages=[{"role": "user", "content": prompt}],
-                tools=[{"type": "function", "function": EXTRACTION_SCHEMA}],
+                tools=[{"type": "function", "function": schema}],
                 tool_choice={"type": "function", "function": {"name": "extract_jurisprudencia"}}
             )
             
