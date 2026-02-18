@@ -23,6 +23,9 @@ jobs:
           pip install ruff pytest
           pip install -r requirements.txt
 
+      - name: Structure check
+        run: python scripts/ci_structure_check.py
+
       - name: Ruff lint
         run: ruff check govy/utils/juris_*.py tests/test_juris_*.py
 
