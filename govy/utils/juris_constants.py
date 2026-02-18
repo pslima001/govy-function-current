@@ -1,4 +1,4 @@
-﻿# ===========================================================================
+# ===========================================================================
 # GOLDEN PATH - DO NOT CHANGE WITHOUT SPEC UPDATE
 # SPEC: SPEC_KB_PIPELINE_v1.3.md
 # ===========================================================================
@@ -37,7 +37,7 @@ VALID_PROCEDURAL_STAGE = {
     "EXECUCAO",
     "PAGAMENTO",
     "SANCIONAMENTO",
-    "NAO_CLARO"
+    "NAO_CLARO",
 }
 
 VALID_HOLDING_OUTCOME = {
@@ -45,7 +45,7 @@ VALID_HOLDING_OUTCOME = {
     "AFASTOU",
     "DETERMINOU_AJUSTE",
     "ANULOU",
-    "NAO_CLARO"
+    "NAO_CLARO",
 }
 
 VALID_REMEDY_TYPE = {
@@ -55,14 +55,10 @@ VALID_REMEDY_TYPE = {
     "REPRESENTACAO",
     "DENUNCIA",
     "ORIENTACAO_GERAL",
-    "NAO_CLARO"
+    "NAO_CLARO",
 }
 
-VALID_EFFECT = {
-    "FLEXIBILIZA",
-    "RIGORIZA",
-    "CONDICIONAL"
-}
+VALID_EFFECT = {"FLEXIBILIZA", "RIGORIZA", "CONDICIONAL", "NAO_CLARO"}
 
 VALID_SECAO = {
     "EMENTA",
@@ -70,7 +66,7 @@ VALID_SECAO = {
     "FUNDAMENTACAO",
     "DISPOSITIVO",
     "VOTO",
-    "NAO_CLARO"
+    "NAO_CLARO",
 }
 
 
@@ -89,10 +85,22 @@ EFFECTS = VALID_EFFECT
 # ==============================================================================
 
 PISTAS_PROCEDURAL_STAGE = {
-    "EDITAL": ["edital", "publicacao", "aviso", "termo de referencia", "projeto basico"],
+    "EDITAL": [
+        "edital",
+        "publicacao",
+        "aviso",
+        "termo de referencia",
+        "projeto basico",
+    ],
     "DISPUTA": ["sessao", "lance", "proposta", "pregao", "leilao", "disputa"],
     "JULGAMENTO": ["julgamento", "classificacao", "desclassificacao", "analise"],
-    "HABILITACAO": ["habilitacao", "documentos", "certidao", "atestado", "qualificacao"],
+    "HABILITACAO": [
+        "habilitacao",
+        "documentos",
+        "certidao",
+        "atestado",
+        "qualificacao",
+    ],
     "CONTRATACAO": ["contrato", "assinatura", "homologacao", "adjudicacao"],
     "EXECUCAO": ["execucao", "fiscalizacao", "medicao", "aditivo", "reajuste"],
     "PAGAMENTO": ["pagamento", "liquidacao", "empenho", "nota fiscal"],
@@ -140,7 +148,6 @@ HOLDING_OUTCOME_MAPPINGS = {
     "DETERMINOU_AJUSTE": "DETERMINOU_AJUSTE",
     "ANULOU": "ANULOU",
     "NAO_CLARO": "NAO_CLARO",
-    
     # ===== ANULATIVOS/SUSPENSIVOS -> ANULOU =====
     "ANULOU_DETERMINACAO": "ANULOU",
     "ANULOU_SANCAO": "ANULOU",
@@ -154,7 +161,6 @@ HOLDING_OUTCOME_MAPPINGS = {
     "DECLAROU_NULIDADE": "ANULOU",
     "ANULACAO": "ANULOU",
     "CANCELOU": "ANULOU",
-    
     # ===== ACOLHEDORES/PROCEDENTES -> AFASTOU =====
     "ACOLHEU": "AFASTOU",
     "ACOLHEU_JUSTIFICATIVAS": "AFASTOU",
@@ -168,7 +174,6 @@ HOLDING_OUTCOME_MAPPINGS = {
     "PARCIALMENTE_PROVIDO": "DETERMINOU_AJUSTE",
     "PARCIAL": "DETERMINOU_AJUSTE",
     "REFORMOU": "AFASTOU",
-    
     # ===== REJEITATORIOS/IMPROCEDENTES -> MANTEVE =====
     "REJEITOU": "MANTEVE",
     "REJEITADO": "MANTEVE",
@@ -182,7 +187,6 @@ HOLDING_OUTCOME_MAPPINGS = {
     "JULGOU_IRREGULAR": "MANTEVE",
     "JULGOU_REGULARES": "MANTEVE",
     "JULGOU_REGULARES_COM_RESSALVA": "DETERMINOU_AJUSTE",
-    
     # ===== SANCIONATORIOS/CONDENATORIOS -> DETERMINOU_AJUSTE =====
     "APLICOU_SANCAO": "DETERMINOU_AJUSTE",
     "APLICOU_SANCAO_BRANDA": "DETERMINOU_AJUSTE",
@@ -194,7 +198,6 @@ HOLDING_OUTCOME_MAPPINGS = {
     "IMPUTOU_DEBITO": "DETERMINOU_AJUSTE",
     "DECLAROU_IRREGULARIDADE": "DETERMINOU_AJUSTE",
     "COMUNICOU_IRREGULARIDADE": "DETERMINOU_AJUSTE",
-    
     # ===== ORIENTATIVOS/INFORMATIVOS -> DETERMINOU_AJUSTE =====
     "DETERMINOU": "DETERMINOU_AJUSTE",
     "RECOMENDOU": "DETERMINOU_AJUSTE",
@@ -209,17 +212,14 @@ HOLDING_OUTCOME_MAPPINGS = {
     "INTERPRETOU_NORMA": "DETERMINOU_AJUSTE",
     "RESPONDEU": "DETERMINOU_AJUSTE",
     "RESPONDEU_CONSULTA": "DETERMINOU_AJUSTE",
-    
     # ===== PERMISSIVOS -> AFASTOU =====
     "AUTORIZOU": "AFASTOU",
     "PERMITIU": "AFASTOU",
-    
     # ===== MANUTENCAO EXPLICITA -> MANTEVE =====
     "MANTEVE_DECISAO": "MANTEVE",
     "MANTEVE_JULGAMENTO_IRREGULARIDADE": "MANTEVE",
     "MANTEVE_POSICAO": "MANTEVE",
     "MANTEVE_SITUACAO": "MANTEVE",
-    
     # ===== OUTROS/AMBIGUOS -> NAO_CLARO =====
     "NAO_APLICAVEL": "NAO_CLARO",
     "NAO_DETERMINOU": "NAO_CLARO",
@@ -244,7 +244,6 @@ PROCEDURAL_STAGE_MAPPINGS = {
     "PAGAMENTO": "PAGAMENTO",
     "SANCIONAMENTO": "SANCIONAMENTO",
     "NAO_CLARO": "NAO_CLARO",
-    
     # ===== PRE-LICITATORIOS -> EDITAL =====
     "LICITACAO": "EDITAL",
     "PRE_LICITACAO": "EDITAL",
@@ -253,12 +252,10 @@ PROCEDURAL_STAGE_MAPPINGS = {
     "REGULAMENTO": "EDITAL",
     "PUBLICACAO_EDITAL": "EDITAL",
     "ELABORACAO_EDITAL": "EDITAL",
-    
     # ===== DISPUTA =====
     "SESSAO_PUBLICA": "DISPUTA",
     "ABERTURA_PROPOSTAS": "DISPUTA",
     "LANCES": "DISPUTA",
-    
     # ===== JULGAMENTO =====
     "ANALISE_PROPOSTAS": "JULGAMENTO",
     "CLASSIFICACAO": "JULGAMENTO",
@@ -267,14 +264,11 @@ PROCEDURAL_STAGE_MAPPINGS = {
     "RECURSO": "JULGAMENTO",
     "CONSULTA": "JULGAMENTO",
     "DENUNCIA": "JULGAMENTO",
-    
     # ===== HABILITACAO =====
     "ANALISE_DOCUMENTOS": "HABILITACAO",
     "INABILITACAO": "HABILITACAO",
-    
     # ===== CONTRATACAO =====
     "ASSINATURA_CONTRATO": "CONTRATACAO",
-    
     # ===== EXECUCAO =====
     "GESTAO_CONTRATO": "EXECUCAO",
     "FISCALIZACAO": "EXECUCAO",
@@ -283,16 +277,13 @@ PROCEDURAL_STAGE_MAPPINGS = {
     "EXECUCAO_CONTRATUAL": "EXECUCAO",
     "POS_LICITATORIO": "EXECUCAO",
     "POS-LICITATORIO": "EXECUCAO",
-    
     # ===== PAGAMENTO =====
     "LIQUIDACAO": "PAGAMENTO",
-    
     # ===== SANCIONAMENTO =====
     "MULTA": "SANCIONAMENTO",
     "PENALIDADE": "SANCIONAMENTO",
     "SUSPENSAO": "SANCIONAMENTO",
     "IMPEDIMENTO": "SANCIONAMENTO",
-    
     # ===== OUTROS -> NAO_CLARO =====
     "NAO_APLICAVEL": "NAO_CLARO",
 }
@@ -302,14 +293,12 @@ EFFECT_MAPPINGS = {
     "FLEXIBILIZA": "FLEXIBILIZA",
     "RIGORIZA": "RIGORIZA",
     "CONDICIONAL": "CONDICIONAL",
-    
     # ===== MAPEAMENTOS =====
     "FLEXIBILIZACAO": "FLEXIBILIZA",
     "FLEXIVEL": "FLEXIBILIZA",
     "PERMITIU": "FLEXIBILIZA",
     "ADMITIU": "FLEXIBILIZA",
     "AUTORIZOU": "FLEXIBILIZA",
-    
     "RIGOR": "RIGORIZA",
     "RIGIDO": "RIGORIZA",
     "EXIGIU": "RIGORIZA",
@@ -317,14 +306,12 @@ EFFECT_MAPPINGS = {
     "VEDOU": "RIGORIZA",
     "PROIBIU": "RIGORIZA",
     "MANDATORIO": "RIGORIZA",
-    
     "CONDICAO": "CONDICIONAL",
     "DEPENDE": "CONDICIONAL",
     "DESDE_QUE": "CONDICIONAL",
     "SE": "CONDICIONAL",
     "DIRETO": "CONDICIONAL",
-    "NAO_APLICAVEL": "CONDICIONAL",
-    "NAO_CLARO": "CONDICIONAL",
+    "NAO_APLICAVEL": "NAO_CLARO",
 }
 
 REMEDY_TYPE_MAPPINGS = {
@@ -336,7 +323,6 @@ REMEDY_TYPE_MAPPINGS = {
     "DENUNCIA": "DENUNCIA",
     "ORIENTACAO_GERAL": "ORIENTACAO_GERAL",
     "NAO_CLARO": "NAO_CLARO",
-    
     # ===== RECURSOS =====
     "PEDIDO_REEXAME": "RECURSO",
     "PEDIDO_DE_REEXAME": "RECURSO",
@@ -348,7 +334,6 @@ REMEDY_TYPE_MAPPINGS = {
     "EMBARGOS_DE_DECLARACAO": "RECURSO",
     "AGRAVO": "RECURSO",
     "REVISAO": "RECURSO",
-    
     # ===== ORIENTACAO GERAL =====
     "TOMADA_DE_CONTAS": "ORIENTACAO_GERAL",
     "TOMADA_DE_CONTAS_ESPECIAL": "ORIENTACAO_GERAL",
@@ -369,11 +354,9 @@ REMEDY_TYPE_MAPPINGS = {
     "SANCAO": "ORIENTACAO_GERAL",
     "SANCAO_INDIVIDUAL": "ORIENTACAO_GERAL",
     "SANCIONAMENTO": "ORIENTACAO_GERAL",
-    
     # ===== REPRESENTACAO =====
     "TCU_REPRESENTACAO": "REPRESENTACAO",
     "MEDIDA_CAUTELAR": "REPRESENTACAO",
-    
     # ===== OUTROS =====
     "NAO_APLICAVEL": "NAO_CLARO",
 }
@@ -394,17 +377,37 @@ SECAO_MAPPINGS = {
 
 UF_TO_REGION = {
     # SUDESTE
-    "SP": "SUDESTE", "RJ": "SUDESTE", "MG": "SUDESTE", "ES": "SUDESTE",
+    "SP": "SUDESTE",
+    "RJ": "SUDESTE",
+    "MG": "SUDESTE",
+    "ES": "SUDESTE",
     # SUL
-    "PR": "SUL", "SC": "SUL", "RS": "SUL",
+    "PR": "SUL",
+    "SC": "SUL",
+    "RS": "SUL",
     # NORDESTE
-    "BA": "NORDESTE", "PE": "NORDESTE", "CE": "NORDESTE", "MA": "NORDESTE",
-    "PB": "NORDESTE", "RN": "NORDESTE", "AL": "NORDESTE", "SE": "NORDESTE", "PI": "NORDESTE",
+    "BA": "NORDESTE",
+    "PE": "NORDESTE",
+    "CE": "NORDESTE",
+    "MA": "NORDESTE",
+    "PB": "NORDESTE",
+    "RN": "NORDESTE",
+    "AL": "NORDESTE",
+    "SE": "NORDESTE",
+    "PI": "NORDESTE",
     # CENTRO-OESTE
-    "GO": "CENTRO_OESTE", "MT": "CENTRO_OESTE", "MS": "CENTRO_OESTE", "DF": "CENTRO_OESTE",
+    "GO": "CENTRO_OESTE",
+    "MT": "CENTRO_OESTE",
+    "MS": "CENTRO_OESTE",
+    "DF": "CENTRO_OESTE",
     # NORTE
-    "AM": "NORTE", "PA": "NORTE", "AC": "NORTE", "RO": "NORTE",
-    "RR": "NORTE", "AP": "NORTE", "TO": "NORTE"
+    "AM": "NORTE",
+    "PA": "NORTE",
+    "AC": "NORTE",
+    "RO": "NORTE",
+    "RR": "NORTE",
+    "AP": "NORTE",
+    "TO": "NORTE",
 }
 
 # ==============================================================================
@@ -419,6 +422,7 @@ AUTHORITY_SCORES = {
 # ==============================================================================
 # FUNCOES DE NORMALIZACAO
 # ==============================================================================
+
 
 def normalize_string(value: str) -> str:
     """Normaliza string para comparacao."""
@@ -452,11 +456,11 @@ def clamp_holding_outcome(value: str) -> str:
 
 
 def clamp_remedy_type(value: str) -> str:
-    return clamp_enum(value, VALID_REMEDY_TYPE, REMEDY_TYPE_MAPPINGS, "ORIENTACAO_GERAL")
+    return clamp_enum(value, VALID_REMEDY_TYPE, REMEDY_TYPE_MAPPINGS, "NAO_CLARO")
 
 
 def clamp_effect(value: str) -> str:
-    return clamp_enum(value, VALID_EFFECT, EFFECT_MAPPINGS, "CONDICIONAL")
+    return clamp_enum(value, VALID_EFFECT, EFFECT_MAPPINGS, "NAO_CLARO")
 
 
 def clamp_secao(value: str) -> str:
@@ -467,7 +471,7 @@ def normalize_chunk_for_upsert(chunk: dict, tribunal: str = None) -> dict:
     """Normaliza todos os campos enum de um chunk antes do upsert."""
     tribunal = tribunal or chunk.get("tribunal", "").upper()
     normalized = dict(chunk)
-    
+
     if "procedural_stage" in normalized:
         normalized["procedural_stage"] = clamp_procedural_stage(normalized.get("procedural_stage"))
     if "holding_outcome" in normalized:
@@ -479,7 +483,7 @@ def normalize_chunk_for_upsert(chunk: dict, tribunal: str = None) -> dict:
     # NAO clampar secao - secao de chunk (tese/vital/etc) != secao de acordao (EMENTA/RELATORIO/etc)
     # if "secao" in normalized:
     #     normalized["secao"] = clamp_secao(normalized.get("secao"))
-    
+
     if tribunal == "TCU":
         normalized["uf"] = None
         normalized["region"] = None
@@ -487,10 +491,10 @@ def normalize_chunk_for_upsert(chunk: dict, tribunal: str = None) -> dict:
         uf = normalized.get("uf", "").upper() if normalized.get("uf") else None
         if uf and uf in UF_TO_REGION:
             normalized["region"] = UF_TO_REGION[uf]
-    
+
     if "authority_score" not in normalized or normalized.get("authority_score") is None:
         normalized["authority_score"] = AUTHORITY_SCORES.get(tribunal, 0.80)
-    
+
     return normalized
 
 
@@ -501,11 +505,11 @@ def validate_chunk_for_upsert(chunk: dict) -> tuple:
     for field in required:
         if not chunk.get(field):
             errors.append(f"Campo obrigatorio ausente: {field}")
-    
+
     tribunal = chunk.get("tribunal", "").upper()
     if tribunal == "TCE" and not chunk.get("uf"):
         errors.append("TCE requer uf")
-    
+
     if chunk.get("effect") and chunk["effect"] not in VALID_EFFECT:
         errors.append(f"effect invalido: {chunk['effect']}")
     if chunk.get("procedural_stage") and chunk["procedural_stage"] not in VALID_PROCEDURAL_STAGE:
@@ -514,7 +518,7 @@ def validate_chunk_for_upsert(chunk: dict) -> tuple:
         errors.append(f"holding_outcome invalido: {chunk['holding_outcome']}")
     if chunk.get("remedy_type") and chunk["remedy_type"] not in VALID_REMEDY_TYPE:
         errors.append(f"remedy_type invalido: {chunk['remedy_type']}")
-    
+
     return (len(errors) == 0, errors)
 
 
