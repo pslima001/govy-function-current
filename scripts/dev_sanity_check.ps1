@@ -3,13 +3,9 @@
 .SYNOPSIS
     Verificacao de sanidade do ambiente de desenvolvimento GOVY.
 .DESCRIPTION
-    Roda antes de iniciar qualquer tarefa. Falha se algo estiver errado:
-    - git status limpo
-    - branch nao e main
-    - python disponivel
-    - claude --version == estavel (npm)
-    - where.exe claude nao aponta para .local\bin (standalone/canary)
-    - ruff e pytest disponiveis
+    Roda antes de iniciar qualquer tarefa.
+    FALHA (exit 1) se qualquer check nao passar.
+    EXIT 0 somente quando TUDO estiver correto.
 #>
 
 Set-StrictMode -Version Latest
@@ -26,78 +22,97 @@ function Pass($msg) {
     Write-Host "OK:   $msg" -ForegroundColor Green
 }
 
-function Warn($msg) {
-    Write-Host "WARN: $msg" -ForegroundColor Yellow
-}
-
 Write-Host "=== GOVY Dev Sanity Check ===" -ForegroundColor Cyan
 Write-Host ""
 
-# -- 1. Git status (nao pode ter alteracoes pendentes) ----------------------------
-$dirty = git status --porcelain 2>&1
-if ($dirty) {
-    Warn "Working tree tem alteracoes. Considere commit ou stash antes de iniciar tarefa."
-    Write-Host "       $($dirty | Select-Object -First 5 | Out-String)" -ForegroundColor DarkGray
+# -- 1. Repo correto ---------------------------------------------------------------
+$toplevel = (git rev-parse --show-toplevel 2>&1).Trim().Replace('\', '/')
+if ($toplevel -notlike "*govy-function-current*") {
+    Fail "Repo errado: $toplevel (esperado *govy-function-current*)"
 } else {
-    Pass "Working tree limpa"
+    Pass "Repo: $toplevel"
 }
 
 # -- 2. Branch nao pode ser main ---------------------------------------------------
 $branch = (git branch --show-current 2>&1).Trim()
 if ($branch -eq "main") {
-    Fail "Branch atual e 'main'. Crie uma feature branch: git checkout -b feat/<nome>"
+    Fail "Branch atual e 'main'. Crie feature branch: git checkout -b feat/<nome>"
 } else {
     Pass "Branch: $branch"
 }
 
-# -- 3. Python disponivel ----------------------------------------------------------
+# -- 3. Working tree limpa (FAIL, nao warn) ----------------------------------------
+$dirty = git status --porcelain 2>&1
+if ($dirty) {
+    Fail "Working tree suja. Commit ou stash antes de iniciar."
+    $dirty | Select-Object -First 5 | ForEach-Object { Write-Host "       $_" -ForegroundColor DarkGray }
+} else {
+    Pass "Working tree limpa"
+}
+
+# -- 4. Python == 3.11.x -----------------------------------------------------------
+$pyCmd = $null
+$pyVer = $null
 try {
-    $pyVer = & python --version 2>&1
-    if ($pyVer -match "Python \d+\.\d+") {
-        Pass "Python: $pyVer"
+    $pyVer = (& python --version 2>&1).ToString().Trim()
+    if ($pyVer -match "Python 3\.11") { $pyCmd = "python" }
+} catch {}
+if (-not $pyCmd) {
+    try {
+        $pyVer = (& python3 --version 2>&1).ToString().Trim()
+        if ($pyVer -match "Python 3\.11") { $pyCmd = "python3" }
+    } catch {}
+}
+if ($pyCmd) {
+    Pass "Python: $pyVer (via $pyCmd)"
+} else {
+    if ($pyVer) {
+        Fail "Python versao errada: $pyVer (esperado 3.11.x)"
     } else {
-        # Fallback: try python3
-        $pyVer = & python3 --version 2>&1
-        if ($pyVer -match "Python \d+\.\d+") {
-            Pass "Python (python3): $pyVer"
+        Fail "Python nao encontrado no PATH"
+    }
+}
+
+# -- 5. Claude Code == 2.1.37 ------------------------------------------------------
+$expectedClaude = "2.1.37"
+try {
+    $claudeRaw = (& claude --version 2>&1).ToString().Trim()
+    # Extract version number (may include prefix text)
+    if ($claudeRaw -match "(\d+\.\d+\.\d+)") {
+        $claudeVer = $Matches[1]
+        if ($claudeVer -eq $expectedClaude) {
+            Pass "Claude Code: $claudeVer"
         } else {
-            Fail "Python nao encontrado ou retornou saida inesperada: $pyVer"
+            Fail "Claude Code versao errada: $claudeVer (esperado $expectedClaude)"
         }
-    }
-} catch {
-    Fail "Python nao encontrado no PATH"
-}
-
-# -- 4. Claude Code versao ---------------------------------------------------------
-try {
-    $claudeVer = & claude --version 2>&1
-    if ($claudeVer -match "\d+\.\d+\.\d+") {
-        Pass "Claude Code: $claudeVer"
     } else {
-        Fail "claude --version retornou saida inesperada: $claudeVer"
+        Fail "claude --version retornou saida inesperada: $claudeRaw"
     }
 } catch {
-    Fail "Claude Code nao encontrado no PATH"
+    Fail "Claude Code nao encontrado no PATH. Instale: npm install -g @anthropic-ai/claude-code@stable"
 }
 
-# -- 5. Claude Code NAO pode ser standalone (.local\bin) ---------------------------
+# -- 6. Claude standalone NAO pode estar no PATH -----------------------------------
 try {
-    $claudePaths = & where.exe claude 2>&1
+    $claudePaths = @(& where.exe claude 2>&1)
+    $standaloneFound = $false
     foreach ($p in $claudePaths) {
-        if ($p -match '\.local\\bin\\claude') {
-            Fail "Claude standalone detectado: $p — desinstale ou renomeie (ver docs/dev-environment.md)"
+        $pStr = $p.ToString()
+        if ($pStr -match '\.local[\\/]bin[\\/]claude') {
+            Fail "Claude standalone detectado: $pStr — desinstale (ver docs/dev-environment.md)"
+            $standaloneFound = $true
         }
     }
-    if ($exitCode -eq 0 -or -not ($claudePaths -match '\.local\\bin\\claude')) {
-        Pass "Claude Code path OK (sem standalone em .local\bin)"
+    if (-not $standaloneFound) {
+        Pass "Claude path OK (sem standalone em .local/bin)"
     }
 } catch {
-    Warn "Nao foi possivel verificar path do Claude"
+    Fail "Nao foi possivel verificar path do Claude (where.exe falhou)"
 }
 
-# -- 6. Ruff disponivel ------------------------------------------------------------
+# -- 7. Ruff disponivel ------------------------------------------------------------
 try {
-    $ruffVer = & ruff --version 2>&1
+    $ruffVer = (& ruff --version 2>&1).ToString().Trim()
     if ($ruffVer -match "\d+\.\d+") {
         Pass "Ruff: $ruffVer"
     } else {
@@ -107,9 +122,9 @@ try {
     Fail "Ruff nao encontrado. Instale: pip install ruff"
 }
 
-# -- 7. Pytest disponivel ----------------------------------------------------------
+# -- 8. Pytest disponivel ----------------------------------------------------------
 try {
-    $pytestVer = & pytest --version 2>&1
+    $pytestVer = (& pytest --version 2>&1).ToString().Trim()
     if ($pytestVer -match "\d+\.\d+") {
         Pass "Pytest: $pytestVer"
     } else {
