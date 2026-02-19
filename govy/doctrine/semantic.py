@@ -12,6 +12,9 @@ from govy.doctrine.chunker import DoctrineChunk
 
 logger = logging.getLogger(__name__)
 
+# Stub mode: True quando OPENAI_API_KEY ausente (seguro para CI)
+STUB_MODE = not os.getenv("OPENAI_API_KEY")
+
 # Catálogo global v1 (fixo)
 ARGUMENT_ROLE_V1 = {
     "DEFINICAO",

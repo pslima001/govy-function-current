@@ -62,3 +62,35 @@ def extract_citation_meta(text: str) -> Dict[str, Optional[str]]:
     elif re.search(r"\bvoto\b", text, re.IGNORECASE):
         result["trecho_rotulo"] = "Voto"
     return result
+
+
+def extract(text: str, meta: dict | None = None) -> dict:
+    """Contract wrapper: retorna formato padronizado.
+
+    Returns:
+        {found: bool, citation_base: str|None, evidence: str|None, confidence: float}
+    """
+    raw = extract_citation_meta(text)
+    if not raw:
+        return {"found": False, "citation_base": None, "evidence": None, "confidence": 0.0}
+
+    parts = []
+    if raw.get("tribunal"):
+        parts.append(raw["tribunal"])
+    if raw.get("tipo_decisao"):
+        parts.append(raw["tipo_decisao"])
+    if raw.get("numero"):
+        parts.append(f"n. {raw['numero']}")
+
+    citation_base = ", ".join(parts) if parts else None
+    found = citation_base is not None
+
+    evidence = None
+    if raw.get("relator"):
+        evidence = f"Relator: {raw['relator']}"
+    elif raw.get("processo"):
+        evidence = f"Processo: {raw['processo']}"
+
+    confidence = min(sum(1 for v in raw.values() if v is not None) / len(raw), 1.0) if raw else 0.0
+
+    return {"found": found, "citation_base": citation_base, "evidence": evidence, "confidence": round(confidence, 2)}

@@ -27,8 +27,7 @@ class TestChunkParagraphs:
         assert chunks[0].chunk_id.startswith("doctrine_0_")
 
     def test_multiple_chunks_when_exceeding_max(self):
-        big_para = "A" * 1000
-        paragraphs = [big_para] * 5  # 5000 chars total, should split
+        paragraphs = [chr(ord("A") + i) * 1000 for i in range(5)]  # 5 distinct paragraphs
         chunks = chunk_paragraphs(paragraphs, max_chars=2500, min_chars=900)
         assert len(chunks) >= 2
         for i, ch in enumerate(chunks):
