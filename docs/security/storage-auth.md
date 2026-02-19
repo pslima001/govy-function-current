@@ -90,3 +90,15 @@ Duas opcoes mutuamente exclusivas:
 | 2026-02-18 | Rollback Phase 4 | OK |
 | 2026-02-18 | Phase 5: `AZURE_STORAGE_CONNECTION_STRING` removido | OK |
 | 2026-02-18 | Smoke tests pos-Phase 5 | OK |
+
+## Anti-regression CI check
+
+O script `scripts/check_no_connection_strings.py` roda no CI em todo PR e push para main.
+
+**O que faz**: varre `govy/**/*.py` e `function_app.py` procurando `from_connection_string(` e `DefaultEndpointsProtocol=.*AccountKey=`.
+
+**Sentinel comment**: usos intencionais devem ter `# ALLOW_CONNECTION_STRING_OK` na mesma linha ou na linha anterior. Sem sentinel = violacao = CI falha.
+
+**Usos permitidos atualmente**:
+- `govy/api/tce_queue_handler.py` — acesso ao storage `sttcejurisprudencia` (GOV-29)
+- `function_app.py` — 5 usos em endpoints de teste/queue (TCE + AzureWebJobsStorage)

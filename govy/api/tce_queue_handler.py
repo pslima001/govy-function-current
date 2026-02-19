@@ -39,7 +39,7 @@ def _get_tce_blob_service() -> BlobServiceClient:
     conn_str = os.environ.get("TCE_STORAGE_CONNECTION", "")
     if not conn_str:
         raise ValueError("TCE_STORAGE_CONNECTION not configured")
-    return BlobServiceClient.from_connection_string(conn_str)
+    return BlobServiceClient.from_connection_string(conn_str)  # ALLOW_CONNECTION_STRING_OK
 
 
 def _get_main_blob_service() -> BlobServiceClient:

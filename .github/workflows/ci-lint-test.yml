@@ -26,6 +26,9 @@ jobs:
       - name: Structure check
         run: python scripts/ci_structure_check.py
 
+      - name: Anti-regression auth check
+        run: python scripts/check_no_connection_strings.py
+
       - name: Ruff lint
         run: ruff check govy/utils/juris_*.py tests/test_juris_*.py govy/doctrine/*.py tests/test_doctrine_*.py
 
