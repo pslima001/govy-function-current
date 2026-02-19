@@ -1,0 +1,13 @@
+# gitleaks configuration for govy-function-current
+# Allowlist known false positives (connection string templates in scripts/offline code)
+
+[allowlist]
+  description = "Known safe patterns in offline scripts and legacy backups"
+  paths = [
+    '''backups/''',
+    '''scripts/migrate_tce_sp\.py''',
+    '''scripts/doctrine_batch.*\.py''',
+    '''scripts/kb/.*\.py''',
+    '''kb_content_hub/.*''',
+    '''tests/contract/.*''',
+  ]

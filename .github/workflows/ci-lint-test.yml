@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -34,6 +41,11 @@ jobs:
 
       - name: Ruff format check
         run: ruff format --check govy/utils/juris_*.py tests/test_juris_*.py govy/doctrine/*.py tests/test_doctrine_*.py
+
+      - name: pip-audit vulnerability scan
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt 2>&1 | tee pip-audit-output.txt || echo "::warning::pip-audit found vulnerabilities (temporary soft-fail). See logs above."
 
       - name: Run tests
         run: pytest tests/test_juris_*.py tests/test_doctrine_*.py -q --tb=short
