@@ -17,6 +17,7 @@ from typing import Dict, Any, Optional
 
 import azure.functions as func
 from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client as _get_blob_svc
 
 # Lazy imports para evitar cold start issues
 logger = logging.getLogger(__name__)
@@ -32,10 +33,7 @@ KB_PROCESSED_CONTAINER = os.environ.get("KB_PROCESSED_CONTAINER", "kb-processed"
 
 def get_blob_service_client():
     """Obtém cliente do Blob Storage."""
-    conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-    if not conn_str:
-        raise ValueError("AZURE_STORAGE_CONNECTION_STRING não configurada")
-    return BlobServiceClient.from_connection_string(conn_str)
+    return _get_blob_svc()
 
 
 def ensure_containers_exist(blob_service: BlobServiceClient):

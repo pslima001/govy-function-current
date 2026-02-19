@@ -1,6 +1,6 @@
 # Ruff configuration for GOVY KB Pipeline
-# Phase 2: lint only KB pipeline modules and tests.
-# Expand include as legacy code is cleaned up.
+# Guardrail: target-version, line-length, excludes.
+# Scope is controlled by CI workflow (explicit file globs).
 
 target-version = "py311"
 line-length = 120
@@ -13,7 +13,6 @@ include = [
 extend-exclude = [
     "backups",
     "govy/api",
-    "govy/doctrine",
     "govy/extractors",
     "govy/juris",
 ]

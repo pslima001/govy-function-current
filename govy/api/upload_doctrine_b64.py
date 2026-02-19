@@ -4,7 +4,8 @@ import os
 import uuid
 import traceback
 import azure.functions as func
-from azure.storage.blob import BlobServiceClient, ContentSettings
+from azure.storage.blob import ContentSettings
+from govy.utils.azure_clients import get_blob_service_client
 
 
 def handle_upload_doctrine_b64(req: func.HttpRequest) -> func.HttpResponse:
@@ -27,14 +28,6 @@ def handle_upload_doctrine_b64(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     try:
-        conn = os.getenv("AZURE_STORAGE_CONNECTION_STRING") or os.getenv("AzureWebJobsStorage")
-        if not conn:
-            return func.HttpResponse(
-                json.dumps({"error": "Missing storage connection string env var."}, ensure_ascii=False),
-                status_code=500,
-                mimetype="application/json",
-            )
-
         filename = str(data.get("filename") or "")
         file_b64 = str(data.get("file_b64") or "")
 
@@ -71,7 +64,7 @@ def handle_upload_doctrine_b64(req: func.HttpRequest) -> func.HttpResponse:
 
         container = os.getenv("DOCTRINE_CONTAINER_NAME", "doutrina")
 
-        blob_service = BlobServiceClient.from_connection_string(conn)
+        blob_service = get_blob_service_client()
         cont = blob_service.get_container_client(container)
 
         blob_name = f"raw/{uuid.uuid4().hex}.docx"

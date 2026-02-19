@@ -1,30 +1,30 @@
 """
 run_microbatch_report.py - Micro-batch com relatorio de qualidade.
 """
+
 from __future__ import annotations
 import json
 import os
 import logging
 from datetime import datetime, timezone
-from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client
 from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_process_once
 
 logger = logging.getLogger(__name__)
 
+
 def _utc_now_iso():
     return datetime.now(timezone.utc).isoformat()
 
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-    conn = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-    if not conn:
-        raise RuntimeError("AZURE_STORAGE_CONNECTION_STRING nao definida.")
     container_source = os.environ.get("DOCTRINE_CONTAINER_SOURCE", "doutrina")
     container_processed = os.environ.get("DOCTRINE_CONTAINER_PROCESSED", "doutrina-processed")
     force = os.environ.get("DOCTRINE_FORCE_REPROCESS", "false").lower() == "true"
     manifest_path = os.environ.get("DOCTRINE_MICROBATCH_MANIFEST_JSON", "")
     report_path = os.environ.get("DOCTRINE_MICROBATCH_REPORT_PATH", "outputs/microbatch_report_doctrine_v2.json")
-    blob_service = BlobServiceClient.from_connection_string(conn)
+    blob_service = get_blob_service_client()
     if manifest_path and os.path.isfile(manifest_path):
         with open(manifest_path, "r", encoding="utf-8") as f:
             manifest = json.load(f)
@@ -64,6 +64,7 @@ def main():
         json.dump(report, f, ensure_ascii=False, indent=2)
     logger.info("Report salvo em: %s", report_path)
 
+
 def _list_blobs(blob_service, container_name, limit=20):
     container = blob_service.get_container_client(container_name)
     blobs = []
@@ -73,6 +74,7 @@ def _list_blobs(blob_service, container_name, limit=20):
             if len(blobs) >= limit:
                 break
     return blobs
+
 
 def _build_report(results):
     processed = sum(1 for r in results if r["result"].get("status") == "processed")
@@ -86,9 +88,16 @@ def _build_report(results):
     return {
         "kind": "doctrine_v2_microbatch_report",
         "generated_at": _utc_now_iso(),
-        "summary": {"total_files": len(results), "processed": processed, "already_processed": already, "failed": failed, "totals": totals},
+        "summary": {
+            "total_files": len(results),
+            "processed": processed,
+            "already_processed": already,
+            "failed": failed,
+            "totals": totals,
+        },
         "details": results,
     }
+
 
 if __name__ == "__main__":
     main()

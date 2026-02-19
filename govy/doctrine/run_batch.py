@@ -3,10 +3,11 @@ import json
 import logging
 import os
 from typing import Dict, Any
-from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client
 from govy.doctrine.pipeline import DoctrineIngestRequest, ingest_doctrine_process_once
 
 logger = logging.getLogger(__name__)
+
 
 def _load_manifest(path: str) -> Dict[str, Any]:
     """Manifest opcional com metadados por arquivo."""
@@ -15,21 +16,20 @@ def _load_manifest(path: str) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def _merge_meta(defaults: Dict[str, Any], file_meta: Dict[str, Any]) -> Dict[str, Any]:
     out = dict(defaults or {})
     out.update(file_meta or {})
     return out
 
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO)
-    conn = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-    if not conn:
-        raise RuntimeError("AZURE_STORAGE_CONNECTION_STRING não configurada")
     container_source = os.getenv("DOCTRINE_CONTAINER_SOURCE", "doutrina")
     container_processed = os.getenv("DOCTRINE_CONTAINER_PROCESSED", "doutrina-processed")
     manifest_path = os.getenv("DOCTRINE_MANIFEST_JSON", "")
     force_reprocess = os.getenv("DOCTRINE_FORCE_REPROCESS", "false").lower() == "true"
-    blob_service = BlobServiceClient.from_connection_string(conn)
+    blob_service = get_blob_service_client()
     manifest = _load_manifest(manifest_path)
     defaults = manifest.get("default", {})
     file_map = manifest.get("files", {})
@@ -68,6 +68,7 @@ def main() -> None:
             logger.error(f"Falha ao processar {blob_name}: {e}")
             fail += 1
     logger.info(f"Batch finalizado. processed={ok} already_processed={skipped} failed={fail}")
+
 
 if __name__ == "__main__":
     main()

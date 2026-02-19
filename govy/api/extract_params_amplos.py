@@ -2,16 +2,13 @@
 import json
 import logging
 import azure.functions as func
-from azure.storage.blob import BlobServiceClient
 import os
+from govy.utils.azure_clients import get_blob_service_client
 
 logger = logging.getLogger(__name__)
 
 def _get_blob_client():
-    conn_str = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-    if not conn_str:
-        raise ValueError("AZURE_STORAGE_CONNECTION_STRING not set")
-    return BlobServiceClient.from_connection_string(conn_str)
+    return get_blob_service_client()
 
 def _load_parsed_json(blob_name: str) -> dict:
     blob_service = _get_blob_client()

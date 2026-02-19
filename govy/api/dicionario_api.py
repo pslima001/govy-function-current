@@ -7,13 +7,13 @@ Endpoints:
 - POST /api/dicionario        -> Adiciona termos
 - DELETE /api/dicionario      -> Remove termos
 """
-import os
 import re
 import json
 import logging
 import unicodedata
 import azure.functions as func
 from azure.storage.blob import BlobServiceClient
+from govy.utils.azure_clients import get_blob_service_client as _get_blob_svc
 
 logger = logging.getLogger(__name__)
 
@@ -68,8 +68,7 @@ def handle_dicionario(req: func.HttpRequest) -> func.HttpResponse:
     logger.info(f"=== DICIONARIO API - {req.method} ===")
     
     try:
-        conn_str = os.environ.get("AzureWebJobsStorage")
-        blob_service = BlobServiceClient.from_connection_string(conn_str)
+        blob_service = _get_blob_svc()
         data = carregar_dicionario(blob_service)
         termos_set = set(data.get("termos", []))
         

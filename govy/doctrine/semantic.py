@@ -23,6 +23,7 @@ ARGUMENT_ROLE_V1 = {
     "PASSO_A_PASSO",
 }
 
+
 @dataclass(frozen=True)
 class DoctrineSemanticChunk:
     id: str
@@ -42,6 +43,7 @@ class DoctrineSemanticChunk:
     compatibility_keys: List[str]
     red_flags: List[str]
     source_refs: Dict[str, str]
+
 
 _FORBIDDEN_DOCTRINE_MENTIONS = [
     (r"\bmajorit[aá]ri[ao]\b", "CONSENSO_REMOVIDO"),
@@ -68,6 +70,7 @@ _FORBIDDEN_AUTHORSHIP = [
     (r"\bed itora\b", "AUTORIA_REMOVIDA"),
 ]
 
+
 def _sanitize_text(s: str) -> tuple[str, List[str]]:
     red_flags: List[str] = []
     out = s or ""
@@ -78,9 +81,13 @@ def _sanitize_text(s: str) -> tuple[str, List[str]]:
     out = re.sub(r"\s{2,}", " ", out).strip()
     return out, sorted(set(red_flags))
 
+
 def _looks_neutral(s: str) -> bool:
     s = (s or "").strip().lower()
-    return (s.startswith("há visões doutrinárias") or s.startswith("parte da doutrina") or s.startswith("alguns advogados"))
+    return (
+        s.startswith("há visões doutrinárias") or s.startswith("parte da doutrina") or s.startswith("alguns advogados")
+    )
+
 
 def _default_scope_assertions() -> Dict[str, bool]:
     return {
@@ -90,11 +97,14 @@ def _default_scope_assertions() -> Dict[str, bool]:
         "revela_autoria": False,
     }
 
+
 def _openai_api_key() -> Optional[str]:
     return os.getenv("OPENAI_API_KEY")
 
+
 def _openai_model() -> str:
     return os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
 
 def _call_openai_json(system_prompt: str, user_prompt: str) -> Dict[str, Any]:
     api_key = _openai_api_key()
@@ -111,12 +121,18 @@ def _call_openai_json(system_prompt: str, user_prompt: str) -> Dict[str, Any]:
         "response_format": {"type": "json_object"},
     }
     data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}, method="POST")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"},
+        method="POST",
+    )
     with urllib.request.urlopen(req, timeout=120) as resp:
         raw = resp.read().decode("utf-8")
     out = json.loads(raw)
     content = out["choices"][0]["message"]["content"]
     return json.loads(content)
+
 
 def _build_system_prompt() -> str:
     return """Você é um extrator de CHUNKS SEMÂNTICOS de DOUTRINA (com autoria) para a plataforma GOVY.
@@ -138,7 +154,16 @@ ARGUMENT_ROLE (catálogo v1):
 SAÍDA:
 - Retorne APENAS JSON válido, sem markdown.""".strip()
 
-def _build_user_prompt(*, procedural_stage: str, tema_principal: str, source_sha: str, raw_chunk_id: str, raw_content_hash: str, raw_text: str) -> str:
+
+def _build_user_prompt(
+    *,
+    procedural_stage: str,
+    tema_principal: str,
+    source_sha: str,
+    raw_chunk_id: str,
+    raw_content_hash: str,
+    raw_text: str,
+) -> str:
     roles = ", ".join(sorted(ARGUMENT_ROLE_V1))
     return f"""Extraia de forma fiel (sem inventar) 1 a 4 CHUNKS SEMÂNTICOS de DOUTRINA para o texto abaixo.
 Cada chunk deve ser UMA ideia jurídica e responder UMA pergunta âncora.
@@ -172,13 +197,22 @@ METADADOS INTERNOS (não mencionar em nenhum campo de texto):
 TEXTO:
 \"\"\"{raw_text}\"\"\"""".strip()
 
+
 def _coerce_argument_role(role: Any) -> Optional[str]:
     if role is None:
         return None
     r = str(role).strip().upper()
     return r if r in ARGUMENT_ROLE_V1 else None
 
-def extract_semantic_chunks_for_raw_chunks(*, raw_chunks: List[DoctrineChunk], procedural_stage: str, tema_principal: str, source_sha: str, review_status_default: str = "PENDING") -> List[Dict[str, Any]]:
+
+def extract_semantic_chunks_for_raw_chunks(
+    *,
+    raw_chunks: List[DoctrineChunk],
+    procedural_stage: str,
+    tema_principal: str,
+    source_sha: str,
+    review_status_default: str = "PENDING",
+) -> List[Dict[str, Any]]:
     if not raw_chunks:
         return []
     if not _openai_api_key():
@@ -187,7 +221,14 @@ def extract_semantic_chunks_for_raw_chunks(*, raw_chunks: List[DoctrineChunk], p
     system_prompt = _build_system_prompt()
     out: List[Dict[str, Any]] = []
     for ch in raw_chunks:
-        user_prompt = _build_user_prompt(procedural_stage=procedural_stage, tema_principal=tema_principal, source_sha=source_sha, raw_chunk_id=ch.chunk_id, raw_content_hash=ch.content_hash, raw_text=ch.content_raw)
+        user_prompt = _build_user_prompt(
+            procedural_stage=procedural_stage,
+            tema_principal=tema_principal,
+            source_sha=source_sha,
+            raw_chunk_id=ch.chunk_id,
+            raw_content_hash=ch.content_hash,
+            raw_text=ch.content_raw,
+        )
         try:
             raw_json = _call_openai_json(system_prompt, user_prompt)
         except Exception as e:
@@ -216,7 +257,7 @@ def extract_semantic_chunks_for_raw_chunks(*, raw_chunks: List[DoctrineChunk], p
                 coverage = "INCERTO"
             if not isinstance(limites, list) or len(limites) < 2:
                 coverage = "INCERTO"
-                limites = [l for l in limites] if isinstance(limites, list) else []
+                limites = [item for item in limites] if isinstance(limites, list) else []
             if not isinstance(tags, list) or len(tags) < 3:
                 coverage = "INCERTO"
                 tags = [t for t in tags] if isinstance(tags, list) else []
@@ -244,7 +285,11 @@ def extract_semantic_chunks_for_raw_chunks(*, raw_chunks: List[DoctrineChunk], p
                 scope_assertions=_default_scope_assertions(),
                 compatibility_keys=[f"{procedural_stage}:{tema_principal}"],
                 red_flags=sorted(set(red_flags)),
-                source_refs={"source_sha": source_sha, "raw_chunk_id": ch.chunk_id, "raw_content_hash": ch.content_hash},
+                source_refs={
+                    "source_sha": source_sha,
+                    "raw_chunk_id": ch.chunk_id,
+                    "raw_content_hash": ch.content_hash,
+                },
             )
             out.append(sem.__dict__)
     return out
