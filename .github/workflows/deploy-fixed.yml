@@ -107,6 +107,12 @@ jobs:
             echo "✅ SUCCESS: imports working!"
           fi
       
+      - name: Smoke test endpoints
+        env:
+          BASE_URL: ${{ secrets.AZURE_FUNCTION_BASE_URL }}
+          FUNC_KEY: ${{ secrets.AZURE_FUNCTION_KEY }}
+        run: python scripts/smoke_test_endpoints.py
+
       - name: List deployed functions
         run: |
           echo "📋 Listing functions..."
