@@ -1,0 +1,21 @@
+{
+  "kind": "migration_report",
+  "generated_at": "2026-02-19T12:03:48.676501+00:00",
+  "source": "tce-jurisprudencia/tce-sp/",
+  "destination": "juris-raw/tce-sp/",
+  "summary": {
+    "total_legacy": 44741,
+    "copied": 0,
+    "skipped": 44741,
+    "failed": 0,
+    "bytes_copied": 0,
+    "elapsed_seconds": 0.0
+  },
+  "sample_paths": [
+    "tce-sp/acordaos/10000_989_17_acordao.pdf",
+    "tce-sp/acordaos/10001_989_19_acordao.pdf",
+    "tce-sp/acordaos/10002_989_21_acordao.pdf",
+    "tce-sp/acordaos/10003_989_21_acordao.pdf",
+    "tce-sp/acordaos/10008_989_22_acordao.pdf"
+  ]
+}

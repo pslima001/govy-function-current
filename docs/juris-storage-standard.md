@@ -80,6 +80,16 @@ Cada doc em `juris-raw/{tribunal}/metadata/{doc_id}.json`:
 | `tcu` | `scrape_pdf` (futuro) | Inventario em andamento |
 | `tce-mg` | `import_json` | 1 doc importado |
 
+## TCE-SP Migration Status
+
+**Status**: Completed (idempotent) — 2026-02-19
+
+Server-side copy de `tce-jurisprudencia/tce-sp/` para `juris-raw/tce-sp/` no account `sttcejurisprudencia`.
+44.741 blobs verificados, 0 falhas. Report em `outputs/migrate_tce_sp_report.json`.
+
+O container legado `tce-jurisprudencia` deve ser tratado como **read-only** e futuramente depreciado.
+O pipeline deve ler somente de `juris-raw`.
+
 ## Regras
 
 1. **Um container por camada** (raw, parsed), prefixos por tribunal
