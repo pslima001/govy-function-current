@@ -470,6 +470,11 @@ _PF_PAPEIS = frozenset({"RESPONSAVEL", "RECORRENTE", "PROCURADOR", "ADVOGADO"})
 # Papeis with default public/private heuristic
 _PUBLIC_DEFAULT_PAPEIS = frozenset({"CONTRATANTE", "CONVENENTE"})
 _PRIVATE_DEFAULT_PAPEIS = frozenset({"CONTRATADA", "CONVENIADA", "LICITANTE"})
+# Institutional papeis: collapse whitespace, split only on ";" (no newline+uppercase split)
+_PAPEIS_INSTITUICAO = frozenset({
+    "CONTRATANTE", "CONTRATADA", "CONVENENTE", "CONVENIADA",
+    "LICITANTE", "INTERESSADO", "REPRESENTANTE", "REPRESENTADA",
+})
 
 
 def _extract_header_window(text: str) -> str:
@@ -609,10 +614,16 @@ def extract_partes(text: str) -> List[dict]:
         if re.search(r"C[ÓO]PIA\s+DE\s+DOCUMENTO\s+ASSINADO\s+DIGITALMENTE", value, re.I):
             continue
 
-        # Split on ";" and newline-with-uppercase first
-        fragments = re.split(r"\s*;\s*|\n\s*(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])", value)
-        # Collapse whitespace inside each fragment (PDF line breaks within phrases)
-        fragments = [re.sub(r"\s+", " ", f).strip() for f in fragments]
+        # Split strategy depends on papel type
+        if papel in _PAPEIS_INSTITUICAO:
+            # Institutional: collapse all whitespace first, then split only on ";"
+            value_norm = re.sub(r"\s+", " ", value).strip()
+            fragments = re.split(r"\s*;\s*", value_norm)
+        else:
+            # Person roles: split on ";" and newline-with-uppercase
+            fragments = re.split(r"\s*;\s*|\n\s*(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])", value)
+            # Collapse whitespace inside each fragment
+            fragments = [re.sub(r"\s+", " ", f).strip() for f in fragments]
 
         # Conservative " e " split (req C):
         # Do NOT split if the full fragment ends with a company suffix (LTDA, S/A, etc.)
@@ -661,6 +672,9 @@ def extract_partes(text: str) -> List[dict]:
             if papel == "ADVOGADO":
                 nome = _OAB_RE.sub("", nome).strip()
                 nome = nome.strip(" ,;.–—-")
+                # OAB in cargo is not a real cargo — clear it
+                if cargo and re.search(r"OAB", cargo, re.I):
+                    cargo = None
 
             nome = _clean_nome(nome)
             if len(nome) < 3:

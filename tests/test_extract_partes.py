@@ -332,3 +332,37 @@ def test_parse_text_no_parties():
     assert pe["partes"] == []
     assert pe["partes_privadas"] == []
     assert pe["partes_publicas"] == []
+
+
+# ── fragmentation / institutional collapse ────────────────────────────────────
+
+def test_convenente_linebreaks_collapse():
+    """CONVENENTE with narrow-column line breaks must collapse into 1 party."""
+    text = (
+        "Convenente: Secretaria de\n"
+        "Estado da\n"
+        "Saúde\n"
+        "Objeto: Convênio"
+    )
+    partes = extract_partes(text)
+    assert len(partes) == 1
+    assert "Secretaria" in partes[0]["nome_raw"]
+    assert "Saúde" in partes[0]["nome_raw"]
+    assert partes[0]["papel"] == "CONVENENTE"
+
+
+def test_conveniada_linebreaks_with_semicolon():
+    """CONVENIADA with line breaks collapses; semicolon splits into 2 parties."""
+    text = (
+        "Conveniada: Hospital das Clínicas da Faculdade de\n"
+        "Medicina de Botucatu; Fundação para o Desenvolvimento\n"
+        "Médico Hospitalar\n"
+        "Objeto: Prestação de serviços"
+    )
+    partes = extract_partes(text)
+    assert len(partes) == 2
+    assert "Hospital" in partes[0]["nome_raw"]
+    assert "Botucatu" in partes[0]["nome_raw"]
+    assert "Fundação" in partes[1]["nome_raw"]
+    assert partes[0]["papel"] == "CONVENIADA"
+    assert partes[1]["papel"] == "CONVENIADA"
