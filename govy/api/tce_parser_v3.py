@@ -620,7 +620,14 @@ def extract_partes(text: str) -> List[dict]:
             value_norm = re.sub(r"\s+", " ", value).strip()
             fragments = re.split(r"\s*;\s*", value_norm)
         else:
-            # Person roles: split on ";" and newline-with-uppercase
+            # Person roles: strip redundant label echo inside value
+            value = re.sub(r"(?is)^\s*Respons[áa]ve(?:l|is).*?:\s*", "", value).strip()
+            # Pre-merge line breaks that look like name continuation (not preceded by : or ;)
+            value = re.sub(
+                r"(?<![:;])(?<=[A-Za-z\u00C0-\u024F])\s*\n\s*(?=[A-Za-z\u00C0-\u024F])",
+                " ", value,
+            )
+            # Split on ";" and newline-with-uppercase
             fragments = re.split(r"\s*;\s*|\n\s*(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])", value)
             # Collapse whitespace inside each fragment
             fragments = [re.sub(r"\s+", " ", f).strip() for f in fragments]

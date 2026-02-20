@@ -366,3 +366,29 @@ def test_conveniada_linebreaks_with_semicolon():
     assert "Fundação" in partes[1]["nome_raw"]
     assert partes[0]["papel"] == "CONVENIADA"
     assert partes[1]["papel"] == "CONVENIADA"
+
+
+def test_responsavel_linebreak_merges_name():
+    """RESPONSAVEL with line break between first/last name must merge into 1 party."""
+    text = (
+        "Responsável(is): José Carlos\n"
+        "Pedroso (Presidente da FITO)\n"
+        "Objeto: Contrato"
+    )
+    partes = extract_partes(text)
+    assert len(partes) == 1
+    assert "José Carlos Pedroso" in partes[0]["nome_raw"]
+    assert partes[0]["papel"] == "RESPONSAVEL"
+    assert partes[0]["cargo"] == "Presidente da FITO"
+
+
+def test_responsaveis_label_not_in_nome():
+    """Redundant 'Responsáveis pelos Instrumentos:' inside value must be stripped."""
+    text = (
+        "Responsáveis pelos Instrumentos: José Carlos Pedroso (Presidente da FITO)\n"
+        "Objeto: Obra"
+    )
+    partes = extract_partes(text)
+    assert len(partes) >= 1
+    assert not partes[0]["nome_raw"].startswith("Responsáveis")
+    assert "José Carlos Pedroso" in partes[0]["nome_raw"]
