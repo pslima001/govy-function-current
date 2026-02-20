@@ -342,6 +342,358 @@ def remove_self_reference(refs: List[str], processo: str) -> List[str]:
     return [r for r in refs if re.sub(r"\s+", "", r) != p_norm]
 
 # ----------------------------
+# Extração de Partes (parties)
+# ----------------------------
+
+# Labels de papel — longest-first para evitar match parcial.
+# Cada tupla: (regex_pattern, papel_normalizado)
+_ROLE_LABELS = [
+    # Compound labels (must precede shorter variants)
+    (r"Respons[áa]vel\(?(?:is)?\)?\s+pela\s+Homologa[çc][ãa]o\s+do\s+Certame\s+Licitat[óo]rio\s*:", "RESPONSAVEL"),
+    (r"Respons[áa]vel\s+pela\s+Ratifica[çc][ãa]o\s+da\s+Dispensa\s+de\s+Licita[çc][ãa]o(?:\s+e\s+pelo\s+Instrumento)?\s*:", "RESPONSAVEL"),
+    (r"Respons[áa]veis?\s+pelos?\s+Instrumentos?\s*:", "RESPONSAVEL"),
+    (r"Respons[áa]vel\(?(?:is)?\)?\s+pelos?\(?s?\)?\s+Instrumentos?\(?s?\)?\s*:", "RESPONSAVEL"),
+    (r"Procurador(?:a)?\s+(?:-?\s*)?Geral\s+do\s+Minist[ée]rio\s+P[úu]blico(?:\s+de\s+Contas)?(?:\s+Substitut[oa])?\s*:", "PROCURADOR"),
+    (r"Procurador(?:a)?\s+de\s+Contas\s*:", "PROCURADOR"),
+    (r"Procurador(?:a)?\s+da\s+Fazenda\s*:", "PROCURADOR"),
+    # Standard labels
+    (r"Contratada\(?s?\)?\s*:", "CONTRATADA"),
+    (r"Contratante\(?s?\)?\s*:", "CONTRATANTE"),
+    (r"Convenente\(?s?\)?\s*:", "CONVENENTE"),
+    (r"Conveniada\(?s?\)?\s*:", "CONVENIADA"),
+    (r"Recorrente\(?s?\)?\s*:", "RECORRENTE"),
+    (r"Recorrido\(?a?\)?\(?s?\)?\s*:", "RECORRIDO"),
+    (r"Interessado\(?a?\)?\(?s?\)?\s*:", "INTERESSADO"),
+    (r"Representante\(?s?\)?\s*:", "REPRESENTANTE"),
+    (r"Representada?\(?s?\)?\s*:", "REPRESENTADA"),
+    (r"Licitante\(?s?\)?\s*:", "LICITANTE"),
+    (r"Impetrante\(?s?\)?\s*:", "IMPETRANTE"),
+    (r"Impetrado\(?a?\)?\s*:", "IMPETRADO"),
+    (r"Denunciante\(?s?\)?\s*:", "DENUNCIANTE"),
+    (r"Denunciado\(?a?\)?\(?s?\)?\s*:", "DENUNCIADO"),
+    (r"Advogados?\(?s?\)?\s*:", "ADVOGADO"),
+    (r"Respons[áa]ve(?:l\(?(?:is)?\)?|is)\s*:", "RESPONSAVEL"),
+]
+
+# Compiled role label patterns (case-insensitive)
+_ROLE_LABELS_C = [(re.compile(p, re.IGNORECASE), papel) for p, papel in _ROLE_LABELS]
+
+# Section boundary — terminates a party-value capture
+_HEADER_END_RE = re.compile(
+    r"(?:"
+    r"\bEMENTA\b"
+    r"|\bRELAT[ÓO]RIO\b"
+    r"|\bVOTO\b"
+    r"|\bDISPOSITIVO\b"
+    r"|\bVISTOS\b"
+    r"|\bACORDAM\b"
+    r")",
+    re.IGNORECASE,
+)
+
+_VALUE_END_RE = re.compile(
+    r"(?:"
+    r"\bObjeto\s*:"
+    r"|\bEm\s+Julgamento\s*:"
+    r"|\bAssunto\s*:"
+    r"|\bEMENTA\b"
+    r"|\bAC[ÓO]RD[ÃA]O\b"
+    r"|\bRELAT[ÓO]RIO\b"
+    r"|\bVOTO\b"
+    r"|\bDISPOSITIVO\b"
+    r"|\bVISTOS\b"
+    r"|\bFiscaliza[çc][ãa]o\s+atual\s*:"
+    r"|\bFiscalizada\s+por\s*:"
+    r")",
+    re.IGNORECASE,
+)
+
+# CNPJ / CPF / OAB patterns
+_CNPJ_RE = re.compile(r"\b(\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2})\b")
+_CPF_RE = re.compile(r"\b(\d{3}\.\d{3}\.\d{3}-\d{2})\b")
+_OAB_RE = re.compile(
+    r"(?:"
+    r"\s*[-–—]\s*OAB[/\s]*[A-Z]{2}\s*(?:n[º°.]?\s*)?\d{1,6}(?:\.\d{3})?"
+    r"|\s*\(OAB[/\s]*[A-Z]{2}\s*(?:n[º°.]?\s*)?\d{1,6}(?:\.\d{3})?\)"
+    r")",
+    re.IGNORECASE,
+)
+_TRAILING_CNPJ_RE = re.compile(r"\s*[-–—,]\s*CNPJ\s*[:/]?\s*\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}", re.IGNORECASE)
+
+# Cargo in parentheses
+_CARGO_RE = re.compile(r"\(([^)]{3,80})\)")
+
+# Classification: PRIVADA
+_PRIVADA_SUFFIXES = re.compile(
+    r"\b(?:LTDA\.?|S[/.]?A\.?|EIRELI|EPP)\b"
+    r"|\bME\b(?!\s*(?:DE|DO|DA|DOS|DAS)\b)",
+    re.IGNORECASE,
+)
+_PRIVADA_KEYWORDS = re.compile(
+    r"\b(?:ENGENHARIA|CONSTRUCAO|COMERCIO|CONSULTORIA|SERVICOS|"
+    r"TECNOLOGIA|ASSESSORIA|REFEICOES|PAVIMENTACAO|INFORMATICA|"
+    r"COMUNICACAO|INCORPORADORA|CONSTRUTORA|EMPREENDIMENTOS|"
+    r"TRANSPORTE|LIMPEZA|SEGURANCA|MANUTENCAO|LOCACAO|"
+    r"DISTRIBUIDORA|EDITORA|GRAFICA|INDUSTRIA|SUPERMERCADO|"
+    r"FORNECEDORA|IMPORTADORA|EXPORTADORA)\b",
+    re.IGNORECASE,
+)
+
+# Classification: PUBLICA (high confidence)
+_PUBLICA_KEYWORDS_HIGH = re.compile(
+    r"\b(?:PREFEITURA|MUNICIPIO\s+DE|SECRETARIA\s+(?:DE\s+ESTADO|MUNICIPAL)|"
+    r"ESTADO\s+DE|CAMARA\s+MUNICIPAL|AUTARQUIA|FUNDACAO\s+PUBLICA|"
+    r"GOVERNO|TRIBUNAL|MINISTERIO|"
+    r"UNIVERSIDADE\s+(?:ESTADUAL|FEDERAL)|"
+    r"INSTITUTO\s+FEDERAL|"
+    r"COMPANHIA\s+DE\s+SANEAMENTO|COMPANHIA\s+D[OAE]\s+ESTADO|"
+    r"SABESP|CETESB|DAEE|DERSA|CDHU|CPTM|EMTU|SPPREV|IPESP)\b",
+    re.IGNORECASE,
+)
+
+# Classification: PUBLICA (medium confidence)
+_PUBLICA_KEYWORDS_MEDIUM = re.compile(
+    r"\b(?:FUNDACAO|INSTITUTO)\b",
+    re.IGNORECASE,
+)
+
+# Classification: PF by cargo
+_PF_CARGO_KEYWORDS = re.compile(
+    r"\b(?:PREFEITO|SECRETARIO|PRESIDENTE|DIRETOR|"
+    r"SUPERINTENDENTE|GOVERNADOR|VEREADOR|GESTOR|"
+    r"COORDENADOR|ORDENADOR|TESOUREIRO|CONTADOR)\b",
+    re.IGNORECASE,
+)
+
+# Papeis that are always PF
+_PF_PAPEIS = frozenset({"RESPONSAVEL", "RECORRENTE", "PROCURADOR", "ADVOGADO"})
+# Papeis with default public/private heuristic
+_PUBLIC_DEFAULT_PAPEIS = frozenset({"CONTRATANTE", "CONVENENTE"})
+_PRIVATE_DEFAULT_PAPEIS = frozenset({"CONTRATADA", "CONVENIADA", "LICITANTE"})
+
+
+def _extract_header_window(text: str) -> str:
+    """Return the header region of the document (before EMENTA/RELATÓRIO/VOTO).
+
+    Caps at 12000 chars to limit false positives and keep runtime low.
+    """
+    cap = text[:12000]
+    m = _HEADER_END_RE.search(cap)
+    if m:
+        return cap[:m.start()]
+    return cap
+
+
+def _classify_tipo_parte(
+    nome_upper: str, papel: str, cargo: Optional[str]
+) -> Tuple[str, str]:
+    """Classify a party as PRIVADA/PUBLICA/PF/DESCONHECIDA with confidence.
+
+    Order: PUBLICA_HIGH wins over PRIVADA if both match (e.g., estatal companies).
+    """
+    # Rule 1: certain PF roles (ADVOGADO, RESPONSAVEL, RECORRENTE, PROCURADOR)
+    if papel in _PF_PAPEIS:
+        return ("PF", "high")
+
+    # Rule 2: PUBLICA high-confidence keywords (checked BEFORE PRIVADA per user req D)
+    if _PUBLICA_KEYWORDS_HIGH.search(nome_upper):
+        return ("PUBLICA", "high")
+
+    # Rule 3: PRIVADA suffixes (LTDA, S/A, EIRELI, EPP)
+    if _PRIVADA_SUFFIXES.search(nome_upper):
+        return ("PRIVADA", "high")
+
+    # Rule 4: PRIVADA keywords (ENGENHARIA, CONSTRUCAO, etc.)
+    if _PRIVADA_KEYWORDS.search(nome_upper):
+        return ("PRIVADA", "high")
+
+    # Rule 5: PUBLICA medium (FUNDACAO, INSTITUTO without PUBLICA)
+    if _PUBLICA_KEYWORDS_MEDIUM.search(nome_upper):
+        return ("PUBLICA", "medium")
+
+    # Rule 6: PF by cargo
+    if cargo:
+        cargo_upper = safe_upper(cargo)
+        if _PF_CARGO_KEYWORDS.search(cargo_upper):
+            return ("PF", "medium")
+
+    # Rule 7: papel-based low-confidence default
+    if papel in _PUBLIC_DEFAULT_PAPEIS:
+        return ("PUBLICA", "low")
+    if papel in _PRIVATE_DEFAULT_PAPEIS:
+        return ("PRIVADA", "low")
+
+    return ("DESCONHECIDA", "low")
+
+
+def _looks_like_entity(fragment: str) -> bool:
+    """Heuristic: does this fragment look like a named entity (company/org/person)?
+
+    True if it contains a company suffix/keyword, OR is a multi-token sequence
+    starting with uppercase.
+    """
+    fu = safe_upper(fragment.strip())
+    if not fu or len(fu) < 3:
+        return False
+    if _PRIVADA_SUFFIXES.search(fu) or _PRIVADA_KEYWORDS.search(fu):
+        return True
+    if _PUBLICA_KEYWORDS_HIGH.search(fu) or _PUBLICA_KEYWORDS_MEDIUM.search(fu):
+        return True
+    # Multi-token sequence (>= 2 words, first starts with uppercase-like char)
+    tokens = fu.split()
+    if len(tokens) >= 2 and len(tokens[0]) >= 2:
+        return True
+    return False
+
+
+def _clean_nome(raw: str) -> str:
+    """Normalize a party name: collapse whitespace, fix hyphen linewraps, trim."""
+    s = re.sub(r"\s+", " ", raw).strip()
+    # Fix broken hyphen linewraps (e.g., "Constru-\n ção" → already collapsed)
+    s = re.sub(r"-\s+", "-", s)
+    # Trim trailing punctuation
+    s = s.strip(" \t\n\r,;.–—-")
+    return s
+
+
+def extract_partes(text: str) -> List[dict]:
+    """Extract parties from TCE document header sections.
+
+    Operates only on the header window (before EMENTA/RELATÓRIO/VOTO, max 12000 chars).
+    Returns list of dicts: {nome_raw, tipo_parte, papel, cnpj_cpf, confidence, cargo}.
+    """
+    header = _extract_header_window(normalize_text(text))
+    if not header or len(header) < 10:
+        return []
+
+    # Find all label positions
+    label_hits: List[Tuple[int, int, str]] = []
+    for pattern_c, papel in _ROLE_LABELS_C:
+        for m in pattern_c.finditer(header):
+            label_hits.append((m.start(), m.end(), papel))
+
+    # Add section/value boundary positions as terminators
+    for m in _VALUE_END_RE.finditer(header):
+        label_hits.append((m.start(), m.start(), "__BOUNDARY__"))
+
+    if not label_hits:
+        return []
+
+    label_hits.sort(key=lambda x: x[0])
+
+    # For each label, capture text until next label/boundary
+    raw_parties: List[Tuple[str, str]] = []  # (papel, value)
+    for i, (start, end, papel) in enumerate(label_hits):
+        if papel == "__BOUNDARY__":
+            continue
+        # Value extends to next hit or +500 chars
+        if i + 1 < len(label_hits):
+            value_end = label_hits[i + 1][0]
+        else:
+            value_end = min(end + 500, len(header))
+        value = header[end:value_end].strip()
+        # Trim at double newline
+        dbl_nl = value.find("\n\n")
+        if dbl_nl > 0:
+            value = value[:dbl_nl].strip()
+        if not value or len(value) < 3:
+            continue
+        raw_parties.append((papel, value))
+
+    # Split, classify, dedup
+    results: List[dict] = []
+    seen: set = set()
+
+    for papel, value in raw_parties:
+        # Filter out digital signature watermarks
+        if re.search(r"C[ÓO]PIA\s+DE\s+DOCUMENTO\s+ASSINADO\s+DIGITALMENTE", value, re.I):
+            continue
+
+        # Split on ";" and newline-with-uppercase first
+        fragments = re.split(r"\s*;\s*|\n\s*(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])", value)
+        # Collapse whitespace inside each fragment (PDF line breaks within phrases)
+        fragments = [re.sub(r"\s+", " ", f).strip() for f in fragments]
+
+        # Conservative " e " split (req C):
+        # Do NOT split if the full fragment ends with a company suffix (LTDA, S/A, etc.)
+        # Only split when BOTH sides independently look like entities.
+        expanded: List[str] = []
+        for frag in fragments:
+            frag_upper = safe_upper(frag)
+            # If whole fragment has a company suffix at end, it's one entity — skip split
+            if _PRIVADA_SUFFIXES.search(frag_upper):
+                expanded.append(frag)
+                continue
+            parts = re.split(r"\s+e\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])", frag)
+            if len(parts) <= 1:
+                expanded.append(frag)
+            else:
+                all_ok = all(_looks_like_entity(p) for p in parts)
+                if all_ok:
+                    expanded.extend(parts)
+                else:
+                    expanded.append(frag)  # keep unsplit
+
+        for raw_name in expanded:
+            nome = _clean_nome(raw_name)
+            if len(nome) < 3:
+                continue
+
+            # Extract cargo from parenthetical
+            cargo = None
+            cargo_m = _CARGO_RE.search(nome)
+            if cargo_m:
+                cargo = cargo_m.group(1).strip()
+
+            # Extract CNPJ/CPF
+            cnpj_cpf = None
+            cnpj_m = _CNPJ_RE.search(nome)
+            if cnpj_m:
+                cnpj_cpf = cnpj_m.group(1)
+                # Strip trailing CNPJ from nome_raw (req E)
+                nome = _TRAILING_CNPJ_RE.sub("", nome).strip()
+            else:
+                cpf_m = _CPF_RE.search(nome)
+                if cpf_m:
+                    cnpj_cpf = cpf_m.group(1)
+
+            # Strip OAB from advogado names (req E)
+            if papel == "ADVOGADO":
+                nome = _OAB_RE.sub("", nome).strip()
+                nome = nome.strip(" ,;.–—-")
+
+            nome = _clean_nome(nome)
+            if len(nome) < 3:
+                continue
+
+            nome_upper = safe_upper(nome)
+
+            # Dedup
+            dedup_key = (nome_upper, papel)
+            if dedup_key in seen:
+                continue
+            seen.add(dedup_key)
+
+            # Classify
+            tipo_parte, confidence = _classify_tipo_parte(nome_upper, papel, cargo)
+
+            # Post-classification: CPF override
+            if cnpj_cpf and _CPF_RE.fullmatch(cnpj_cpf) and tipo_parte != "PF":
+                tipo_parte, confidence = "PF", "medium"
+
+            results.append({
+                "nome_raw": nome,
+                "tipo_parte": tipo_parte,
+                "papel": papel,
+                "cnpj_cpf": cnpj_cpf,
+                "confidence": confidence,
+                "cargo": cargo,
+            })
+
+    return results
+
+
+# ----------------------------
 # procedural_stage / claim_pattern
 # ----------------------------
 PROCEDURAL_STAGE_KW = {
@@ -538,6 +890,9 @@ def parse_text(text: str, include_text: bool = False) -> Dict[str, object]:
     refs = extract_references(text)
     refs = remove_self_reference(refs, processo)
     key_cit, key_speaker, key_src = extract_key_citation(dispositivo)
+    partes = extract_partes(text)
+    partes_privadas = [p for p in partes if p["tipo_parte"] == "PRIVADA"]
+    partes_publicas = [p for p in partes if p["tipo_parte"] == "PUBLICA"]
     out: Dict[str, object] = {
         "tribunal_type": tribunal_type, "tribunal_name": tribunal_name,
         "uf": (MISSING if tribunal_type == "TCU" else uf),
@@ -551,6 +906,12 @@ def parse_text(text: str, include_text: bool = False) -> Dict[str, object]:
         "procedural_stage": procedural_stage, "claim_pattern": claim_patterns,
         "authority_score": auth, "year": year, "is_current": current,
         "key_citation": key_cit, "key_citation_speaker": key_speaker, "key_citation_source": key_src,
+        "party_extraction": {
+            "version": 1,
+            "partes": partes,
+            "partes_privadas": partes_privadas,
+            "partes_publicas": partes_publicas,
+        },
     }
     if include_text:
         out["text"] = text
