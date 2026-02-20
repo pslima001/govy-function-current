@@ -20,15 +20,13 @@ import os
 from datetime import datetime
 
 from azure.storage.blob import BlobServiceClient, ContentSettings
+from govy.config.tribunal_registry import get_config
 from govy.utils.azure_clients import get_blob_service_client as _get_main_blob_svc
 
 # Imports locais (lazy para evitar cold start pesado)
 # tce_parser_v3 e mapping_tce_to_kblegal devem estar em govy/api/
 
 logger = logging.getLogger(__name__)
-
-# Container onde estão os PDFs (na conta sttcejurisprudencia)
-TCE_PDF_CONTAINER = "tce-jurisprudencia"
 
 # Container onde gravamos os JSONs processados (na conta stgovyparsetestsponsor)
 KB_RAW_CONTAINER = "kb-raw"
@@ -63,13 +61,17 @@ def handle_enqueue_tce(req_body: dict) -> dict:
 
     Retorna: { enqueued: int, skipped: int, messages: [...] }
     """
-    prefix = req_body.get("prefix", "tce-sp/acordaos/")
+    tribunal_id = req_body.get("tribunal_id", "tce-sp")
+    cfg = get_config(tribunal_id)
+
+    default_prefix = f"{cfg.raw_prefix}acordaos/"
+    prefix = req_body.get("prefix", default_prefix)
     limit = int(req_body.get("limit", 0))
     skip_existing = req_body.get("skip_existing", True)
 
     # PDFs estão em sttcejurisprudencia
     tce_service = _get_tce_blob_service()
-    source_container = tce_service.get_container_client(TCE_PDF_CONTAINER)
+    source_container = tce_service.get_container_client(cfg.container_raw)
 
     # JSONs processados estão em stgovyparsetestsponsor
     main_service = _get_main_blob_service()
@@ -105,6 +107,7 @@ def handle_enqueue_tce(req_body: dict) -> dict:
             continue
 
         msg = {
+            "tribunal_id": tribunal_id,
             "blob_path": blob.name,
             "blob_etag": blob.etag or "",
             "json_key": json_key,
@@ -116,6 +119,7 @@ def handle_enqueue_tce(req_body: dict) -> dict:
 
     return {
         "status": "success",
+        "tribunal_id": tribunal_id,
         "enqueued": len(messages),
         "skipped": skipped,
         "total_existing": len(existing_keys),
@@ -168,12 +172,18 @@ def handle_parse_tce_pdf(msg_json: str) -> dict:
     blob_etag = msg.get("blob_etag", "")
     json_key = msg.get("json_key", _blob_path_to_json_key(blob_path))
 
-    logger.info(f"[parse-tce] Processando: {blob_path}")
+    # Resolve tribunal config (explicit or inferred from blob_path)
+    tribunal_id = msg.get("tribunal_id")
+    if not tribunal_id:
+        tribunal_id = blob_path.split("/")[0] if "/" in blob_path else "tce-sp"
+    cfg = get_config(tribunal_id)
+
+    logger.info(f"[parse-tce] Processando: {blob_path} (tribunal={tribunal_id})")
 
     # 1. Baixar PDF de sttcejurisprudencia
     try:
         tce_service = _get_tce_blob_service()
-        source = tce_service.get_container_client(TCE_PDF_CONTAINER)
+        source = tce_service.get_container_client(cfg.container_raw)
         pdf_bytes = source.get_blob_client(blob_path).download_blob().readall()
         logger.info(f"[parse-tce] PDF baixado: {len(pdf_bytes)} bytes")
     except Exception as e:
