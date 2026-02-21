@@ -449,6 +449,7 @@ def parse_tce_pdf(msg: func.QueueMessage) -> None:
         logging.warning(f"[parse-tce-queue] Pulado: {result.get('blob_path')} - {result.get('reason')}")
     else:
         logging.error(f"[parse-tce-queue] ERRO: {result.get('blob_path')} - {result.get('error')}")
+        raise RuntimeError(f"parse_tce_pdf failed: {result.get('error')}")
 
 
 # ============================================================
