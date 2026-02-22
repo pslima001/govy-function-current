@@ -98,6 +98,8 @@ def handle_enqueue_tce(req_body: dict) -> dict:
     for blob in source_container.list_blobs(name_starts_with=prefix):
         if not blob.name.lower().endswith(".pdf"):
             continue
+        if ".voto." in blob.name.lower():
+            continue
 
         # Nome determinístico do JSON de saída
         json_key = _blob_path_to_json_key(blob.name)

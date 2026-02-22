@@ -209,13 +209,18 @@ def extract_relator(text: str) -> str:
 def extract_ementa(text: str) -> str:
     t = normalize_text(text)
     m = re.search(
-        r"\bEMENTA\b\s*[:\-]?\s*(.{10,4000}?)(?=\n\s*(?:AC[ÓO]RD[ÃA]O\b|ACORDAM\b|RELAT[ÓO]RIO\b|VOTO\b|DECIS[ÃA]O\b|DISPOSITIVO\b)\b)",
+        r"\bEMENTA\b\s*[:\-]?\s*(.{10,4000}?)"
+        r"(?=\n\s*(?:AC[ÓO]RD[ÃA]O\b|ACORDAM\b|RELAT[ÓO]RIO\b|VOTO\b|DECIS[ÃA]O\b|DISPOSITIVO\b"
+        r"|VEJA\b|REFER[ÊE]NCIAS\b|INFORMA[ÇC][ÕO]ES\b|PALAVRAS\b)\b)",
         t, flags=re.IGNORECASE | re.DOTALL,
     )
     if m:
         e = re.sub(r"\s{2,}", " ", normalize_text(m.group(1)))
         return e if len(e) >= 10 else MISSING
-    m = re.search(r"\bEMENTA\b\s*[:\-]?\s*(.{10,800}?)(?=\n\n|\bAC[ÓO]RD[ÃA]O\b)", t, flags=re.I | re.S)
+    m = re.search(
+        r"\bEMENTA\b\s*[:\-]?\s*(.{10,4000}?)"
+        r"(?=\n\n|\bAC[ÓO]RD[ÃA]O\b|\bVEJA\b|\bREFER[ÊE]NCIAS\b|\bPALAVRAS\b|\bTRIBUNAL\s+DE\s+CONTAS\b)",
+        t, flags=re.I | re.S)
     if m:
         e = normalize_text(m.group(1))
         return e if len(e) >= 10 else MISSING
