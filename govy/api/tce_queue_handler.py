@@ -87,7 +87,8 @@ def handle_enqueue_tce(req_body: dict) -> dict:
     existing_keys = set()
     if skip_existing:
         try:
-            for blob in raw_container.list_blobs(name_starts_with="tce-"):
+            kb_prefix = cfg.raw_prefix.replace("/", "--")
+            for blob in raw_container.list_blobs(name_starts_with=kb_prefix):
                 existing_keys.add(blob.name)
         except Exception as e:
             logger.warning(f"Erro listando kb-raw: {e}")
