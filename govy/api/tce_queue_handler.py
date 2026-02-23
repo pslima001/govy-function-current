@@ -84,10 +84,12 @@ def handle_enqueue_tce(req_body: dict) -> dict:
         pass  # já existe
 
     # Set de JSONs já existentes (para skip)
+    # Usa o prefix real (ex: "tce-sp/relatorios_voto/") para gerar kb_prefix mais específico,
+    # evitando listar todos os JSONs do tribunal (ex: acordaos + relatorios_voto juntos).
     existing_keys = set()
     if skip_existing:
         try:
-            kb_prefix = cfg.raw_prefix.replace("/", "--")
+            kb_prefix = prefix.replace("/", "--")
             for blob in raw_container.list_blobs(name_starts_with=kb_prefix):
                 existing_keys.add(blob.name)
         except Exception as e:
@@ -255,9 +257,21 @@ def handle_parse_tce_pdf(msg_json: str) -> dict:
         parser_output["region"] = "__MISSING__"
     elif tribunal_id.startswith("tce-") and cfg.uf:
         parser_output["tribunal_type"] = "TCE"
-        if parser_output.get("tribunal_name", "").startswith("SUPREMO") or \
-           parser_output.get("tribunal_name", "").startswith("SUPERIOR"):
-            parser_output["tribunal_name"] = f"TCE-{cfg.uf}"
+        detected_name = parser_output.get("tribunal_name", "").upper()
+        # Corrigir se parser detectou tribunal errado (STF, STJ, TCU, ou outro TCE)
+        if not detected_name.startswith("TRIBUNAL DE CONTAS DO ESTADO") and \
+           not detected_name.startswith(f"TCE-{cfg.uf}") and \
+           not detected_name.startswith(f"TCE {cfg.uf}"):
+            parser_output["tribunal_name"] = cfg.display_name
+        parser_output["uf"] = cfg.uf
+    elif tribunal_id.startswith("tcm-") and cfg.uf:
+        parser_output["tribunal_type"] = "TCM"
+        detected_name = parser_output.get("tribunal_name", "").upper()
+        # Corrigir se parser detectou tribunal errado (STF, STJ, TCU, TCE, etc.)
+        if not detected_name.startswith("TRIBUNAL DE CONTAS DO MUNICIPIO") and \
+           not detected_name.startswith(f"TCM-{cfg.uf}") and \
+           not detected_name.startswith(f"TCM {cfg.uf}"):
+            parser_output["tribunal_name"] = cfg.display_name
         parser_output["uf"] = cfg.uf
 
     # 3. Mapear para kb-legal
