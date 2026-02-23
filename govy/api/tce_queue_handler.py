@@ -98,7 +98,7 @@ def handle_enqueue_tce(req_body: dict) -> dict:
     for blob in source_container.list_blobs(name_starts_with=prefix):
         if not blob.name.lower().endswith(".pdf"):
             continue
-        if ".voto." in blob.name.lower():
+        if blob.name.lower().endswith(".voto.pdf"):
             continue
 
         # Nome determinístico do JSON de saída
@@ -142,6 +142,30 @@ def _blob_path_to_json_key(blob_path: str) -> str:
     # Remove caracteres inválidos
     name = re.sub(r"[^a-zA-Z0-9_\-]", "_", name)
     return f"{name}.json"
+
+
+def _normalize_scraper_fields(meta: dict) -> dict:
+    """Normaliza campos do scraper JSON para nomes esperados pelo merge."""
+    norm = {}
+    if meta.get("numero_processo"):
+        norm["processo"] = meta["numero_processo"]
+    if meta.get("numero_acordao"):
+        norm["acordao_numero"] = meta["numero_acordao"]
+    if meta.get("data_decisao"):
+        norm["julgamento_date"] = meta["data_decisao"]
+    if meta.get("data_publicacao"):
+        norm["publication_date"] = meta["data_publicacao"]
+    if meta.get("relator"):
+        norm["relator"] = meta["relator"]
+    if meta.get("colegiado"):
+        norm["orgao_julgador"] = meta["colegiado"]
+    if meta.get("ementa_full"):
+        norm["ementa"] = meta["ementa_full"]
+    if meta.get("tipo_processo"):
+        norm["tipo_processo"] = meta["tipo_processo"]
+    if meta.get("link_detalhes"):
+        norm["source_url"] = meta["link_detalhes"]
+    return norm
 
 
 # ============================================================
@@ -204,9 +228,26 @@ def handle_parse_tce_pdf(msg_json: str) -> dict:
         logger.error(f"[parse-tce] Erro no parser: {e}")
         return {"status": "error", "error": f"parse_failed: {e}", "blob_path": blob_path}
 
+    # 2b. Ler metadata do scraper (se existir)
+    scraper_meta = None
+    try:
+        meta_blob_path = blob_path.rsplit(".", 1)[0] + ".json"
+        meta_bytes = source.get_blob_client(meta_blob_path).download_blob().readall()
+        scraper_meta = json.loads(meta_bytes)
+        logger.info(f"[parse-tce] Scraper metadata: {meta_blob_path}")
+    except Exception:
+        logger.debug(f"[parse-tce] Sem scraper metadata para {blob_path}")
+
+    # 2c. Merge scraper → parser (scraper priority para processo/datas/relator)
+    if scraper_meta:
+        from govy.api.tce_parser_v3 import merge_with_scraper_metadata
+        parser_output = merge_with_scraper_metadata(
+            parser_output, _normalize_scraper_fields(scraper_meta)
+        )
+
     # 3. Mapear para kb-legal
     try:
-        kb_doc = transform_parser_to_kblegal(parser_output, blob_path, blob_etag)
+        kb_doc = transform_parser_to_kblegal(parser_output, blob_path, blob_etag, config=cfg)
         if not kb_doc:
             logger.warning(f"[parse-tce] Mapeamento retornou vazio (sem conteúdo útil)")
             return {"status": "skipped", "reason": "no_content", "blob_path": blob_path}

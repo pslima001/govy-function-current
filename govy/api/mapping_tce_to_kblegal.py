@@ -165,7 +165,7 @@ def _build_citation(parser: Dict[str, Any]) -> str:
 
 
 # --- Construção de title ---
-def _build_title(parser: Dict[str, Any]) -> str:
+def _build_title(parser: Dict[str, Any], display_name: Optional[str] = None) -> str:
     """
     Monta um título descritivo.
     Formato: "Acórdão X - Processo Y - TRIBUNAL"
@@ -180,37 +180,42 @@ def _build_title(parser: Dict[str, Any]) -> str:
     if processo and processo != MISSING:
         parts.append(f"Proc. {processo}")
 
-    tribunal = parser.get("tribunal_name", MISSING)
-    if tribunal and tribunal != MISSING:
-        # Abreviação para title
-        t_type = parser.get("tribunal_type", "")
-        uf = parser.get("uf", MISSING)
-        if t_type == "TCU":
-            parts.append("TCU")
-        elif t_type == "TCE" and uf != MISSING:
-            parts.append(f"TCE-{uf}")
-        else:
-            parts.append(tribunal[:30])
+    if display_name:
+        parts.append(display_name)
+    else:
+        tribunal = parser.get("tribunal_name", MISSING)
+        if tribunal and tribunal != MISSING:
+            t_type = parser.get("tribunal_type", "")
+            uf = parser.get("uf", MISSING)
+            if t_type == "TCU":
+                parts.append("TCU")
+            elif t_type == "TCE" and uf != MISSING:
+                parts.append(f"TCE-{uf}")
+            else:
+                parts.append(tribunal[:30])
 
     return " - ".join(parts) if parts else "Jurisprudência sem título"
 
 
 # --- Construção de source ---
-def _build_source(parser: Dict[str, Any], blob_path: str = "") -> str:
+def _build_source(parser: Dict[str, Any], blob_path: str = "", display_name: Optional[str] = None) -> str:
     """
     Fonte original do documento.
     Formato: "TCE-SP / tce-sp/acordaos/10026_989_24_acordao.pdf"
     """
     parts = []
 
-    t_type = parser.get("tribunal_type", "")
-    uf = parser.get("uf", MISSING)
-    if t_type == "TCU":
-        parts.append("TCU")
-    elif t_type and uf and uf != MISSING:
-        parts.append(f"{t_type}-{uf}")
-    elif t_type:
-        parts.append(t_type)
+    if display_name:
+        parts.append(display_name)
+    else:
+        t_type = parser.get("tribunal_type", "")
+        uf = parser.get("uf", MISSING)
+        if t_type == "TCU":
+            parts.append("TCU")
+        elif t_type and uf and uf != MISSING:
+            parts.append(f"{t_type}-{uf}")
+        elif t_type:
+            parts.append(t_type)
 
     if blob_path:
         parts.append(blob_path)
@@ -238,6 +243,7 @@ def transform_parser_to_kblegal(
     parser_output: Dict[str, Any],
     blob_path: str,
     blob_etag: str = "",
+    config=None,
 ) -> Dict[str, Any]:
     """
     Transforma output do tce_parser_v3 para schema kb-legal.
@@ -246,6 +252,8 @@ def transform_parser_to_kblegal(
         parser_output: dict retornado por parse_text() ou parse_pdf_bytes()
         blob_path: caminho do blob no container sttcejurisprudencia
         blob_etag: etag do blob (para idempotência)
+        config: TribunalConfig opcional — quando presente, usa registry
+                como source of truth para tribunal/uf/authority_score/region
 
     Returns:
         dict pronto para indexar no kb-legal (19 campos, sem embedding)
@@ -259,17 +267,25 @@ def transform_parser_to_kblegal(
         "doc_type": "jurisprudencia",
     }
 
-    # tribunal (TCU, TCE, TJ, STF, STJ, OUTRO)
-    tribunal = p.get("tribunal_type", MISSING)
-    if tribunal and tribunal != MISSING:
-        doc["tribunal"] = tribunal
-    # else: omitir (null)
+    # Se config fornecido, registry é source of truth para identidade
+    if config:
+        # tribunal_type derivado do tribunal_id (tce-sc → TCE, tcu → TCU)
+        doc["tribunal"] = config.tribunal_id.split("-")[0].upper()
+        if config.uf:
+            doc["uf"] = config.uf
+        doc["authority_score"] = config.authority_score
+        from govy.api.tce_parser_v3 import REGION_MAP
+        if config.uf and config.uf in REGION_MAP:
+            doc["region"] = REGION_NORMALIZE.get(REGION_MAP[config.uf], REGION_MAP[config.uf])
+    else:
+        # Fallback: inferir do parser (comportamento original)
+        tribunal = p.get("tribunal_type", MISSING)
+        if tribunal and tribunal != MISSING:
+            doc["tribunal"] = tribunal
 
-    # uf
-    uf = p.get("uf", MISSING)
-    if uf and uf != MISSING:
-        doc["uf"] = uf
-    # else: omitir (null) - importante para TCU (REGRA #3 KB)
+        uf = p.get("uf", MISSING)
+        if uf and uf != MISSING:
+            doc["uf"] = uf
 
     # content (searchable)
     content = _build_content(p)
@@ -284,13 +300,14 @@ def transform_parser_to_kblegal(
     if citation:
         doc["citation"] = citation
 
-    # authority_score (str "0.75" → float)
-    auth = p.get("authority_score", MISSING)
-    if auth and auth != MISSING:
-        try:
-            doc["authority_score"] = float(auth)
-        except (ValueError, TypeError):
-            pass
+    # authority_score (str "0.75" → float) — skip if config already set it
+    if "authority_score" not in doc:
+        auth = p.get("authority_score", MISSING)
+        if auth and auth != MISSING:
+            try:
+                doc["authority_score"] = float(auth)
+            except (ValueError, TypeError):
+                pass
 
     # year (str "2024" → int)
     year = p.get("year", MISSING)
@@ -331,18 +348,20 @@ def transform_parser_to_kblegal(
     if effect and effect != MISSING:
         doc["effect"] = effect
 
-    # region (normaliza CENTRO-OESTE → CENTRO_OESTE)
-    region = p.get("region", MISSING)
-    if region and region != MISSING:
-        doc["region"] = REGION_NORMALIZE.get(region, region)
+    # region (normaliza CENTRO-OESTE → CENTRO_OESTE) — skip if config already set it
+    if "region" not in doc:
+        region = p.get("region", MISSING)
+        if region and region != MISSING:
+            doc["region"] = REGION_NORMALIZE.get(region, region)
 
-    # source
-    source = _build_source(p, blob_path)
+    # source / title — use display_name from config when available
+    dn = config.display_name if config else None
+    source = _build_source(p, blob_path, display_name=dn)
     if source:
         doc["source"] = source
 
     # title
-    doc["title"] = _build_title(p)
+    doc["title"] = _build_title(p, display_name=dn)
 
     # is_current (str "True"/"False" → bool)
     current = p.get("is_current", MISSING)
