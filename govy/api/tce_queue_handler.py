@@ -246,6 +246,20 @@ def handle_parse_tce_pdf(msg_json: str) -> dict:
             parser_output, _normalize_scraper_fields(scraper_meta)
         )
 
+    # 2d. Override tribunal fields from config (parser detects from text,
+    #     may misidentify when doc cites other courts e.g. TCU citing STF)
+    if tribunal_id == "tcu":
+        parser_output["tribunal_type"] = "TCU"
+        parser_output["tribunal_name"] = "TRIBUNAL DE CONTAS DA UNIAO"
+        parser_output["uf"] = "__MISSING__"
+        parser_output["region"] = "__MISSING__"
+    elif tribunal_id.startswith("tce-") and cfg.uf:
+        parser_output["tribunal_type"] = "TCE"
+        if parser_output.get("tribunal_name", "").startswith("SUPREMO") or \
+           parser_output.get("tribunal_name", "").startswith("SUPERIOR"):
+            parser_output["tribunal_name"] = f"TCE-{cfg.uf}"
+        parser_output["uf"] = cfg.uf
+
     # 3. Mapear para kb-legal
     try:
         kb_doc = transform_parser_to_kblegal(parser_output, blob_path, blob_etag, config=cfg)
