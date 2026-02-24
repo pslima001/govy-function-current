@@ -1,0 +1,293 @@
+{
+  "generated_at": "2026-02-23T20:55:09.473821+00:00",
+  "total_pdfs": 2343,
+  "total_kb_raw": 2296,
+  "missing_count": 47,
+  "diff_formula": "2343 - 2296 = 47",
+  "sha256_pdf_list": "0cc4275b80e4a2fb",
+  "sha256_kbraw_list": "7dff9b0987e0b809",
+  "items": [
+    {
+      "doc_id": "tcm-sp--TC0009122018--20541",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0009122018--20541.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0009122018--20541.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0009122018--20542",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0009122018--20542.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0009122018--20542.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0012212018--27754",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0012212018--27754.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0012212018--27754.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0012212018--27755",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0012212018--27755.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0012212018--27755.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0027572018--65954",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0027572018--65954.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0027572018--65954.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0027572018--65955",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0027572018--65955.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0027572018--65955.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0027572018--65956",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0027572018--65956.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0027572018--65956.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0029262018--70099",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0029262018--70099.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0029262018--70099.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0029262018--70100",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0029262018--70100.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0029262018--70100.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74743",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74743.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74743.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74744",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74744.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74744.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74745",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74745.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74745.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74746",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74746.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74746.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74747",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74747.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74747.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74750",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74750.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74750.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74751",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74751.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74751.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74752",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74752.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74752.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74753",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74753.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74753.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74754",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74754.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74754.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74755",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74755.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74755.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74756",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74756.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74756.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74757",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74757.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74757.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74758",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74758.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74758.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74759",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74759.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74759.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74760",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74760.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74760.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74761",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74761.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74761.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74762",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74762.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74762.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74763",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74763.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74763.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74764",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74764.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74764.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74765",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74765.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74765.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74766",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74766.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74766.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74767",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74767.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74767.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74768",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74768.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74768.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74769",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74769.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74769.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74770",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74770.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74770.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74771",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74771.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74771.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74772",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74772.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74772.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74773",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74773.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74773.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74774",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74774.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74774.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74775",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74775.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74775.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74776",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74776.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74776.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74777",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74777.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74777.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74778",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74778.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74778.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74779",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74779.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0031042018--74779.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0035322018--83289",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0035322018--83289.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0035322018--83289.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0089162017--106323",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0089162017--106323.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0089162017--106323.json",
+      "status": "not_in_kb_raw"
+    },
+    {
+      "doc_id": "tcm-sp--TC0089162017--106324",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0089162017--106324.pdf",
+      "expected_kb_raw_key": "tcm-sp--acordaos--tcm-sp--TC0089162017--106324.json",
+      "status": "not_in_kb_raw"
+    }
+  ]
+}

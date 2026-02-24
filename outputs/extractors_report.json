@@ -1,0 +1,1207 @@
+{
+  "summary": {
+    "total_docs": 82,
+    "ok": 82,
+    "skipped": 0,
+    "errors": 0,
+    "total_relations": 118,
+    "docs_with_dates": 81,
+    "elapsed_seconds": 49.8,
+    "dry_run": false
+  },
+  "results": [
+    {
+      "doc_id": "in_01_2010_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 0,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2010-01-19",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_06_1995_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2010-01-03",
+      "effective_from": "2010-01-03",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_07_2018_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "altera"
+      ],
+      "published_at": "2018-09-20",
+      "effective_from": "2018-09-20",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_10_2012_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 0,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2012-11-12",
+      "effective_from": "2012-11-12",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_10_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 3,
+      "relations_high": 1,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia",
+        "altera"
+      ],
+      "published_at": "2020-02-10",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_102_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2020-10-19",
+      "effective_from": "2020-11-03",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_103_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 4,
+      "relations_high": 0,
+      "relations_low": 4,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-01-02",
+      "effective_from": "2023-03-30",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_107_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 3,
+      "relations_high": 1,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia",
+        "altera"
+      ],
+      "published_at": "2020-10-29",
+      "effective_from": "2020-10-29",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_11_2018_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2018-11-29",
+      "effective_from": "2018-11-29",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_11_2023_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-03-30",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_116_2021_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2021-12-30",
+      "effective_from": "2021-12-30",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_12_1997_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2010-01-04",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_12_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2020-02-20",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_12_2023_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 5,
+      "relations_high": 0,
+      "relations_low": 5,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-04-03",
+      "effective_from": "2023-04-03",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_13_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2020-02-27",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_16_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2020-03-04",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_176_2024_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2024-11-26",
+      "effective_from": "2024-11-26",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_183_1986_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2010-01-01",
+      "effective_from": "2010-01-01",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_190_2024_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2024-12-06",
+      "effective_from": "2024-12-13",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_20_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2022-04-07",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_205_1988_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2010-01-02",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_206_2019_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 0,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2019-10-18",
+      "effective_from": "2019-10-28",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_210_2019_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "revoga"
+      ],
+      "published_at": "2019-11-20",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_213_2025_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2024-12-06",
+      "effective_from": "2024-12-13",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_2_2011_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2011-08-16",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_2_2016_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2016-12-06",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_2_2018_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2018-03-29",
+      "effective_from": "2018-03-29",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_2_2023_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 5,
+      "relations_high": 0,
+      "relations_low": 5,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-02-09",
+      "effective_from": "2023-03-30",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_26_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 1,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2022-04-14",
+      "effective_from": "2022-05-02",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_3_2015_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 1,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2015-02-11",
+      "effective_from": "2015-02-11",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_3_2018_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 4,
+      "relations_high": 1,
+      "relations_low": 3,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2018-04-26",
+      "effective_from": "2018-06-25",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_3_2019_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "altera"
+      ],
+      "published_at": "2019-05-27",
+      "effective_from": "2019-05-27",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_381_2025_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2025-09-19",
+      "effective_from": "2025-09-19",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_382_2025_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2025-06-04",
+      "effective_from": "2025-06-04",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_40_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 0,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2020-05-22",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_412_2025_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 1,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2025-10-21",
+      "effective_from": "2025-10-21",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_4_2018_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 1,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2018-07-04",
+      "effective_from": "2018-07-04",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_4_2023_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-02-03",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_42_2021_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "altera"
+      ],
+      "published_at": "2021-04-20",
+      "effective_from": "2021-04-20",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_49_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "altera"
+      ],
+      "published_at": "2020-06-30",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_50_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2020-07-02",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_51_2021_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 3,
+      "relations_high": 1,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2021-05-17",
+      "effective_from": "2021-05-17",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_5_2013_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2013-11-07",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_5_2017_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 5,
+      "relations_high": 1,
+      "relations_low": 4,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2017-05-26",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_5_2018_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2018-07-05",
+      "effective_from": "2018-07-05",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_5_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "altera"
+      ],
+      "published_at": "2022-02-09",
+      "effective_from": "2022-02-09",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_53_2023_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-12-29",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_58_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 3,
+      "relations_high": 0,
+      "relations_low": 3,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2022-08-09",
+      "effective_from": "2022-09-01",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_6_2014_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2014-07-25",
+      "effective_from": "2014-07-25",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_6_2018_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2018-07-06",
+      "effective_from": "2018-07-06",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_6_2019_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 1,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia",
+        "regulamenta"
+      ],
+      "published_at": "2019-08-12",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_62_2021_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "altera"
+      ],
+      "published_at": "2021-06-29",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_64_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2020-07-29",
+      "effective_from": "2020-07-29",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_65_2021_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2021-07-08",
+      "effective_from": "2021-07-08",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_67_2021_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 5,
+      "relations_high": 0,
+      "relations_low": 5,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2021-07-09",
+      "effective_from": "2021-08-09",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_73_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 3,
+      "relations_high": 0,
+      "relations_low": 3,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2020-08-05",
+      "effective_from": "2020-08-05",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_73_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 4,
+      "relations_high": 0,
+      "relations_low": 4,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2022-10-03",
+      "effective_from": "2022-11-01",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_76_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2020-08-11",
+      "effective_from": "2020-08-11",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_77_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2022-11-07",
+      "effective_from": "2022-12-01",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_79_2024_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 3,
+      "relations_high": 1,
+      "relations_low": 2,
+      "relation_types": [
+        "referencia",
+        "altera"
+      ],
+      "published_at": "2024-10-14",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_81_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 5,
+      "relations_high": 0,
+      "relations_low": 5,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2022-11-28",
+      "effective_from": "2022-12-01",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_81_2024_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2024-09-13",
+      "effective_from": "2024-09-13",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_8_2023_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-03-29",
+      "effective_from": "2023-05-02",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_82_2025_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2025-02-24",
+      "effective_from": "2025-06-02",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_90_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2022-12-20",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_91_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 2,
+      "relations_high": 1,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia",
+        "revoga"
+      ],
+      "published_at": "2022-12-20",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_9_2012_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2012-10-03",
+      "effective_from": "2012-10-03",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "in_96_2020_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 3,
+      "relations_high": 2,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia",
+        "regulamenta",
+        "altera"
+      ],
+      "published_at": "2020-10-05",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "in_96_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 4,
+      "relations_high": 0,
+      "relations_low": 4,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2022-12-26",
+      "effective_from": "2023-03-30",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "in_98_2022_federal_br",
+      "doc_type": "instrucao_normativa",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2022-12-27",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "lei_14133_2021_federal_br",
+      "doc_type": "lei",
+      "status": "ok",
+      "relations_total": 7,
+      "relations_high": 0,
+      "relations_low": 7,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": null,
+      "effective_from": null,
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "portaria_1344_2023_federal_br",
+      "doc_type": "portaria",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2023-11-09",
+      "effective_from": "2023-12-01",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_DATA"
+    },
+    {
+      "doc_id": "portaria_2162_2024_federal_br",
+      "doc_type": "portaria",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 1,
+      "relations_low": 0,
+      "relation_types": [
+        "revoga"
+      ],
+      "published_at": "2024-04-08",
+      "effective_from": "2024-04-08",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "portaria_6238_2023_federal_br",
+      "doc_type": "portaria",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2023-10-17",
+      "effective_from": "2023-10-17",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "portaria_6521_2025_federal_br",
+      "doc_type": "portaria",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2025-08-11",
+      "effective_from": "2025-08-11",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "portaria_7604_2025_federal_br",
+      "doc_type": "portaria",
+      "status": "ok",
+      "relations_total": 1,
+      "relations_high": 0,
+      "relations_low": 1,
+      "relation_types": [
+        "referencia"
+      ],
+      "published_at": "2025-09-10",
+      "effective_from": "2025-09-10",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "portaria_7911_2023_federal_br",
+      "doc_type": "portaria",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2023-12-13",
+      "effective_from": "2023-12-13",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "portaria_9598_2024_federal_br",
+      "doc_type": "portaria",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2024-12-18",
+      "effective_from": "2024-12-18",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "resolucao_4_2024_federal_br",
+      "doc_type": "resolucao",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2024-10-18",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    },
+    {
+      "doc_id": "resolucao_6_2024_federal_br",
+      "doc_type": "resolucao",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2024-11-27",
+      "effective_from": "2024-11-27",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "resolucao_7_2024_federal_br",
+      "doc_type": "resolucao",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2025-01-02",
+      "effective_from": "2025-01-02",
+      "status_vigencia": "vigente",
+      "vigor_pattern": "RE_VIGOR_PUBLICACAO"
+    },
+    {
+      "doc_id": "resolucao_8_2025_federal_br",
+      "doc_type": "resolucao",
+      "status": "ok",
+      "relations_total": 0,
+      "relations_high": 0,
+      "relations_low": 0,
+      "relation_types": [],
+      "published_at": "2025-04-02",
+      "effective_from": null,
+      "status_vigencia": "desconhecido",
+      "vigor_pattern": null
+    }
+  ],
+  "errors": []
+}

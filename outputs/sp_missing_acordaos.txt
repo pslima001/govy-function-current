@@ -1,0 +1,11 @@
+tce-sp--acordaos--11351_989_18_acordao.json	tce-sp/acordaos/11351_989_18_acordao.pdf
+tce-sp--acordaos--13824_989_17_acordao.json	tce-sp/acordaos/13824_989_17_acordao.pdf
+tce-sp--acordaos--14340_989_20_acordao.json	tce-sp/acordaos/14340_989_20_acordao.pdf
+tce-sp--acordaos--15025_989_21_acordao.json	tce-sp/acordaos/15025_989_21_acordao.pdf
+tce-sp--acordaos--16921_989_20_acordao.json	tce-sp/acordaos/16921_989_20_acordao.pdf
+tce-sp--acordaos--18295_989_18_acordao.json	tce-sp/acordaos/18295_989_18_acordao.pdf
+tce-sp--acordaos--22329_989_21_acordao.json	tce-sp/acordaos/22329_989_21_acordao.pdf
+tce-sp--acordaos--44247_026_09_acordao.json	tce-sp/acordaos/44247_026_09_acordao.pdf
+tce-sp--acordaos--7554_989_17_acordao.json	tce-sp/acordaos/7554_989_17_acordao.pdf
+tce-sp--acordaos--8072_989_17_acordao.json	tce-sp/acordaos/8072_989_17_acordao.pdf
+tce-sp--acordaos--8079_989_17_acordao.json	tce-sp/acordaos/8079_989_17_acordao.pdf

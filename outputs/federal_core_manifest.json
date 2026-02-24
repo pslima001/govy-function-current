@@ -1,0 +1,68 @@
+[
+  {
+    "doc_id": "lei_14133_2021_federal_br",
+    "title": "Lei 14.133/2021 - Nova Lei de Licitacoes",
+    "priority": 0,
+    "status": "present"
+  },
+  {
+    "doc_id": "lei_8666_1993_federal_br",
+    "title": "Lei 8.666/1993 - Antiga Lei de Licitacoes (historica)",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "lei_10520_2002_federal_br",
+    "title": "Lei 10.520/2002 - Pregao (historica)",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "lei_12462_2011_federal_br",
+    "title": "Lei 12.462/2011 - RDC",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "lc_123_2006_federal_br",
+    "title": "LC 123/2006 - ME/EPP em Licitacoes",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "decreto_10024_2019_federal_br",
+    "title": "Decreto 10.024/2019 - Pregao Eletronico",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "decreto_7892_2013_federal_br",
+    "title": "Decreto 7.892/2013 - SRP",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "lei_12527_2011_federal_br",
+    "title": "Lei 12.527/2011 - LAI",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "lei_13303_2016_federal_br",
+    "title": "Lei 13.303/2016 - Lei das Estatais",
+    "priority": 0,
+    "status": "missing"
+  },
+  {
+    "doc_id": "lei_14981_2024_federal_br",
+    "title": "Lei 14.981/2024",
+    "priority": 1,
+    "status": "missing"
+  },
+  {
+    "doc_id": "decreto_12807_federal_br",
+    "title": "Decreto 12.807",
+    "priority": 1,
+    "status": "missing"
+  }
+]

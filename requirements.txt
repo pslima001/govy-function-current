@@ -17,6 +17,7 @@ pymupdf
 pymupdf
 pdfplumber
 python-docx
+beautifulsoup4
 pandas
 openpyxl
 tabula-py

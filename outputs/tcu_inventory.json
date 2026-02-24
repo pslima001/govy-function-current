@@ -1,0 +1,8434 @@
+{
+  "kind": "tcu_inventory",
+  "generated_at": "2026-02-18T19:23:08.567459+00:00",
+  "source": "https://search-govy-kb.search.windows.net/indexes/kb-legal",
+  "summary": {
+    "total_chunks": 1846,
+    "unique_documents": 411,
+    "effects_distribution": {
+      "RIGORIZA": 251,
+      "FLEXIBILIZA": 106,
+      "CONDICIONAL": 53
+    },
+    "procedural_stages_distribution": {
+      "EDITAL": 113,
+      "CONTRATACAO": 81,
+      "HABILITACAO": 65,
+      "EXECUCAO": 55,
+      "JULGAMENTO": 52,
+      "DISPUTA": 15,
+      "NAO_CLARO": 15,
+      "SANCIONAMENTO": 12,
+      "PAGAMENTO": 1
+    }
+  },
+  "documents": [
+    {
+      "title": "LC_PUBLICACAO_100_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_100_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_101_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_101_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_102_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_102_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_103_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_103_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_104_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_104_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_105_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_105_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_106_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_106_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_107_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_107_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_108_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_108_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_109_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_109_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_10_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_10_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_110_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_110_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_111_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_111_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_112_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_112_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_113_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_113_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_114_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_114_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_115_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_115_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_116_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_116_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_117_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_117_2016_2_29, fundamento legal",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_118_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_118_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_119_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_119_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_11_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_11_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_120_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_120_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_121_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_121_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_122_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_122_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_123_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_123_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_124_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_124_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_125_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_125_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese"
+      ],
+      "chunk_count": 2
+    },
+    {
+      "title": "LC_PUBLICACAO_126_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_126_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_127_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_127_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_128_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_128_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_129_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_129_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_12_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_12_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_130_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_130_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_131_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_131_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_132_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_132_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_133_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_133_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_134_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_134_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_135_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_135_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_136_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_136_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_137_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_137_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_138_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_138_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_139_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_139_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_13_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_13_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_140_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_140_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_141_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_141_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_142_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_142_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_143_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_143_2016_2_29, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_144_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_144_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_145_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_145_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_146_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_146_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_147_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_147_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_148_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_148_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_149_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_149_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_14_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_14_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_150_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_150_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_151_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_151_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_152_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_152_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_153_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_153_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_154_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_154_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_155_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_155_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_156_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_156_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_157_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_157_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_158_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_158_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_159_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_159_2016_2_29, contexto",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_15_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_15_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_160_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_160_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_161_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_161_2016_2_29, contexto",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese"
+      ],
+      "chunk_count": 2
+    },
+    {
+      "title": "LC_PUBLICACAO_162_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_162_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_163_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_163_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_164_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_164_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_165_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_165_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_166_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_166_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_167_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_167_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_168_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_168_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_169_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_169_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_16_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_16_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_170_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_170_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_171_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_171_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_172_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_172_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_174_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_174_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_175_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_175_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_176_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_176_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_177_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_177_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_178_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_178_2016_2_29, fundamento legal",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_179_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_179_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_17_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_17_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_180_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_180_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_182_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_182_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_183_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_183_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_184_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_184_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 3
+    },
+    {
+      "title": "LC_PUBLICACAO_185_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_185_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_186_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_186_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_187_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_187_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_188_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_188_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_189_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_189_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_18_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_18_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_190_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_190_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_191_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_191_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_192_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_192_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_193_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_193_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 3
+    },
+    {
+      "title": "LC_PUBLICACAO_194_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_194_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_195_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_195_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_196_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_196_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_197_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_197_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_198_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_198_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_199_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_199_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_19_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_19_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_1_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_1_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_200_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_200_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_201_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_201_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_202_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_202_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_203_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_203_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_204_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_204_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_205_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_205_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_206_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_206_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_207_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_207_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_208_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_208_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_209_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_209_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_20_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_20_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_210_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_210_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_211_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_211_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_212_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_212_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_213_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_213_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_214_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_214_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_215_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_215_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_216_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_216_2016_2_29, fundamento legal",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_217_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_217_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_218_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_218_2016_2_29, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_219_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_219_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_21_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_21_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_220_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_220_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_221_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_221_2016_2_29, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_222_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_222_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_223_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_223_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_224_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_224_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_225_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_225_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_226_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_226_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_227_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_227_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_229_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_229_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_22_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_22_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_230_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_230_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_231_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_231_2016_2_29, limites",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_232_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_232_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_233_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_233_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_234_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_234_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_235_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_235_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_236_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_236_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_237_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_237_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_238_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_238_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_239_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_239_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_23_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_23_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_240_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_240_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "PAGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_243_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_243_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_244_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_244_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_245_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_245_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_246_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_246_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_247_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_247_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_248_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_248_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_249_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_249_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_24_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_24_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_251_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_251_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_252_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_252_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_253_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_253_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_254_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_254_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_255_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_255_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_256_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_256_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_257_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_257_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_258_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_258_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_259_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_259_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_25_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_25_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_260_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_260_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_261_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_261_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_262_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_262_2016_2_29, fundamento legal",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_263_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_263_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 3
+    },
+    {
+      "title": "LC_PUBLICACAO_264_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_264_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_265_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_265_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_266_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_266_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_267_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_267_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_268_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_268_2016_2_29, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_269_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_269_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_26_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_26_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_270_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_270_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_271_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_271_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_272_2016_3_1",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_272_2016_3_1, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_273_2016_3_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_273_2016_3_3, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_274_2016_3_9",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_274_2016_3_9, limites",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_275_2016_3_16",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_275_2016_3_16, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_276_2016_3_23",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_276_2016_3_23, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_277_2016_3_31",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_277_2016_3_31, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_278_2016_4_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_278_2016_4_8, contexto",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_279_2016_4_13",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_279_2016_4_13, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_27_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_27_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_280_2016_4_20",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_280_2016_4_20, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_281_2016_4_27",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_281_2016_4_27, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_282_2016_5_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_282_2016_5_4, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_283_2016_5_12",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_283_2016_5_12, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_284_2016_6_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_284_2016_6_3, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_285_2016_6_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_285_2016_6_3, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_286_2016_6_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_286_2016_6_8, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_287_2016_6_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_287_2016_6_8, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_288_2016_6_17",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_288_2016_6_17, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_289_2016_6_21",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_289_2016_6_21, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_28_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_28_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_290_2016_6_28",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_290_2016_6_28, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "LC_PUBLICACAO_291_2016_7_6",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_291_2016_7_6, limites",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_292_2016_7_12",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_292_2016_7_12, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_293_2016_7_19",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_293_2016_7_19, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_294_2016_7_26",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_294_2016_7_26, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_295_2016_8_2",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_295_2016_8_2, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_296_2016_8_9",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_296_2016_8_9, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_297_2016_8_16",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_297_2016_8_16, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_298_2016_8_23",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_298_2016_8_23, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_299_2016_8_30",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_299_2016_8_30, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_29_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_29_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_2_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_2_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_300_2016_9_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_300_2016_9_8, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "LC_PUBLICACAO_301_2016_9_13",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_301_2016_9_13, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_302_2016_9_20",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_302_2016_9_20, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_303_2016_10_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_303_2016_10_4, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_304_2016_10_11",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_304_2016_10_11, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_305_2016_10_18",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_305_2016_10_18, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_306_2016_11_1",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_306_2016_11_1, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_307_2016_11_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_307_2016_11_8, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_308_2016_11_14",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_308_2016_11_14, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_309_2016_11_22",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_309_2016_11_22, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_30_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_30_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_310_2016_12_1",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_310_2016_12_1, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_311_2016_12_6",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_311_2016_12_6, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_312_2016_12_13",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_312_2016_12_13, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_313_2017_1_24",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_313_2017_1_24, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_314_2017_1_31",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_314_2017_1_31, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_315_2017_2_14",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_315_2017_2_14, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "LC_PUBLICACAO_316_2017_3_7",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_316_2017_3_7, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_317_2017_3_21",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_317_2017_3_21, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_318_2017_4_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_318_2017_4_4, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_319_2017_4_18",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_319_2017_4_18, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_31_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_31_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_321_2017_5_16",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_321_2017_5_16, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_322_2017_5_30",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_322_2017_5_30, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_323_2017_6_13",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_323_2017_6_13, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_324_2017_6_27",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_324_2017_6_27, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_325_2017_7_11",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_325_2017_7_11, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_326_2017_7_25",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_326_2017_7_25, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_327_2017_8_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_327_2017_8_8, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_328_2017_8_22",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_328_2017_8_22, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_329_2017_9_5",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_329_2017_9_5, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_32_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_32_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_330_2017_9_19",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_330_2017_9_19, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_331_2017_10_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_331_2017_10_4, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_332_2017_10_17",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_332_2017_10_17, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_333_2017_11_7",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_333_2017_11_7, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_334_2017_11_14",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_334_2017_11_14, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_335_2017_11_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_335_2017_11_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_336_2017_12_13",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_336_2017_12_13, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_337_2018_1_30",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_337_2018_1_30, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_338_2018_2_20",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_338_2018_2_20, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_339_2018_3_6",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_339_2018_3_6, fundamento legal",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_33_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_33_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_340_2018_3_21",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_340_2018_3_21, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_342_2018_4_17",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_342_2018_4_17, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_343_2018_5_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_343_2018_5_3, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_344_2018_5_15",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_344_2018_5_15, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_345_2018_5_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_345_2018_5_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_346_2018_6_12",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_346_2018_6_12, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_347_2018_6_26",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_347_2018_6_26, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_348_2018_7_10",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_348_2018_7_10, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_349_2018_7_24",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_349_2018_7_24, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_34_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_34_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_350_2018_8_7",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_350_2018_8_7, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_351_2018_8_22",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_351_2018_8_22, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_352_2018_9_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_352_2018_9_4, contexto",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese"
+      ],
+      "chunk_count": 2
+    },
+    {
+      "title": "LC_PUBLICACAO_353_2018_9_18",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_353_2018_9_18, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "LC_PUBLICACAO_354_2018_10_2",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_354_2018_10_2, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_355_2018_10_16",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_355_2018_10_16, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_356_2018_10_30",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_356_2018_10_30, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_357_2018_11_13",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_357_2018_11_13, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_358_2018_11_27",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_358_2018_11_27, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_359_2018_12_11",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_359_2018_12_11, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_35_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_35_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_360_2019_1_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_360_2019_1_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_361_2019_2_12",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_361_2019_2_12, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_362_2019_3_19",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_362_2019_3_19, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_363_2019_3_19",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_363_2019_3_19, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_364_2019_4_2",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_364_2019_4_2, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_365_2019_4_16",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_365_2019_4_16, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_366_2019_4_30",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_366_2019_4_30, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese"
+      ],
+      "chunk_count": 2
+    },
+    {
+      "title": "LC_PUBLICACAO_367_2019_5_14",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_367_2019_5_14, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_368_2019_5_28",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_368_2019_5_28, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_369_2019_6_11",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_369_2019_6_11, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_36_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_36_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_370_2019_6_25",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_370_2019_6_25, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_371_2019_7_9",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_371_2019_7_9, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_373_2019_8_6",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_373_2019_8_6, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_374_2019_8_20",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_374_2019_8_20, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_375_2019_9_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_375_2019_9_3, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_376_2019_9_17",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_376_2019_9_17, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_377_2019_10_1",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_377_2019_10_1, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_378_2019_10_15",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_378_2019_10_15, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_379_2019_10_30",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_379_2019_10_30, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_37_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_37_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_380_2019_11_26",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_380_2019_11_26, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "LC_PUBLICACAO_381_2019_12_10",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_381_2019_12_10, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_382_2020_1_28",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_382_2020_1_28, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_383_2020_2_11",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_383_2020_2_11, limites",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_384_2020_3_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_384_2020_3_3, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_385_2020_3_17",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_385_2020_3_17, limites",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_386_2020_3_31",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_386_2020_3_31, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_387_2020_4_14",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_387_2020_4_14, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 3
+    },
+    {
+      "title": "LC_PUBLICACAO_388_2020_4_28",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_388_2020_4_28, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_389_2020_5_12",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_389_2020_5_12, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_38_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_38_2016_2_29, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_390_2020_5_26",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_390_2020_5_26, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_391_2020_6_9",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_391_2020_6_9, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_392_2020_6_23",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_392_2020_6_23, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_393_2020_7_7",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_393_2020_7_7, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_394_2020_7_21",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_394_2020_7_21, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_395_2020_8_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_395_2020_8_4, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_396_2020_8_18",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_396_2020_8_18, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_397_2020_9_1",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_397_2020_9_1, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_398_2020_9_15",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_398_2020_9_15, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_399_2020_9_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_399_2020_9_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_39_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_39_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_400_2020_10_14",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_400_2020_10_14, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_401_2020_10_27",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_401_2020_10_27, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_402_2020_11_10",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_402_2020_11_10, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_403_2020_11_24",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_403_2020_11_24, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_404_2020_12_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_404_2020_12_8, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_405_2021_1_26",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_405_2021_1_26, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_406_2021_2_9",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_406_2021_2_9, contexto",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_407_2021_3_2",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_407_2021_3_2, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_408_2021_3_16",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_408_2021_3_16, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_409_2021_3_30",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_409_2021_3_30, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_40_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_40_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "SANCIONAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_410_2021_4_13",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_410_2021_4_13, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_411_2021_4_27",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_411_2021_4_27, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_412_2021_5_11",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_412_2021_5_11, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_413_2021_5_25",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_413_2021_5_25, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_414_2021_6_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_414_2021_6_8, fundamento legal",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_415_2021_6_22",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_415_2021_6_22, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_416_2021_7_6",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_416_2021_7_6, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_417_2021_7_20",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_417_2021_7_20, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_418_2021_8_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_418_2021_8_3, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_419_2021_8_17",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_419_2021_8_17, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_41_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_41_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_420_2021_8_31",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_420_2021_8_31, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_421_2021_9_21",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_421_2021_9_21, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_422_2021_10_5",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_422_2021_10_5, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_423_2021_10_19",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_423_2021_10_19, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_424_2021_11_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_424_2021_11_4, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_66_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_66_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_67_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_67_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_69_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_69_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_6_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_6_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_70_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_70_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_71_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_71_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_72_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_72_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_73_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_73_2016_2_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_74_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_74_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_75_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_75_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_76_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_76_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_77_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_77_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_78_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_78_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_79_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_79_2016_2_29, contexto",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_7_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_7_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_80_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_80_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_81_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_81_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_83_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_83_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_84_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_84_2016_2_29, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_85_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_85_2016_2_29, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_86_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_86_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_87_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_87_2016_2_29, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_88_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_88_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_89_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_89_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_8_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_8_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_90_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_90_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_91_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_91_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_92_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_92_2016_2_29, tese",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "NAO_CLARO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "tese"
+      ],
+      "chunk_count": 2
+    },
+    {
+      "title": "LC_PUBLICACAO_93_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_93_2016_2_29, vital",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_94_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_94_2016_2_29, limites",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_95_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_95_2016_2_29, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "LC_PUBLICACAO_96_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_96_2016_2_29, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_97_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_97_2016_2_29, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_98_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_98_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_99_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_99_2016_2_29, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "LC_PUBLICACAO_9_2016_2_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, LC_PUBLICACAO_9_2016_2_29, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "CONTRATACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "T1",
+      "source": null,
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "T2",
+      "source": null,
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "vital"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "TCU Acordao 2666/2025 - Ementa",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, Acordao 2666/2025-Plenario, ementa",
+      "effects": [],
+      "procedural_stages": [],
+      "secoes": [],
+      "chunk_count": 1
+    },
+    {
+      "title": "TCU Acordao 2666/2025 - Teste",
+      "source": null,
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, Acordao 2666/2025-Plenario, vital",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "vital"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "TCU Acordao Teste - Ementa",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, Acordao Teste/2025-Plenario, ementa",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [],
+      "secoes": [],
+      "chunk_count": 1
+    },
+    {
+      "title": "TCU Acórdão 1234/2025 - Plenário. Vistoria técnica obrigatória em obras de engenharia. Texto de test...",
+      "source": "kb-content/approved/329e80f8798b9cfb01a14067060b1477ab292555134fc96bd9e639a58b342111.json",
+      "tribunal": "TCU",
+      "year": 0,
+      "citation_sample": "TCU, 329e80f8798b9cfb01a14067060b1477ab292555134fc96bd9e639a58b342111",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 1
+    },
+    {
+      "title": "TESTE",
+      "source": null,
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "tese"
+      ],
+      "chunk_count": 2
+    },
+    {
+      "title": "idSisdoc_31159321v1-51 - LC_PUBLICACAO_501_2025_4_8",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31159321v1-51 - LC_PUBLICACAO_501_2025_4_8, limites",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31224055v1-36 - LC_PUBLICACAO_502_2025_4_23",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31224055v1-36 - LC_PUBLICACAO_502_2025_4_23, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31280641v1-33 - LC_PUBLICACAO_503_2025_5_6",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31280641v1-33 - LC_PUBLICACAO_503_2025_5_6, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31358316v1-62 - LC_PUBLICACAO_504_2025_5_20",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31358316v1-62 - LC_PUBLICACAO_504_2025_5_20, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31441524v1-07 - LC_PUBLICACAO_505_2025_6_3",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31441524v1-07 - LC_PUBLICACAO_505_2025_6_3, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31523741v1-83 - LC_PUBLICACAO_506_2025_6_17",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31523741v1-83 - LC_PUBLICACAO_506_2025_6_17, fundamento legal",
+      "effects": [
+        "CONDICIONAL"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "idSisdoc_31589194v1-66 - LC_PUBLICACAO_507_2025_7_1",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31589194v1-66 - LC_PUBLICACAO_507_2025_7_1, limites",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31673393v3-19 - LC_PUBLICACAO_508_2025_7_15",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31673393v3-19 - LC_PUBLICACAO_508_2025_7_15, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "idSisdoc_31749491v1-83 - LC_PUBLICACAO_509_2025_7_29",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31749491v1-83 - LC_PUBLICACAO_509_2025_7_29, contexto",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "HABILITACAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "idSisdoc_31819153v1-11 - LC_PUBLICACAO_510_2025_8_12",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31819153v1-11 - LC_PUBLICACAO_510_2025_8_12, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31895568v7-22 - LC_PUBLICACAO_511_2025_8_26",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31895568v7-22 - LC_PUBLICACAO_511_2025_8_26, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_31961483v1-29 - LC_PUBLICACAO_512_2025_9_9",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_31961483v1-29 - LC_PUBLICACAO_512_2025_9_9, fundamento legal",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "idSisdoc_32036521v1-30 - LC_PUBLICACAO_513_2025_9_23",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_32036521v1-30 - LC_PUBLICACAO_513_2025_9_23, tese",
+      "effects": [
+        "FLEXIBILIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_32111324v1-57 - LC_PUBLICACAO_514_2025_10_7",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_32111324v1-57 - LC_PUBLICACAO_514_2025_10_7, tese",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EDITAL"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_32176736v1-50 - LC_PUBLICACAO_515_2025_10_21",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_32176736v1-50 - LC_PUBLICACAO_515_2025_10_21, contexto",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "JULGAMENTO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "idSisdoc_32239336v1-41 - LC_PUBLICACAO_516_2025_11_4",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_32239336v1-41 - LC_PUBLICACAO_516_2025_11_4, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "EXECUCAO"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "limites",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 5
+    },
+    {
+      "title": "idSisdoc_32310485v1-67 - LC_PUBLICACAO_517_2025_11_18",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_32310485v1-67 - LC_PUBLICACAO_517_2025_11_18, vital",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    },
+    {
+      "title": "idSisdoc_32412440v1-68 - LC_PUBLICACAO_518_2025_12_9",
+      "source": "TCU",
+      "tribunal": "TCU",
+      "year": 2025,
+      "citation_sample": "TCU, idSisdoc_32412440v1-68 - LC_PUBLICACAO_518_2025_12_9, fundamento legal",
+      "effects": [
+        "RIGORIZA"
+      ],
+      "procedural_stages": [
+        "DISPUTA"
+      ],
+      "secoes": [
+        "contexto_minimo",
+        "fundamento_legal",
+        "tese",
+        "vital"
+      ],
+      "chunk_count": 4
+    }
+  ]
+}

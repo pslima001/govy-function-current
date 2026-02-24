@@ -1,0 +1,48 @@
+{
+  "results": [
+    {
+      "doc_id": "lei_14133_2021_federal_br",
+      "status": "already_in_db"
+    },
+    {
+      "doc_id": "lei_8666_1993_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "lei_10520_2002_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "lei_12462_2011_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "lc_123_2006_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "decreto_10024_2019_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "decreto_7892_2013_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "lei_12527_2011_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "lei_13303_2016_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "lei_14981_2024_federal_br",
+      "status": "no_blob"
+    },
+    {
+      "doc_id": "decreto_12807_2025_federal_br",
+      "status": "no_blob"
+    }
+  ]
+}

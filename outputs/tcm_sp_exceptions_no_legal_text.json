@@ -1,0 +1,479 @@
+{
+  "description": "TCM-SP PDFs skipped by parse pipeline: attachments/appendices without legal decision content",
+  "total": 47,
+  "sample_proof": "10/10 PDFs analyzed with PyMuPDF: zero legal markers (EMENTA, DISPOSITIVO, ACORDAM), all are financial spreadsheets, maps, or administrative tables",
+  "decision": "terminal_skip - these are not legal decisions, no parsing expected",
+  "generated_at": "2026-02-23T20:55:09.474822+00:00",
+  "items": [
+    {
+      "doc_id": "tcm-sp--TC0009122018--20541",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0009122018--20541.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0009122018--20542",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0009122018--20542.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0012212018--27754",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0012212018--27754.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0012212018--27755",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0012212018--27755.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0027572018--65954",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0027572018--65954.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0027572018--65955",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0027572018--65955.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0027572018--65956",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0027572018--65956.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0029262018--70099",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0029262018--70099.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0029262018--70100",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0029262018--70100.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74743",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74743.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74744",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74744.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74745",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74745.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74746",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74746.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74747",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74747.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74750",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74750.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74751",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74751.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74752",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74752.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74753",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74753.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74754",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74754.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74755",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74755.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74756",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74756.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74757",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74757.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74758",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74758.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74759",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74759.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74760",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74760.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74761",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74761.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74762",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74762.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74763",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74763.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74764",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74764.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74765",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74765.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74766",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74766.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74767",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74767.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74768",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74768.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74769",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74769.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74770",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74770.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74771",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74771.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74772",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74772.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74773",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74773.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74774",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74774.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74775",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74775.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74776",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74776.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74777",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74777.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74778",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74778.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0031042018--74779",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0031042018--74779.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0035322018--83289",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0035322018--83289.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0089162017--106323",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0089162017--106323.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    },
+    {
+      "doc_id": "tcm-sp--TC0089162017--106324",
+      "tribunal_id": "tcm-sp",
+      "pdf_blob_path": "tcm-sp/acordaos/tcm-sp--TC0089162017--106324.pdf",
+      "reason": "no_legal_markers_attachment",
+      "evidence": "10/10 sample confirmed: PDFs are financial tables, maps, appendices without EMENTA/DISPOSITIVO/ACORDAM markers",
+      "status": "terminal_skip_non_decision_attachment",
+      "checked_at": "2026-02-23T20:55:09.474822+00:00",
+      "checker": "claude-code-opus-4.6"
+    }
+  ]
+}
