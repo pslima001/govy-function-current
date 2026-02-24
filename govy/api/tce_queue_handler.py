@@ -231,6 +231,33 @@ def handle_parse_tce_pdf(msg_json: str) -> dict:
         logger.error(f"[parse-tce] Erro no parser: {e}")
         return {"status": "error", "error": f"parse_failed: {e}", "blob_path": blob_path}
 
+    # 2a. Pre-filter: detect non-decision attachments (tables, maps, appendices)
+    #     If parser found zero structured legal content, check raw text for markers.
+    #     Saves cost of scraper-metadata fetch + mapping + blob write.
+    _MISSING = "__MISSING__"
+    _LEGAL_MARKERS = ("EMENTA", "DISPOSITIVO", "ACORDAM", "ACÓRDÃO",
+                      "RELATÓRIO", "VOTO", "DECIDE")
+    _em = parser_output.get("ementa", _MISSING)
+    _di = parser_output.get("dispositivo", _MISSING)
+    _kc = parser_output.get("key_citation", _MISSING)
+    if _em == _MISSING and _di == _MISSING and _kc == _MISSING:
+        try:
+            import fitz
+            _doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            _raw = "".join(p.get_text() for p in _doc).upper()
+            _doc.close()
+            if not any(m in _raw for m in _LEGAL_MARKERS):
+                logger.info(f"[parse-tce] Pre-filter: no legal markers in {blob_path} "
+                            f"({len(_raw)}c), skipping as non-decision attachment")
+                return {
+                    "status": "terminal_skip",
+                    "reason": "non_decision_attachment",
+                    "blob_path": blob_path,
+                    "text_length": len(_raw),
+                }
+        except Exception:
+            pass  # if check fails, continue normal flow
+
     # 2b. Ler metadata do scraper (se existir)
     scraper_meta = None
     try:

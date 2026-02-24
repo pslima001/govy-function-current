@@ -445,11 +445,13 @@ def parse_tce_pdf(msg: func.QueueMessage) -> None:
     status = result.get("status", "unknown")
     if status == "success":
         logging.info(f"[parse-tce-queue] OK: {result.get('blob_path')}")
-    elif status == "skipped":
-        logging.warning(f"[parse-tce-queue] Pulado: {result.get('blob_path')} - {result.get('reason')}")
-    else:
+    elif status in ("skipped", "terminal_skip"):
+        logging.warning(f"[parse-tce-queue] Pulado: {result.get('blob_path')} - {result.get('reason', status)}")
+    elif status == "error":
         logging.error(f"[parse-tce-queue] ERRO: {result.get('blob_path')} - {result.get('error')}")
         raise RuntimeError(f"parse_tce_pdf failed: {result.get('error')}")
+    else:
+        logging.warning(f"[parse-tce-queue] Status desconhecido '{status}': {result.get('blob_path')}")
 
 
 # ============================================================

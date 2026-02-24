@@ -1,0 +1,71 @@
+{
+  "tribunal_id": "tce-sc",
+  "run_date": "2026-02-23",
+  "run_type": "full_reprocess",
+  "commit": "a24aff7",
+  "deploy_time_utc": "2026-02-23T01:55:35Z",
+  "reprocess_enqueue_utc": "2026-02-23T20:41:00Z",
+  "reprocess_complete_utc": "2026-02-23T21:15:00Z",
+  "source": {
+    "storage_account": "sttcejurisprudencia",
+    "container": "juris-raw",
+    "prefix": "tce-sc/acordaos/",
+    "pdf_count": 576,
+    "voto_count": 576,
+    "scraper_json_count": 576,
+    "relatorios_voto_count": 0
+  },
+  "output": {
+    "storage_account": "stgovyparsetestsponsor",
+    "container": "kb-raw",
+    "prefix": "tce-sc--acordaos--",
+    "json_count": 576,
+    "oldest_lastModified": "2026-02-23T20:44:33+00:00",
+    "newest_lastModified": "2026-02-23T21:14:54+00:00",
+    "all_576_with_new_code": true
+  },
+  "diff": {
+    "expected": 576,
+    "actual": 576,
+    "missing": 0
+  },
+  "queue": {
+    "parse_tce_queue": 0,
+    "parse_tce_queue_poison": 0,
+    "poison_tce_sc_count": 0
+  },
+  "legacy": {
+    "juris_parsed_tce_sc": 0,
+    "status": "empty/unused"
+  },
+  "audit": {
+    "total_samples": 33,
+    "random_15_seed": 42,
+    "stratified_15": "5_oldest + 5_median + 5_newest",
+    "legacy_failures_retested": 3,
+    "total_asserts": 198,
+    "asserts_pass": 198,
+    "asserts_fail": 0,
+    "pass_rate": "100%",
+    "assert_list": [
+      "kb_doc.tribunal == TCE",
+      "kb_doc.uf == SC",
+      "kb_doc.region == SUL",
+      "kb_doc.authority_score == 0.80",
+      "metadata.parser_version == tce_parser_v3",
+      "kb_doc.content len >= 50"
+    ]
+  },
+  "legacy_failures_fixed": {
+    "141672": {"before": "tribunal=STF, score=1.0", "after": "tribunal=TCE, uf=SC, score=0.80, relator=WILSON ROGÉRIO WAN-DALL"},
+    "140063": {"before": "uf=RS", "after": "uf=SC, relator=JOSÉ NEI ALBERTON ASCARI"},
+    "143313": {"before": "tribunal=STF, uf=DF, region=CENTRO_OESTE, score=1.0", "after": "tribunal=TCE, uf=SC, region=SUL, score=0.80, relator=CESAR FILOMENO FONTES"}
+  },
+  "stragglers": {
+    "count": 12,
+    "cause": "queue_concurrency_with_tce_pr_messages",
+    "resolution": "reprocessed_via_http_test_endpoint",
+    "doc_ids": ["143588", "143605", "143608", "143637", "143657", "143662", "143663", "143664", "143667", "143669", "143670", "143681"]
+  },
+  "status": "FECHADO"
+}
