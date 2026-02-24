@@ -16,7 +16,7 @@
 | TCE-PA | 🟢 9.144 | 🔴 | 🔴 | Validar qualidade PDFs + parse full | HTML scraping — risco qualidade variavel; 2 failed, 2 no_url |
 | TCE-RS | 🟢 5.471 | 🔴 | 🔴 | Parse full + auditoria 30 | API REST, clean |
 | TCE-CE | 🟢 3.136 | 🔴 | 🔴 | Parse full + auditoria 30 | 1 failed (HTTP 500); API REST |
-| TCE-AM | 🟢 2.087 | 🔴 | 🔴 | Parse full + auditoria 30 | API REST, 0 failed |
+| TCE-AM | 🟢 33.941 | 🟢 33.900 | 🔴 | Agente Diario | 41 terminal_skip (non_decision_attachment); 99.88% coverage |
 | TCE-PB | 🟢 1.760 | 🔴 | 🔴 | Parse full + auditoria 30 | API REST, 0 failed |
 | TCE-RJ | 🟢 406 | 🔴 | 🔴 | Parse full + auditoria 30 | Menor volume; API REST |
 
