@@ -237,8 +237,13 @@ def match_item_to_bula(
     t = normalize_text(bula_text)
     pres = extract_presentations_from_bula_text(t)
 
-    # Princípio ativo (MVP: busca literal)
-    principle_ok = item_requirement.principle in t
+    # Princípio ativo: word-boundary (protege contra substring parcial)
+    # \bVINCRISTINA\b casa em "SULFATO DE VINCRISTINA" (bom)
+    # \bVIN\b NÃO casa em "VINCRISTINA" (proteção contra fragmentos)
+    principle_re = re.compile(
+        r"\b" + re.escape(item_requirement.principle) + r"\b"
+    )
+    principle_ok = bool(principle_re.search(t))
 
     # Disclaimer se algum waiver está ativo
     waiver_used = any([
