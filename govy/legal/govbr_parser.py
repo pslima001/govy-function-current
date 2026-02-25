@@ -30,6 +30,7 @@ class ListItem:
     kind: Optional[str] = None
     number: Optional[str] = None
     year: Optional[int] = None
+    is_non_normative: bool = False
 
 
 @dataclass
@@ -173,6 +174,28 @@ RE_REVOGACAO_TITULO = re.compile(
 )
 
 
+# ── Non-normative detection ──────────────────────────────────────────────────
+
+_NON_NORMATIVE_RE = re.compile(
+    r"^(?:v[ií]deo|manuais?|formul[áa]rios?(?:\s+de\s+\w+)?|"
+    r"tutorial|webin[áa]rios?|cartilha|apresenta[çc][ãa]o|"
+    r"faq|perguntas\s+frequentes|"
+    r"ambiente\s+de\s+treinamento|capacita[çc][ãa]o)s?$",
+    re.IGNORECASE,
+)
+_NON_NORMATIVE_SUFFIX_RE = re.compile(r"\(comentad[ao]\)\s*$", re.IGNORECASE)
+
+
+def is_non_normative_caption(caption: str) -> bool:
+    """Detecta captions nao-normativos (videos, manuais, formularios, etc.)."""
+    c = caption.strip()
+    if _NON_NORMATIVE_RE.match(c):
+        return True
+    if _NON_NORMATIVE_SUFFIX_RE.search(c):
+        return True
+    return False
+
+
 # ── Funcoes de parse ─────────────────────────────────────────────────────────
 
 def parse_list_page(html: str, list_url: str) -> ListPageResult:
@@ -213,12 +236,16 @@ def parse_list_page(html: str, list_url: str) -> ListPageResult:
             continue
         seen_urls.add(detail_url)
 
-        # Tenta parsear doc_id do caption
-        parsed = caption_to_doc_id(caption)
-        if parsed:
-            doc_id, kind, number, year = parsed
-        else:
+        # Detecta items nao-normativos (videos, manuais, etc.)
+        non_norm = is_non_normative_caption(caption)
+        if non_norm:
             doc_id, kind, number, year = None, None, None, None
+        else:
+            parsed = caption_to_doc_id(caption)
+            if parsed:
+                doc_id, kind, number, year = parsed
+            else:
+                doc_id, kind, number, year = None, None, None, None
 
         items.append(ListItem(
             caption_raw=caption,
@@ -227,6 +254,7 @@ def parse_list_page(html: str, list_url: str) -> ListPageResult:
             kind=kind,
             number=number,
             year=year,
+            is_non_normative=non_norm,
         ))
 
     # Paginacao: procura link "Próximo" ou "Next"

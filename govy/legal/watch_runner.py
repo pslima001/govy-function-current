@@ -30,6 +30,7 @@ from govy.legal.govbr_parser import (
     ListItem,
     caption_to_doc_id,
     extract_revocation_from_title,
+    is_non_normative_caption,
     parse_list_page,
 )
 from govy.legal.html_extractor import extract_html
@@ -408,6 +409,7 @@ def process_list(
         "new": 0,
         "updated": 0,
         "skipped": 0,
+        "skipped_non_normative": 0,
         "errors": 0,
         "error_details": [],
     }
@@ -415,6 +417,12 @@ def process_list(
     ingested_count = 0
 
     for i, item in enumerate(items, 1):
+        # Skip non-normative items (videos, manuais, formularios, etc.)
+        if item.is_non_normative:
+            logger.info("  [%d/%d] Skip non-normative: %s", i, len(items), item.caption_raw[:60])
+            stats["skipped_non_normative"] += 1
+            continue
+
         if not item.doc_id:
             logger.warning("  [%d/%d] Sem doc_id para: %s", i, len(items), item.caption_raw[:60])
             stats["errors"] += 1
@@ -545,8 +553,9 @@ def process_list(
                     pass
 
     logger.info(
-        "  Resultado: %d total, %d novos, %d atualizados, %d skip, %d erros",
+        "  Resultado: %d total, %d novos, %d atualizados, %d skip, %d erros, %d skip_non_normative",
         stats["total_items"], stats["new"], stats["updated"], stats["skipped"], stats["errors"],
+        stats["skipped_non_normative"],
     )
     return stats
 
@@ -602,28 +611,30 @@ def generate_report_md(all_stats: List[dict]) -> str:
         f"",
         f"## Resumo por Lista",
         f"",
-        f"| Lista | Kind | Status | Total | Novos | Atualiz. | Skip | Erros |",
-        f"|-------|------|--------|------:|------:|---------:|-----:|------:|",
+        f"| Lista | Kind | Status | Total | Novos | Atualiz. | Skip | Skip NN | Erros |",
+        f"|-------|------|--------|------:|------:|---------:|-----:|--------:|------:|",
     ]
 
-    totals = {"total": 0, "new": 0, "updated": 0, "skipped": 0, "errors": 0}
+    totals = {"total": 0, "new": 0, "updated": 0, "skipped": 0, "skipped_non_normative": 0, "errors": 0}
 
     for s in all_stats:
         url_short = s["list_url"].split("/legislacao/")[-1] if "/legislacao/" in s["list_url"] else s["list_url"]
+        skip_nn = s.get("skipped_non_normative", 0)
         lines.append(
             f"| {url_short} | {s['kind']} | {s['status_hint']} | "
-            f"{s['total_items']} | {s['new']} | {s['updated']} | {s['skipped']} | {s['errors']} |"
+            f"{s['total_items']} | {s['new']} | {s['updated']} | {s['skipped']} | {skip_nn} | {s['errors']} |"
         )
         totals["total"] += s["total_items"]
         totals["new"] += s["new"]
         totals["updated"] += s["updated"]
         totals["skipped"] += s["skipped"]
+        totals["skipped_non_normative"] += s.get("skipped_non_normative", 0)
         totals["errors"] += s["errors"]
 
     lines.append(
         f"| **TOTAL** | | | "
         f"**{totals['total']}** | **{totals['new']}** | **{totals['updated']}** | "
-        f"**{totals['skipped']}** | **{totals['errors']}** |"
+        f"**{totals['skipped']}** | **{totals['skipped_non_normative']}** | **{totals['errors']}** |"
     )
 
     # Errors section
@@ -652,6 +663,7 @@ def generate_report_json(all_stats: List[dict], timestamp: str) -> dict:
     total_errors = sum(s["errors"] for s in all_stats)
     total_updated = sum(s["updated"] for s in all_stats)
     total_skipped = sum(s["skipped"] for s in all_stats)
+    total_skip_nn = sum(s.get("skipped_non_normative", 0) for s in all_stats)
     total_items = sum(s["total_items"] for s in all_stats)
 
     return {
@@ -661,6 +673,7 @@ def generate_report_json(all_stats: List[dict], timestamp: str) -> dict:
             "new": total_new,
             "updated": total_updated,
             "skipped": total_skipped,
+            "skipped_non_normative": total_skip_nn,
             "errors": total_errors,
         },
         "lists": [
@@ -672,6 +685,7 @@ def generate_report_json(all_stats: List[dict], timestamp: str) -> dict:
                 "new": s["new"],
                 "updated": s["updated"],
                 "skipped": s["skipped"],
+                "skipped_non_normative": s.get("skipped_non_normative", 0),
                 "errors": s["errors"],
                 "error_details": s.get("error_details", []),
             }
@@ -750,6 +764,7 @@ def watch_govbr_all(
                 "new": 0,
                 "updated": 0,
                 "skipped": 0,
+                "skipped_non_normative": 0,
                 "errors": 1,
                 "error_details": [{"error": str(e)}],
             })
@@ -760,7 +775,9 @@ def watch_govbr_all(
     report_md = generate_report_md(all_stats)
     report_json = generate_report_json(all_stats, timestamp)
 
-    logger.info("=== Watch concluido: %d novos, %d erros ===", total_new, total_errors)
+    total_skip_nn = sum(s.get("skipped_non_normative", 0) for s in all_stats)
+    logger.info("=== Watch concluido: %d novos, %d erros, %d skip_non_normative ===",
+                total_new, total_errors, total_skip_nn)
 
     return {
         "all_stats": all_stats,
