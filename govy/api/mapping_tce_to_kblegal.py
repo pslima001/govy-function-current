@@ -120,6 +120,18 @@ def _build_content(parser: Dict[str, Any]) -> str:
     if ementa and ementa != MISSING:
         parts.append(f"EMENTA: {ementa}")
 
+    relatorio = parser.get("relatorio", MISSING)
+    if relatorio and relatorio != MISSING:
+        parts.append(f"RELATÓRIO: {relatorio}")
+
+    fundamentacao = parser.get("fundamentacao", MISSING)
+    if fundamentacao and fundamentacao != MISSING:
+        parts.append(f"FUNDAMENTAÇÃO: {fundamentacao}")
+
+    conclusao = parser.get("conclusao", MISSING)
+    if conclusao and conclusao != MISSING:
+        parts.append(f"CONCLUSÃO: {conclusao}")
+
     dispositivo = parser.get("dispositivo", MISSING)
     if dispositivo and dispositivo != MISSING:
         parts.append(f"DISPOSITIVO: {dispositivo}")
@@ -423,7 +435,7 @@ def validate_kblegal_doc(doc: Dict[str, Any]) -> List[str]:
     if "procedural_stage" in doc and doc["procedural_stage"] not in valid_stages:
         errors.append(f"procedural_stage inválido: {doc['procedural_stage']}")
 
-    valid_outcomes = {"DETERMINOU_AJUSTE", "AFASTOU", "ORIENTOU", "SANCIONOU"}
+    valid_outcomes = {"DETERMINOU_AJUSTE", "AFASTOU", "ORIENTOU", "SANCIONOU", "ARQUIVOU", "ABSOLVEU"}
     if "holding_outcome" in doc and doc["holding_outcome"] not in valid_outcomes:
         errors.append(f"holding_outcome inválido: {doc['holding_outcome']}")
 
