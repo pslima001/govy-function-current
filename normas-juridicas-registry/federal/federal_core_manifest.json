@@ -1,0 +1,110 @@
+{
+  "_doc": "Manifest de leis/decretos federais estruturantes para licitacoes",
+  "_updated": "2026-02-23",
+  "core_laws": [
+    {
+      "doc_id": "lei_14133_2021_federal_br",
+      "title": "Lei 14.133/2021 - Nova Lei de Licitacoes e Contratos",
+      "doc_type": "lei",
+      "number": "14133",
+      "year": 2021,
+      "priority": "P0",
+      "status": "present"
+    },
+    {
+      "doc_id": "lei_8666_1993_federal_br",
+      "title": "Lei 8.666/1993 - Antiga Lei de Licitacoes",
+      "doc_type": "lei",
+      "number": "8666",
+      "year": 1993,
+      "priority": "P0",
+      "status": "missing"
+    },
+    {
+      "doc_id": "lei_10520_2002_federal_br",
+      "title": "Lei 10.520/2002 - Pregao",
+      "doc_type": "lei",
+      "number": "10520",
+      "year": 2002,
+      "priority": "P0",
+      "status": "missing"
+    },
+    {
+      "doc_id": "lei_12462_2011_federal_br",
+      "title": "Lei 12.462/2011 - RDC",
+      "doc_type": "lei",
+      "number": "12462",
+      "year": 2011,
+      "priority": "P1",
+      "status": "missing"
+    },
+    {
+      "doc_id": "lc_123_2006_federal_br",
+      "title": "LC 123/2006 - ME/EPP em Licitacoes",
+      "doc_type": "lei_complementar",
+      "number": "123",
+      "year": 2006,
+      "priority": "P0",
+      "status": "missing"
+    },
+    {
+      "doc_id": "decreto_10024_2019_federal_br",
+      "title": "Decreto 10.024/2019 - Pregao Eletronico",
+      "doc_type": "decreto",
+      "number": "10024",
+      "year": 2019,
+      "priority": "P0",
+      "status": "missing"
+    },
+    {
+      "doc_id": "decreto_7892_2013_federal_br",
+      "title": "Decreto 7.892/2013 - SRP",
+      "doc_type": "decreto",
+      "number": "7892",
+      "year": 2013,
+      "priority": "P1",
+      "status": "missing"
+    },
+    {
+      "doc_id": "lei_12527_2011_federal_br",
+      "title": "Lei 12.527/2011 - LAI",
+      "doc_type": "lei",
+      "number": "12527",
+      "year": 2011,
+      "priority": "P1",
+      "status": "missing"
+    },
+    {
+      "doc_id": "lei_13303_2016_federal_br",
+      "title": "Lei 13.303/2016 - Lei das Estatais",
+      "doc_type": "lei",
+      "number": "13303",
+      "year": 2016,
+      "priority": "P1",
+      "status": "missing"
+    },
+    {
+      "doc_id": "lei_14981_2024_federal_br",
+      "title": "Lei 14.981/2024",
+      "doc_type": "lei",
+      "number": "14981",
+      "year": 2024,
+      "priority": "P1",
+      "status": "missing"
+    },
+    {
+      "doc_id": "decreto_12807_2025_federal_br",
+      "title": "Decreto 12.807/2025",
+      "doc_type": "decreto",
+      "number": "12807",
+      "year": 2025,
+      "priority": "P1",
+      "status": "missing"
+    }
+  ],
+  "summary": {
+    "present": 1,
+    "missing": 10,
+    "total": 11
+  }
+}

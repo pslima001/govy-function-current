@@ -1,0 +1,15 @@
+{
+  "_doc": "Overrides manuais para documentos que nao tiveram metadata extraida automaticamente.",
+  "_updated": "2026-02-23",
+  "overrides": [
+    {
+      "doc_id": "lei_14133_2021_federal_br",
+      "reason": "PDF OCR nao contem padrao 'publicada no DOU'; data conhecida da Lei 14.133/2021",
+      "fields": {
+        "published_at": "2021-04-01",
+        "effective_from": "2021-04-01",
+        "status_vigencia": "vigente"
+      }
+    }
+  ]
+}
