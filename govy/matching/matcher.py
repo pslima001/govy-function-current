@@ -379,11 +379,31 @@ def match_item_to_bula(
 # OUTPUT CURTO (POPUP)
 # =============================================================================
 
+_POPUP_MAX = 220
+
+
+def _fmt_gap_part(g: Gap, with_evidence: bool = True) -> str:
+    """Format a single gap for popup display."""
+    compact = GAP_COMPACT.get(g.code, g.code.value)
+    if g.required and g.found:
+        part = f"{compact}: req {g.required} got {g.found}"
+    elif g.required:
+        part = f"{compact}: req {g.required}"
+    else:
+        part = compact
+    if with_evidence and g.evidence and len(part) < 100:
+        ev_short = g.evidence[:80]
+        part += f' | "{ev_short}"'
+    return part
+
+
 def format_popup(result: MatchResult, item_requirement: ItemRequirement) -> str:
     """
-    Gera string curta para UI (popup). Target: ≤220 chars.
+    Gera string curta para UI (popup). Hard cap: 220 chars.
 
     Usa códigos compactos (ACTIVE, CONC, FORM, PKG, VOL) + evidence snippet.
+    Graceful degradation: se > 220 chars, remove evidence; se ainda > 220,
+    reduz a 1 gap; por fim trunca.
 
     Formato MATCH:
       MATCH [+] | Item 38 | OK: RITUXIMABE; 10 MG/ML; SOLUCAO INJETAVEL; FRASCO-AMPOLA 50 ML
@@ -407,29 +427,31 @@ def format_popup(result: MatchResult, item_requirement: ItemRequirement) -> str:
         req_pkgvol = _fmt_pkg_vol(
             item_requirement.pkg, item_requirement.vol, item_requirement.vol_unit
         )
-        return (
+        s = (
             f"{base} | OK: {item_requirement.principle}; {req_conc}; "
             f"{item_requirement.form}; {req_pkgvol}"
         )
+        return s[:_POPUP_MAX]
 
     # UNMATCH — compact gaps com evidence
-    parts = []
-    for g in result.gaps[:3]:
-        compact = GAP_COMPACT.get(g.code, g.code.value)
-        if g.required and g.found:
-            part = f"{compact}: req {g.required} got {g.found}"
-        elif g.required:
-            part = f"{compact}: req {g.required}"
-        else:
-            part = compact
-        # Append evidence se cabe
-        if g.evidence and len(part) < 100:
-            ev_short = g.evidence[:80]
-            part += f' | "{ev_short}"'
-        parts.append(part)
-    gap_str = "; ".join(parts) if parts else "(sem gaps detectados)"
+    suffix = " | RISCO" if result.disclaimer else ""
 
-    s = f"{base} | {gap_str}"
-    if result.disclaimer:
-        s += " | RISCO"
-    return s
+    # Try 1: up to 3 gaps with evidence
+    parts = [_fmt_gap_part(g, with_evidence=True) for g in result.gaps[:3]]
+    gap_str = "; ".join(parts) if parts else "(sem gaps detectados)"
+    s = f"{base} | {gap_str}{suffix}"
+    if len(s) <= _POPUP_MAX:
+        return s
+
+    # Try 2: up to 3 gaps without evidence
+    parts = [_fmt_gap_part(g, with_evidence=False) for g in result.gaps[:3]]
+    gap_str = "; ".join(parts)
+    s = f"{base} | {gap_str}{suffix}"
+    if len(s) <= _POPUP_MAX:
+        return s
+
+    # Try 3: first gap only, without evidence
+    parts = [_fmt_gap_part(result.gaps[0], with_evidence=False)] if result.gaps else []
+    gap_str = parts[0] if parts else "(sem gaps)"
+    s = f"{base} | {gap_str}{suffix}"
+    return s[:_POPUP_MAX]
