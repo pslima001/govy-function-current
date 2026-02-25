@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-02-24T23:46:57Z",
+  "totals": {
+    "items": 126,
+    "new": 125,
+    "updated": 1,
+    "skipped": 0,
+    "errors": 0
+  },
+  "lists": [
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/decretos-vigentes",
+      "kind": "decreto",
+      "status_hint": "vigente",
+      "total_items": 126,
+      "new": 125,
+      "updated": 1,
+      "skipped": 0,
+      "errors": 0,
+      "error_details": []
+    }
+  ]
+}
