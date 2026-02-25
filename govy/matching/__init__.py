@@ -23,6 +23,7 @@ __version__ = "1.0.0-mvp"
 
 from .models import (
     GapCode,
+    GAP_COMPACT,
     ItemRequirement,
     Presentation,
     Gap,
@@ -40,6 +41,7 @@ from .pdf_utils import extract_text_from_pdf
 __all__ = [
     # models
     "GapCode",
+    "GAP_COMPACT",
     "ItemRequirement",
     "Presentation",
     "Gap",

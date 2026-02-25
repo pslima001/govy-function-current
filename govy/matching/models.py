@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 
 # =============================================================================
@@ -19,7 +19,7 @@ from typing import List, Optional
 # =============================================================================
 
 class GapCode(str, Enum):
-    """Códigos padronizados de divergência entre requisito e bula."""
+    """Códigos padronizados (granulares) de divergência entre requisito e bula."""
     ACTIVE_MISSING = "ACTIVE_MISSING"       # Princípio ativo não encontrado
     CONC_MISSING = "CONC_MISSING"           # Concentração não detectada
     CONC_MISMATCH = "CONC_MISMATCH"         # Concentração diferente
@@ -29,6 +29,20 @@ class GapCode(str, Enum):
     PKG_MISMATCH = "PKG_MISMATCH"           # Embalagem diferente
     VOLUME_MISSING = "VOLUME_MISSING"       # Volume não detectado
     VOLUME_MISMATCH = "VOLUME_MISMATCH"     # Volume diferente
+
+
+# Mapeamento granular → compacto para popup UI (5 códigos)
+GAP_COMPACT: Dict[GapCode, str] = {
+    GapCode.ACTIVE_MISSING: "ACTIVE",
+    GapCode.CONC_MISSING: "CONC",
+    GapCode.CONC_MISMATCH: "CONC",
+    GapCode.FORM_MISSING: "FORM",
+    GapCode.FORM_MISMATCH: "FORM",
+    GapCode.PKG_MISSING: "PKG",
+    GapCode.PKG_MISMATCH: "PKG",
+    GapCode.VOLUME_MISSING: "VOL",
+    GapCode.VOLUME_MISMATCH: "VOL",
+}
 
 
 # =============================================================================
@@ -69,6 +83,7 @@ class Gap:
     code: GapCode
     required: Optional[str] = None  # valor exigido no edital
     found: Optional[str] = None     # valor encontrado na bula (None se ausente)
+    evidence: Optional[str] = None  # trecho curto da bula (≤220 chars)
 
 
 @dataclass(frozen=True)

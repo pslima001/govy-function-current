@@ -20,6 +20,7 @@ from typing import List, Optional
 from .models import (
     Gap,
     GapCode,
+    GAP_COMPACT,
     ItemRequirement,
     MatchResult,
     Presentation,
@@ -53,6 +54,17 @@ def _fmt_pkg_vol(pkg: str, vol: Optional[float], unit: str) -> str:
     else:
         vol_s = f"{vol:.6g}"
     return f"{pkg} {vol_s} {unit}"
+
+
+def _evidence_around(text: str, m: Optional[re.Match], window: int = 70) -> Optional[str]:
+    """Extract short evidence snippet around a regex match."""
+    if not m:
+        return None
+    left = max(0, m.start() - window)
+    right = min(len(text), m.end() + window)
+    snippet = text[left:right].strip()
+    snippet = re.sub(r"\s+", " ", snippet)
+    return snippet[:220] if snippet else None
 
 
 # =============================================================================
@@ -141,6 +153,11 @@ def match_item_to_bula(
         item_requirement.pkg, item_requirement.vol, item_requirement.vol_unit
     )
 
+    # PKG: busca global (uma vez, reusada por apresentação)
+    pkg_regex = re.compile(rf"\b{re.escape(item_requirement.pkg)}\b")
+    pkg_match = pkg_regex.search(t)
+    pkg_evidence = _evidence_around(t, pkg_match)
+
     for p in pres:
         gaps: List[Gap] = []
 
@@ -154,7 +171,11 @@ def match_item_to_bula(
         # --- CONCENTRACAO (exata) ---
         if not waivers.ignore_concentration:
             if p.conc_num is None or p.conc_unit is None or p.conc_den_unit is None:
-                gaps.append(Gap(GapCode.CONC_MISSING, required=req_conc))
+                gaps.append(Gap(
+                    GapCode.CONC_MISSING,
+                    required=req_conc,
+                    evidence=p.evidence,
+                ))
             else:
                 found_conc = _fmt_conc(p.conc_num, p.conc_unit, p.conc_den_unit)
                 conc_equal = (
@@ -167,6 +188,7 @@ def match_item_to_bula(
                         GapCode.CONC_MISMATCH,
                         required=req_conc,
                         found=found_conc,
+                        evidence=p.evidence,
                     ))
 
         # --- FORMA FARMACEUTICA (estrita) ---
@@ -178,34 +200,39 @@ def match_item_to_bula(
                     GapCode.FORM_MISMATCH,
                     required=req_form,
                     found=p.form,
+                    evidence=p.evidence,
                 ))
 
-        # --- EMBALAGEM (busca global no texto — MVP) ---
+        # --- EMBALAGEM (busca global no texto) ---
         if not waivers.ignore_pkg:
-            pkg_found = bool(
-                re.search(rf"\b{re.escape(item_requirement.pkg)}\b", t)
-            )
-            if not pkg_found:
-                gaps.append(Gap(GapCode.PKG_MISSING, required=item_requirement.pkg))
+            if not pkg_match:
+                gaps.append(Gap(
+                    GapCode.PKG_MISSING,
+                    required=item_requirement.pkg,
+                ))
 
-        # --- VOLUME ---
+        # --- VOLUME (prefere vol da apresentação, fallback RE_PKG_VOL global) ---
         if not waivers.ignore_volume:
             vol_ok = False
             found_vol_str = None
+            vol_evidence = None
 
+            # Preferir volume da apresentação
             if p.vol is not None and p.vol_unit is not None:
                 found_vol_str = f"{p.vol:g} {p.vol_unit}"
+                vol_evidence = p.evidence
                 vol_ok = (
                     abs(p.vol - item_requirement.vol) < 1e-9
                     and p.vol_unit == item_requirement.vol_unit
                 )
             else:
-                # fallback: busca PKG ... VOL UNIT no texto
+                # Fallback: busca PKG ... VOL UNIT no texto global
                 m_pkg = RE_PKG_VOL.search(t)
                 if m_pkg:
                     found_vol = parse_number(m_pkg.group("vol"))
                     found_unit = normalize_text(m_pkg.group("unit"))
                     found_vol_str = f"{found_vol:g} {found_unit}"
+                    vol_evidence = _evidence_around(t, m_pkg)
                     vol_ok = (
                         abs(found_vol - item_requirement.vol) < 1e-9
                         and found_unit == item_requirement.vol_unit
@@ -216,6 +243,7 @@ def match_item_to_bula(
                     GapCode.VOLUME_MISMATCH,
                     required=req_pkgvol,
                     found=found_vol_str,
+                    evidence=vol_evidence,
                 ))
 
         # Se sem gaps → MATCH (primeira apresentação que bate)
@@ -256,21 +284,24 @@ def match_item_to_bula(
 
 def format_popup(result: MatchResult, item_requirement: ItemRequirement) -> str:
     """
-    Gera string curta e objetiva para UI (popup).
+    Gera string curta para UI (popup). Target: ≤220 chars.
+
+    Usa códigos compactos (ACTIVE, CONC, FORM, PKG, VOL) + evidence snippet.
 
     Formato MATCH:
-      MATCH | Item 38 | OK: RITUXIMABE; 10 MG/ML; SOLUCAO INJETAVEL; FRASCO-AMPOLA 50 ML
+      MATCH [+] | Item 38 | OK: RITUXIMABE; 10 MG/ML; SOLUCAO INJETAVEL; FRASCO-AMPOLA 50 ML
 
     Formato UNMATCH:
-      UNMATCH | Item 38 | CONC_MISMATCH: req=10 MG/ML got=5 MG/ML; FORM_MISSING: req=...
+      UNMATCH [X] | Item 38 | CONC: req 10 MG/ML got 5 MG/ML | "...500 MG/60 ML..."
     """
-    icon = "+" if result.status == "MATCH" else "X"
+    is_match = result.status in ("MATCH", "MATCH_WITH_WAIVER")
+    icon = "+" if is_match else "X"
     base = f"{result.status} [{icon}] | Item {result.item_id}"
 
     if result.disclaimer:
         base += " [!]"
 
-    if result.status == "MATCH" and result.best_presentation:
+    if is_match and result.best_presentation:
         req_conc = _fmt_conc(
             item_requirement.conc_num,
             item_requirement.conc_unit,
@@ -284,18 +315,24 @@ def format_popup(result: MatchResult, item_requirement: ItemRequirement) -> str:
             f"{item_requirement.form}; {req_pkgvol}"
         )
 
-    # UNMATCH — lista gaps (até 3)
+    # UNMATCH — compact gaps com evidence
     parts = []
     for g in result.gaps[:3]:
+        compact = GAP_COMPACT.get(g.code, g.code.value)
         if g.required and g.found:
-            parts.append(f"{g.code}: req={g.required} got={g.found}")
+            part = f"{compact}: req {g.required} got {g.found}"
         elif g.required:
-            parts.append(f"{g.code}: req={g.required}")
+            part = f"{compact}: req {g.required}"
         else:
-            parts.append(f"{g.code}")
-    gap_str = "; ".join(parts) if parts else "GAP: (sem detalhes)"
+            part = compact
+        # Append evidence se cabe
+        if g.evidence and len(part) < 100:
+            ev_short = g.evidence[:80]
+            part += f' | "{ev_short}"'
+        parts.append(part)
+    gap_str = "; ".join(parts) if parts else "(sem gaps detectados)"
 
     s = f"{base} | {gap_str}"
     if result.disclaimer:
-        s += f" | {WAIVER_DISCLAIMER}"
+        s += " | RISCO"
     return s
