@@ -9,7 +9,7 @@ Modelos imutáveis (frozen dataclasses) para:
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional
 
@@ -89,12 +89,13 @@ class Gap:
 @dataclass(frozen=True)
 class MatchResult:
     """Resultado do matching de um item contra uma bula."""
-    status: str                             # "MATCH" | "UNMATCH"
+    status: str                             # "MATCH" | "MATCH_WITH_WAIVER" | "UNMATCH"
     item_id: str
     best_presentation: Optional[Presentation]
-    gaps: List[Gap]
+    gaps: List[Gap]                         # gaps efetivos (não cobertos por waiver)
     other_presentations: List[Presentation]
-    disclaimer: Optional[str] = None        # presente se waiver foi aplicado
+    waived_gaps: List[Gap] = field(default_factory=list)  # gaps suprimidos por waiver
+    disclaimer: Optional[str] = None        # presente se waiver ativo
 
 
 @dataclass(frozen=True)
