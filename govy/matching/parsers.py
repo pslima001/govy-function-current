@@ -28,11 +28,13 @@ from .normalizers import normalize_text, parse_number
 
 # --- ITEM: 1ª tentativa — estruturado com ';' ---
 # PRINCIPIO; 10 MG/ML; FORMA <PKG> <VOL> ML
+# Aceita denominador numérico opcional: 10 MG/1 ML → canônico 10 MG/ML
 RE_ITEM_STRUCTURED = re.compile(
     r"""(?is)^\s*
     (?P<principio>[^;]+?)\s*;\s*
     (?P<conc_num>\d{1,4}(?:\.\d{3})*(?:,\d+)?)\s*
     (?P<conc_unit>MG|MCG|G|UI)\s*/\s*
+    (?:\d+(?:,\d+)?\s*)?
     (?P<conc_den>ML|L)\s*;\s*
     (?P<forma>.+?)\s+
     (?P<pkg>FRASCO-AMPOLA|AMPOLA|FRASCO|SERINGA)\s*
@@ -43,12 +45,13 @@ RE_ITEM_STRUCTURED = re.compile(
 )
 
 # --- ITEM: 2ª tentativa — semi-estruturado (';' mas espaços/tabs estranhos) ---
-# Mais permissivo: aceita vol até 4 dígitos e separadores irregulares antes do pkg
+# Mais permissivo: aceita vol até 4 dígitos, separadores irregulares, den numérico
 RE_ITEM_SEMI_STRUCTURED = re.compile(
     r"""(?is)^\s*
     (?P<principio>[^;]+?)\s*;\s*
     (?P<conc_num>\d{1,4}(?:\.\d{3})*(?:,\d+)?)\s*
     (?P<conc_unit>MG|MCG|G|UI)\s*/\s*
+    (?:\d+(?:,\d+)?\s*)?
     (?P<conc_den>ML|L)\s*;\s*
     (?P<forma>.+?)\s+
     (?P<pkg>FRASCO-AMPOLA|AMPOLA|FRASCO|SERINGA)\s*[- ]*\s*
@@ -70,30 +73,52 @@ RE_DOSE_PER_VOL = re.compile(
     r"(?P<vol>\d{1,3}(?:,\d+)?)\s*(?P<vol_unit>ML|L)\b"
 )
 
-# Bula: concentração explícita sem denominador numérico (ex: 10 MG/ML)
+# Concentração: aceita denominador numérico opcional (10 MG/ML, 10 MG/1 ML)
+# Grupo den_num capturado mas não usado no baseline (futuro: validar 1:1)
 RE_CONC = re.compile(
     r"(?i)\b(?P<num>\d{1,4}(?:\.\d{3})*(?:,\d+)?)\s*"
-    r"(?P<num_unit>MG|MCG|G|UI)\s*/\s*(?P<den_unit>ML|L)\b"
+    r"(?P<num_unit>MG|MCG|G|UI)\s*/\s*"
+    r"(?:\d+(?:,\d+)?\s*)?(?P<den_unit>ML|L)\b"
 )
 
-# Bula: forma farmacêutica (lista estrita — MVP)
+# Forma farmacêutica (lista estrita + plurais)
+# COMPRIMIDO(S), CAPSULA(S), SOLUCAO INJETAVEIS (raro)
 RE_FORM = re.compile(
     r"(?i)\b("
-    r"SOLUCAO\s+INJETAVEL|"
+    r"SOLUCAO\s+INJETAVE[IL]S?|"
     r"SOLUCAO\s+PARA\s+DILUICAO\s+PARA\s+INFUSAO|"
     r"SOLUCAO\s+PARA\s+INFUSAO|"
-    r"PO\s+LIOFILIZADO\s+INJETAVEL|"
-    r"COMPRIMIDO|"
-    r"CAPSULA"
+    r"PO\s+LIOFILIZADO\s+INJETAVE[IL]S?|"
+    r"COMPRIMIDOS?|"
+    r"CAPSULAS?"
     r")\b"
 )
 
-# Bula: embalagem + volume próximo (ex: FRASCO-AMPOLA ... 50 ML)
+# Embalagem + volume próximo (ex: FRASCO-AMPOLA ... 50 ML, FRASCO-AMPOLA 1ML)
+# \b antes do vol removido para aceitar volume colado ao pkg (ex: "AMPOLA1ML")
+# normalize_text() já unifica FRASCO AMPOLA / FRASCO - AMPOLA → FRASCO-AMPOLA
 RE_PKG_VOL = re.compile(
     r"(?i)\b(?P<pkg>FRASCO-AMPOLA|AMPOLA|FRASCO|SERINGA)\b"
     r".{0,40}?"
-    r"\b(?P<vol>\d{1,3}(?:,\d+)?)\s*(?P<unit>ML|L)\b"
+    r"(?P<vol>\d{1,4}(?:,\d+)?)\s*(?P<unit>ML|L)\b"
 )
+
+
+# =============================================================================
+# HELPERS
+# =============================================================================
+
+# Rótulos comuns que aparecem antes do princípio ativo em texto livre
+RE_LABEL_PREFIX = re.compile(
+    r"^(?:MEDICAMENTO|DESCRICAO|APRESENTACAO|PRODUTO|ITEM|NOME"
+    r"|PRINCIPIO\s+ATIVO|FARMACO|SUBSTANCIA)\s*[:\-]\s*",
+    re.IGNORECASE,
+)
+
+
+def _strip_label_prefix(s: str) -> str:
+    """Remove rótulos comuns do início (ex: 'DESCRICAO: RITUXIMABE' → 'RITUXIMABE')."""
+    return RE_LABEL_PREFIX.sub("", s).strip()
 
 
 # =============================================================================
@@ -104,7 +129,7 @@ def _build_requirement_from_regex_match(item_raw: str, m: re.Match) -> ItemRequi
     """Constrói ItemRequirement a partir de um match de regex estruturada/semi."""
     return ItemRequirement(
         raw=item_raw,
-        principle=m.group("principio").strip(),
+        principle=_strip_label_prefix(m.group("principio").strip()),
         conc_num=parse_number(m.group("conc_num")),
         conc_unit=normalize_text(m.group("conc_unit")),
         conc_den_unit=normalize_text(m.group("conc_den")),
@@ -125,6 +150,7 @@ def _guess_principle_from_text(
     1. Se houver delimitador (';', '|', tab), usa texto antes do primeiro delimitador
        desde que o próximo segmento contenha concentração.
     2. Senão, usa o texto antes da posição da concentração encontrada.
+    3. Em ambos os casos, remove rótulos comuns (DESCRICAO:, MEDICAMENTO:, etc.)
 
     Raises:
         ValueError: se não for possível inferir com confiança.
@@ -133,17 +159,22 @@ def _guess_principle_from_text(
     if parts:
         # Se parts[0] não contém concentração e parts[1] sim → parts[0] é princípio
         if len(parts) >= 2 and RE_CONC.search(parts[1]):
-            return parts[0]
+            candidate = _strip_label_prefix(parts[0])
+            if candidate and len(candidate) >= 3:
+                return candidate
         # Se parts[0] é "texto razoável" (>=4 chars, sem conc), usa ele
         if not RE_CONC.search(parts[0]) and len(parts[0]) >= 4:
-            return parts[0]
+            candidate = _strip_label_prefix(parts[0])
+            if candidate and len(candidate) >= 3:
+                return candidate
 
     # Sem delimitador: usa trecho antes da concentração
     if conc_span:
         start, _ = conc_span
         prefix = raw_norm[:start].strip()
         prefix = re.sub(r"[-:,]+$", "", prefix).strip()
-        if prefix and len(prefix) >= 4:
+        prefix = _strip_label_prefix(prefix)
+        if prefix and len(prefix) >= 3:
             return prefix
 
     raise ValueError("Fallback: nao foi possivel inferir principio ativo.")
