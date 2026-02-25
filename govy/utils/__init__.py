@@ -1,13 +1,6 @@
-"""
-GOVY - Utils para Knowledge Base Juridica
-SPEC 1.2
-
-IMPORTANT: Este arquivo deve ser side-effect free.
-NAO importar modulos pesados aqui.
-Use imports explicitos nos arquivos que precisam:
-  from govy.utils.juris_constants import ...
-  from govy.utils.juris_pipeline import JurisPipeline
-  from govy.utils.review_queue import ReviewQueue
-"""
+# govy/utils/__init__.py — COMPAT SHIM (Fase 3 restructuring)
+# Deadline: remover após 2 PRs quando todos os consumers migrarem.
+# Canonical location: packages/govy_platform/utils/
+"""Compat layer — redireciona para packages.govy_platform.utils."""
 
 __all__ = []

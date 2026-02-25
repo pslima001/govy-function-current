@@ -1,12 +1,14 @@
-# govy/security/__init__.py
-"""
-Módulo de segurança do GOVY.
-Middleware de proteção: error shield, security headers, rate limiting, audit logging.
-"""
-from govy.security.error_shield import safe_handler
-from govy.security.headers import security_headers, apply_security_headers
-from govy.security.validation import validate_blob_path, validate_json_body
-from govy.security.audit import audit_log
+# govy/security/__init__.py — COMPAT SHIM (Fase 3 restructuring)
+# Canonical location: packages/govy_platform/security/
+"""Compat layer — redireciona para packages.govy_platform.security."""
+from packages.govy_platform.security import (  # noqa: F401
+    safe_handler,
+    security_headers,
+    apply_security_headers,
+    validate_blob_path,
+    validate_json_body,
+    audit_log,
+)
 
 __all__ = [
     "safe_handler",
