@@ -106,6 +106,49 @@ def _split_by_waivers(
     return effective, waived
 
 
+# Broader search for ANY packaging term (for evidence when canonical PKG missing)
+_RE_PKG_ANY = re.compile(
+    r"(?i)\b(FRASCO-AMPOLA|AMPOLA|FRASCO|SERINGA|BISNAGA|TUBO|BLISTER)\b"
+)
+
+
+def _conc_equal(
+    item_requirement: ItemRequirement, p: Presentation
+) -> bool:
+    """
+    Compare concentration: cross-multiply when dose/vol available (exact),
+    fall back to derived conc_num with relaxed tolerance.
+
+    Cross-multiply avoids float division artifacts:
+      req 10 MG/ML + bula 500 MG/50 ML → 500 == 10*50 → True (exact)
+      req 10 MG/ML + bula 500 MG/60 ML → 500 != 10*60 → False (exact)
+    """
+    if p.conc_unit is None or p.conc_den_unit is None:
+        return False
+
+    # Unit check first
+    if p.conc_unit != item_requirement.conc_unit:
+        return False
+    if p.conc_den_unit != item_requirement.conc_den_unit:
+        return False
+
+    # Cross-multiply when raw dose/vol available and denominator units match
+    if (
+        p.dose is not None
+        and p.vol is not None
+        and p.dose_unit == item_requirement.conc_unit
+        and p.vol_unit == item_requirement.conc_den_unit
+    ):
+        # dose/vol == conc_num/1  →  dose == conc_num * vol
+        expected = item_requirement.conc_num * p.vol
+        return abs(p.dose - expected) < 0.01  # tolerance for rounding
+
+    # Fall back to derived concentration with relaxed tolerance
+    if p.conc_num is None:
+        return False
+    return abs(p.conc_num - item_requirement.conc_num) < 1e-6
+
+
 def _compute_all_gaps(
     item_requirement: ItemRequirement,
     p: Presentation,
@@ -136,7 +179,7 @@ def _compute_all_gaps(
             required=item_requirement.principle,
         ))
 
-    # --- CONCENTRACAO (exata) ---
+    # --- CONCENTRACAO (cross-multiply quando possível) ---
     if p.conc_num is None or p.conc_unit is None or p.conc_den_unit is None:
         gaps.append(Gap(
             GapCode.CONC_MISSING,
@@ -144,13 +187,8 @@ def _compute_all_gaps(
             evidence=p.evidence,
         ))
     else:
-        found_conc = _fmt_conc(p.conc_num, p.conc_unit, p.conc_den_unit)
-        conc_equal = (
-            p.conc_unit == item_requirement.conc_unit
-            and p.conc_den_unit == item_requirement.conc_den_unit
-            and abs(p.conc_num - item_requirement.conc_num) < 1e-9
-        )
-        if not conc_equal:
+        if not _conc_equal(item_requirement, p):
+            found_conc = _fmt_conc(p.conc_num, p.conc_unit, p.conc_den_unit)
             gaps.append(Gap(
                 GapCode.CONC_MISMATCH,
                 required=req_conc,
@@ -160,7 +198,11 @@ def _compute_all_gaps(
 
     # --- FORMA FARMACEUTICA (estrita) ---
     if not p.form:
-        gaps.append(Gap(GapCode.FORM_MISSING, required=req_form))
+        gaps.append(Gap(
+            GapCode.FORM_MISSING,
+            required=req_form,
+            evidence=p.evidence,  # fix: era None, agora mostra contexto
+        ))
     elif normalize_text(p.form) != normalize_text(req_form):
         gaps.append(Gap(
             GapCode.FORM_MISMATCH,
@@ -169,36 +211,43 @@ def _compute_all_gaps(
             evidence=p.evidence,
         ))
 
-    # --- EMBALAGEM (busca global no texto) ---
+    # --- EMBALAGEM (busca global) ---
     if not pkg_match:
+        # Busca tolerante para evidence (pode achar "AMPOLA" mesmo que "FRASCO-AMPOLA" falte)
+        any_pkg = _RE_PKG_ANY.search(t)
+        pkg_ev = _evidence_around(t, any_pkg) if any_pkg else p.evidence
         gaps.append(Gap(
             GapCode.PKG_MISSING,
             required=item_requirement.pkg,
+            found=any_pkg.group(1) if any_pkg else None,
+            evidence=pkg_ev,
         ))
 
-    # --- VOLUME (prefere vol da apresentação, fallback RE_PKG_VOL global) ---
+    # --- VOLUME (prefere RE_PKG_VOL packaging, fallback p.vol) ---
+    # p.vol from dose/vol captures is the concentration DENOMINATOR (e.g. 10 in
+    # "100 MG/10 ML"), NOT the packaging volume. Packaging volume comes from
+    # RE_PKG_VOL (e.g. "FRASCO-AMPOLA 50 ML").
     vol_ok = False
     found_vol_str = None
     vol_evidence = None
 
-    if p.vol is not None and p.vol_unit is not None:
+    m_pkg_vol = RE_PKG_VOL.search(t)
+    if m_pkg_vol:
+        found_vol = parse_number(m_pkg_vol.group("vol"))
+        found_unit = normalize_text(m_pkg_vol.group("unit"))
+        found_vol_str = f"{found_vol:g} {found_unit}"
+        vol_evidence = _evidence_around(t, m_pkg_vol)
+        vol_ok = (
+            abs(found_vol - item_requirement.vol) < 1e-6
+            and found_unit == item_requirement.vol_unit
+        )
+    elif p.vol is not None and p.vol_unit is not None:
         found_vol_str = f"{p.vol:g} {p.vol_unit}"
         vol_evidence = p.evidence
         vol_ok = (
-            abs(p.vol - item_requirement.vol) < 1e-9
+            abs(p.vol - item_requirement.vol) < 1e-6
             and p.vol_unit == item_requirement.vol_unit
         )
-    else:
-        m_pkg = RE_PKG_VOL.search(t)
-        if m_pkg:
-            found_vol = parse_number(m_pkg.group("vol"))
-            found_unit = normalize_text(m_pkg.group("unit"))
-            found_vol_str = f"{found_vol:g} {found_unit}"
-            vol_evidence = _evidence_around(t, m_pkg)
-            vol_ok = (
-                abs(found_vol - item_requirement.vol) < 1e-9
-                and found_unit == item_requirement.vol_unit
-            )
 
     if not vol_ok:
         gaps.append(Gap(
