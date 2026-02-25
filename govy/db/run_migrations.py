@@ -11,19 +11,17 @@ Requer: POSTGRES_CONNSTR env var.
 """
 from __future__ import annotations
 
-import os
 import sys
-import glob
 import hashlib
 import logging
 import argparse
-from datetime import datetime, timezone
+from pathlib import Path
 
-from govy.db.connection import get_conn, release_conn
+from .connection import get_conn, release_conn
 
 logger = logging.getLogger(__name__)
 
-MIGRATIONS_DIR = os.path.join(os.path.dirname(__file__), "migrations")
+MIGRATIONS_DIR = Path(__file__).resolve().parent / "migrations"
 
 HISTORY_DDL = """
 CREATE TABLE IF NOT EXISTS _migration_history (
@@ -35,9 +33,8 @@ CREATE TABLE IF NOT EXISTS _migration_history (
 """
 
 
-def _sha256_file(path: str) -> str:
-    with open(path, "r", encoding="utf-8") as f:
-        return hashlib.sha256(f.read().encode("utf-8")).hexdigest()
+def _sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
 
 
 def _ensure_history_table(conn):
@@ -52,10 +49,8 @@ def _get_applied(conn) -> set[str]:
         return {row[0] for row in cur.fetchall()}
 
 
-def _list_migrations() -> list[str]:
-    pattern = os.path.join(MIGRATIONS_DIR, "*.sql")
-    files = sorted(glob.glob(pattern))
-    return files
+def _list_migrations() -> list[Path]:
+    return sorted(MIGRATIONS_DIR.glob("*.sql"))
 
 
 def run_migrations():
@@ -67,7 +62,7 @@ def run_migrations():
 
         pending = [
             m for m in migrations
-            if os.path.basename(m) not in applied
+            if m.name not in applied
         ]
 
         if not pending:
@@ -76,11 +71,9 @@ def run_migrations():
             return 0
 
         for mpath in pending:
-            fname = os.path.basename(mpath)
+            fname = mpath.name
             checksum = _sha256_file(mpath)
-
-            with open(mpath, "r", encoding="utf-8") as f:
-                sql = f.read()
+            sql = mpath.read_text(encoding="utf-8")
 
             logger.info("Aplicando migration: %s", fname)
             print(f"Aplicando: {fname} ...", end=" ")
@@ -132,8 +125,8 @@ def show_status():
                 print(f"  [OK] {fname}  ({ts})")
 
         pending = [
-            os.path.basename(m) for m in migrations
-            if os.path.basename(m) not in applied_set
+            m.name for m in migrations
+            if m.name not in applied_set
         ]
         if pending:
             print()
