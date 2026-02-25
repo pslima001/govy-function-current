@@ -1,0 +1,65 @@
+TÍTULO I
+DISPOSIÇÕES PRELIMINARES
+
+CAPÍTULO I
+DO ÂMBITO DE APLICAÇÃO DESTA LEI
+
+Art. 1o Esta Lei estabelece normas gerais de licitação e contratação para as Administrações Públicas diretas, autárquicas e fundacionais da União, dos Estados, do Distrito Federal e dos Municípios, e abrange:
+I - os órgãos dos Poderes Legislativo e Judiciário da União, dos Estados e do Distrito Federal e os órgãos do Poder Legislativo dos Municípios, quando no desempenho de função administrativa;
+II - os fundos especiais e as demais entidades controladas direta ou indiretamente pela Administração Pública.
+§ 1o Não são abrangidas por esta Lei as empresas públicas, as sociedades de economia mista e as suas subsidiárias, regidas pela Lei no 13.303, de 30 de junho de 2016, ressalvado o disposto no art. 178 desta Lei.
+§ 2o As contratações realizadas no âmbito das repartições públicas sediadas no exterior obedecerão às peculiaridades locais e aos princípios básicos estabelecidos nesta Lei, na forma de regulamentação específica a ser editada por ministro de Estado.
+§ 3o Nas licitações e contratações que envolvam recursos provenientes de empréstimo ou doação oriundos de agência oficial de cooperação estrangeira ou de organismo financeiro de que o Brasil seja parte, podem ser admitidas:
+a) condições decorrentes de acordos internacionais aprovados pelo Congresso Nacional e internalizados no ordenamento jurídico brasileiro;
+b) condições peculiares à seleção e à contratação constantes de normas e procedimentos das agências ou dos organismos, desde que:
+1. não conflitem com os princípios constitucionais e com os vetores de sustentabilidade previstos nesta Lei; e
+2. sejam indicadas no respectivo contrato de empréstimo ou doação.
+
+Art. 2o Esta Lei aplica-se a:
+I - alienação e concessão de direito real de uso de bens;
+II - compras, inclusive por encomenda;
+III - locações;
+IV - concessões e permissões de uso de bens públicos;
+V - prestação de serviços, inclusive os técnicos submetidos a predominância intelectual e de engenharia;
+VI - obras e serviços de engenharia;
+VII - contratações de tecnologia da informação e de comunicação.
+
+Art. 3o Esta Lei não se aplica a:
+I - contratações que tenham por objeto operação de crédito, interno ou externo, e gestão de dívida pública, incluídas as contratações de agente financeiro e a concessão de garantia relacionadas a esses contratos;
+II - contratações sujeitas a normas previstas em legislação própria.
+
+Art. 4o Aplicam-se às licitações e contratos disciplinados por esta Lei as disposições constantes dos arts. 42 a 49 da Lei no 8.078, de 11 de setembro de 1990 (Código de Defesa do Consumidor).
+
+Art. 5o Na aplicação desta Lei, serão observados os princípios da legalidade, da impessoalidade, da moralidade, da publicidade, da eficiência, do interesse público, da probidade administrativa, da igualdade, do planejamento, da transparência, da eficácia, da segregação de funções, da motivação, da vinculação ao edital, do julgamento objetivo, da segurança jurídica, da razoabilidade, da competitividade, da proporcionalidade, da celeridade, da economicidade e do desenvolvimento nacional sustentável, assim como as disposições do Decreto-Lei no 4.657, de 4 de setembro de 1942 (Lei de Introdução às Normas do Direito Brasileiro).
+
+CAPÍTULO II
+DAS DEFINIÇÕES
+
+Art. 6o Para os fins desta Lei, consideram-se:
+I - órgão: unidade de atuação integrante da estrutura da Administração Pública;
+II - entidade: unidade de atuação dotada de personalidade jurídica;
+III - Administração Pública: administração direta e indireta da União, dos Estados, do Distrito Federal e dos Municípios, inclusive as entidades com personalidade jurídica de direito privado sob controle do poder público e as fundações por ele instituídas ou mantidas;
+IV - Administração: órgão ou entidade por meio do qual a Administração Pública atua;
+V - agente público: indivíduo que, em virtude de eleição, nomeação, designação, contratação ou qualquer outra forma de investidura ou vínculo, exerce mandato, cargo, emprego ou função em pessoa jurídica integrante da Administração Pública;
+VI - autoridade: agente público dotado de poder de decisão;
+VII - contratante: pessoa jurídica integrante da Administração Pública responsável pela contratação;
+VIII - contratado: pessoa física ou jurídica, ou consórcio de pessoas jurídicas, signatária de contrato com a Administração;
+IX - licitante: pessoa física ou jurídica, ou consórcio de pessoas jurídicas, que participa ou manifesta a intenção de participar de processo licitatório, sendo-lhe equiparável, para os fins desta Lei, o fornecedor ou o prestador de serviço que, em atendimento a solicitação da Administração, oferece proposta;
+X - compra: aquisição remunerada de bens para fornecimento de uma só vez ou parceladamente, considerada imediata aquela com prazo de entrega de até 30 (trinta) dias da ordem de fornecimento.
+
+Art. 7o Caberá à autoridade máxima do órgão ou da entidade, ou a quem as normas de organização administrativa indicarem, promover gestão por competências e designar agentes públicos para o desempenho das funções essenciais à execução desta Lei que preencham os seguintes requisitos:
+I - sejam, preferencialmente, servidor efetivo ou empregado público dos quadros permanentes da Administração Pública;
+II - tenham atribuições relacionadas a licitações e contratos ou possuam formação compatível ou qualificação atestada por certificação profissional emitida por escola de governo criada e mantida pelo poder público;
+III - não sejam cônjuge ou companheiro de licitantes ou contratados habituais da Administração nem tenham com eles vínculo de parentesco, colateral ou por afinidade, até o terceiro grau, ou de natureza técnica, comercial, econômica, financeira, trabalhista e civil.
+§ 1o A autoridade referida no caput deste artigo deverá observar o princípio da segregação de funções, vedada a designação do mesmo agente público para atuação simultânea em funções mais suscetíveis a riscos, de modo a reduzir a possibilidade de ocultação de erros e de ocorrência de fraudes na respectiva contratação.
+§ 2o O disposto neste artigo, inclusive os seus §§ 1o e 3o, aplica-se a agentes públicos que exerçam funções essenciais à execução desta Lei.
+Parágrafo único. Este é um parágrafo de teste para verificar o regex de parágrafo único.
+
+Art. 8o A licitação será conduzida por agente de contratação, pessoa designada pela autoridade competente, entre servidores efetivos ou empregados públicos dos quadros permanentes da Administração Pública, para tomar decisões, acompanhar o trâmite da licitação, dar impulso ao procedimento licitatório e executar quaisquer atividades necessárias ao bom andamento do certame até a homologação.
+
+Art. 9o É vedado ao agente público designado para atuar na área de licitações e contratos, ressalvados os casos previstos em lei:
+I - admitir, prever, incluir ou tolerar, nos atos de convocação, cláusulas ou condições que comprometam, restrinjam ou frustrem o seu caráter competitivo em decorrência de qualquer circunstância impertinente ou irrelevante para o específico objeto do contrato, ressalvados os casos de que trata o art. 14 desta Lei;
+II - estabelecer tratamento diferenciado de natureza comercial, legal, trabalhista, previdenciária ou qualquer outra entre empresas brasileiras e estrangeiras, inclusive no que se refere a moeda, modalidade e local de pagamento, mesmo quando envolvido financiamento de agência internacional.
+
+Art. 10. A partir da data de publicação desta Lei, o Diário Oficial da União é obrigatoriamente veiculado por meio de sítio eletrônico mantido pelo Governo federal, com acesso livre, na forma de regulamento.
+Parágrafo único. Os Diários Oficiais dos Estados, do Distrito Federal e dos Municípios serão, preferencialmente, veiculados da forma prevista no caput deste artigo.
