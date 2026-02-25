@@ -1,18 +1,22 @@
 """
 govy.matching.parsers — Regex patterns e funções de parsing para matching.
 
-Duas funções principais:
+Três funções principais:
 1. parse_medicine_requirement_from_item_description()
    - Interpreta a descrição já extraída do item (vinda do BD/extract_items)
    - NÃO extrai itens do edital (isso é papel do extract_items.py)
+   - Cadeia: estruturado → semi-estruturado → texto livre (fallback)
 
 2. extract_presentations_from_bula_text()
    - Detecta apresentações (concentração, forma, volume) em texto de bula/ficha
+
+3. _guess_principle_from_text() [interno]
+   - Heurística conservadora para inferir princípio ativo em texto livre
 """
 from __future__ import annotations
 
 import re
-from typing import List
+from typing import List, Optional, Tuple
 
 from .models import ItemRequirement, Presentation
 from .normalizers import normalize_text, parse_number
@@ -22,7 +26,8 @@ from .normalizers import normalize_text, parse_number
 # REGEX PATTERNS
 # =============================================================================
 
-# Item do edital/TR estruturado: PRINCIPIO; 10 MG/ML; FORMA <PKG> <VOL> ML
+# --- ITEM: 1ª tentativa — estruturado com ';' ---
+# PRINCIPIO; 10 MG/ML; FORMA <PKG> <VOL> ML
 RE_ITEM_STRUCTURED = re.compile(
     r"""(?is)^\s*
     (?P<principio>[^;]+?)\s*;\s*
@@ -36,6 +41,27 @@ RE_ITEM_STRUCTURED = re.compile(
     """,
     re.VERBOSE,
 )
+
+# --- ITEM: 2ª tentativa — semi-estruturado (';' mas espaços/tabs estranhos) ---
+# Mais permissivo: aceita vol até 4 dígitos e separadores irregulares antes do pkg
+RE_ITEM_SEMI_STRUCTURED = re.compile(
+    r"""(?is)^\s*
+    (?P<principio>[^;]+?)\s*;\s*
+    (?P<conc_num>\d{1,4}(?:\.\d{3})*(?:,\d+)?)\s*
+    (?P<conc_unit>MG|MCG|G|UI)\s*/\s*
+    (?P<conc_den>ML|L)\s*;\s*
+    (?P<forma>.+?)\s+
+    (?P<pkg>FRASCO-AMPOLA|AMPOLA|FRASCO|SERINGA)\s*[- ]*\s*
+    (?P<vol>\d{1,4}(?:,\d+)?)\s*
+    (?P<vol_unit>ML|L)\s*$
+    """,
+    re.VERBOSE,
+)
+
+# --- ITEM: 3ª tentativa (texto livre) usa RE_CONC, RE_FORM, RE_PKG_VOL abaixo ---
+
+# Delimitadores comuns em descrições de item
+RE_DELIMS = re.compile(r"[;|\t]+")
 
 # Bula: dose/volume explícito (ex: 500 MG / 50 ML)
 RE_DOSE_PER_VOL = re.compile(
@@ -74,23 +100,8 @@ RE_PKG_VOL = re.compile(
 # PARSERS
 # =============================================================================
 
-def parse_medicine_requirement_from_item_description(item_raw: str) -> ItemRequirement:
-    """
-    Faz parsing da descrição do item do edital/TR (texto MAIS completo).
-
-    Espera formato estruturado com separadores ';' e apresentação com volume.
-    Exemplo: "RITUXIMABE; 10 MG/ML; SOLUÇÃO INJETÁVEL  FRASCO-AMPOLA 50 ML"
-
-    Raises:
-        ValueError: se o texto não casa no padrão estruturado MVP.
-    """
-    raw_norm = normalize_text(item_raw)
-    m = RE_ITEM_STRUCTURED.match(raw_norm)
-    if not m:
-        raise ValueError(
-            f"Item nao casa no padrao estruturado MVP: {item_raw!r}"
-        )
-
+def _build_requirement_from_regex_match(item_raw: str, m: re.Match) -> ItemRequirement:
+    """Constrói ItemRequirement a partir de um match de regex estruturada/semi."""
     return ItemRequirement(
         raw=item_raw,
         principle=m.group("principio").strip(),
@@ -101,6 +112,104 @@ def parse_medicine_requirement_from_item_description(item_raw: str) -> ItemRequi
         pkg=normalize_text(m.group("pkg")),
         vol=parse_number(m.group("vol")),
         vol_unit=normalize_text(m.group("vol_unit")),
+    )
+
+
+def _guess_principle_from_text(
+    raw_norm: str, conc_span: Optional[Tuple[int, int]] = None
+) -> str:
+    """
+    Heurística conservadora para inferir princípio ativo em texto livre.
+
+    Estratégia:
+    1. Se houver delimitador (';', '|', tab), usa texto antes do primeiro delimitador
+       desde que o próximo segmento contenha concentração.
+    2. Senão, usa o texto antes da posição da concentração encontrada.
+
+    Raises:
+        ValueError: se não for possível inferir com confiança.
+    """
+    parts = [p.strip() for p in RE_DELIMS.split(raw_norm) if p.strip()]
+    if parts:
+        # Se parts[0] não contém concentração e parts[1] sim → parts[0] é princípio
+        if len(parts) >= 2 and RE_CONC.search(parts[1]):
+            return parts[0]
+        # Se parts[0] é "texto razoável" (>=4 chars, sem conc), usa ele
+        if not RE_CONC.search(parts[0]) and len(parts[0]) >= 4:
+            return parts[0]
+
+    # Sem delimitador: usa trecho antes da concentração
+    if conc_span:
+        start, _ = conc_span
+        prefix = raw_norm[:start].strip()
+        prefix = re.sub(r"[-:,]+$", "", prefix).strip()
+        if prefix and len(prefix) >= 4:
+            return prefix
+
+    raise ValueError("Fallback: nao foi possivel inferir principio ativo.")
+
+
+def parse_medicine_requirement_from_item_description(item_raw: str) -> ItemRequirement:
+    """
+    Faz parsing da descrição do item do edital/TR (texto MAIS completo).
+
+    Cadeia de tentativas:
+    1. Estruturado: "PRINCIPIO; CONC; FORMA PKG VOL"
+    2. Semi-estruturado: idem mas com espaços/separadores irregulares
+    3. Texto livre: campos detectados por regex individuais em qualquer ordem
+
+    Exemplos aceitos:
+        "RITUXIMABE; 10 MG/ML; SOLUÇÃO INJETÁVEL  FRASCO-AMPOLA 50 ML"
+        "RITUXIMABE 10MG/ML SOLUCAO INJETAVEL FRASCO AMPOLA 50 ML"
+        "SULFATO DE VINCRISTINA - 1 MG/ML - SOLUCAO INJETAVEL - FRASCO-AMPOLA 1ML"
+
+    Raises:
+        ValueError: se algum campo obrigatório (princípio, concentração, forma,
+                    embalagem, volume) não for encontrado em nenhuma tentativa.
+    """
+    raw_norm = normalize_text(item_raw)
+
+    # 1) Estruturado
+    m = RE_ITEM_STRUCTURED.match(raw_norm)
+    if m:
+        return _build_requirement_from_regex_match(item_raw, m)
+
+    # 2) Semi-estruturado
+    m = RE_ITEM_SEMI_STRUCTURED.match(raw_norm)
+    if m:
+        return _build_requirement_from_regex_match(item_raw, m)
+
+    # 3) Texto livre — campo a campo
+    conc_m = RE_CONC.search(raw_norm)
+    if not conc_m:
+        raise ValueError(
+            f"Fallback: concentracao (MG/ML etc.) nao encontrada: {item_raw!r}"
+        )
+
+    pkg_m = RE_PKG_VOL.search(raw_norm)
+    if not pkg_m:
+        raise ValueError(
+            f"Fallback: embalagem/volume (FRASCO-AMPOLA X ML) nao encontrado: {item_raw!r}"
+        )
+
+    form_m = RE_FORM.search(raw_norm)
+    if not form_m:
+        raise ValueError(
+            f"Fallback: forma farmaceutica nao encontrada: {item_raw!r}"
+        )
+
+    principle = _guess_principle_from_text(raw_norm, conc_span=conc_m.span())
+
+    return ItemRequirement(
+        raw=item_raw,
+        principle=principle,
+        conc_num=parse_number(conc_m.group("num")),
+        conc_unit=normalize_text(conc_m.group("num_unit")),
+        conc_den_unit=normalize_text(conc_m.group("den_unit")),
+        form=normalize_text(form_m.group(1)),
+        pkg=normalize_text(pkg_m.group("pkg")),
+        vol=parse_number(pkg_m.group("vol")),
+        vol_unit=normalize_text(pkg_m.group("unit")),
     )
 
 
