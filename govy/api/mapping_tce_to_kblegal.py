@@ -142,6 +142,12 @@ def _build_content(parser: Dict[str, Any]) -> str:
         if dispositivo == MISSING or key_cit not in dispositivo:
             parts.append(f"CITAÇÃO PRINCIPAL: {key_cit}")
 
+    # Fallback: texto completo do PDF (para tribunais com text_strategy=full_text)
+    if not parts:
+        raw_text = parser.get("text", "")
+        if raw_text and len(raw_text.strip()) >= 50:
+            parts.append(raw_text.strip())
+
     return "\n\n".join(parts) if parts else ""
 
 

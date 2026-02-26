@@ -103,6 +103,8 @@ def handle_enqueue_tce(req_body: dict) -> dict:
             continue
         if blob.name.lower().endswith(".voto.pdf"):
             continue
+        if blob.name.lower().endswith("_relatorio.pdf"):
+            continue
 
         # Nome determinístico do JSON de saída
         json_key = _blob_path_to_json_key(blob.name)
@@ -148,26 +150,69 @@ def _blob_path_to_json_key(blob_path: str) -> str:
 
 
 def _normalize_scraper_fields(meta: dict) -> dict:
-    """Normaliza campos do scraper JSON para nomes esperados pelo merge."""
+    """Normaliza campos do scraper JSON para nomes esperados pelo merge.
+
+    Suporta formatos de vários scrapers:
+    - Genérico: numero_processo, data_decisao, relator, colegiado, ...
+    - TCE-RS: nr_processo_fmt, dt_sessao, magistrado, orgao_julgador, ...
+    """
     norm = {}
+    # processo
     if meta.get("numero_processo"):
         norm["processo"] = meta["numero_processo"]
+    elif meta.get("nr_processo_fmt"):
+        norm["processo"] = meta["nr_processo_fmt"]
+    # acordao_numero
     if meta.get("numero_acordao"):
         norm["acordao_numero"] = meta["numero_acordao"]
+    # julgamento_date
     if meta.get("data_decisao"):
         norm["julgamento_date"] = meta["data_decisao"]
+    elif meta.get("dt_sessao"):
+        # ISO datetime → DD/MM/YYYY
+        dt_raw = meta["dt_sessao"]
+        if isinstance(dt_raw, str) and len(dt_raw) >= 10:
+            try:
+                from datetime import datetime as _dt
+                parsed = _dt.fromisoformat(dt_raw.replace("Z", "+00:00"))
+                norm["julgamento_date"] = parsed.strftime("%d/%m/%Y")
+            except Exception:
+                norm["julgamento_date"] = dt_raw[:10]
+    # publication_date
     if meta.get("data_publicacao"):
         norm["publication_date"] = meta["data_publicacao"]
+    elif meta.get("publicacao_dt"):
+        dt_raw = meta["publicacao_dt"]
+        if isinstance(dt_raw, str) and len(dt_raw) >= 10:
+            try:
+                from datetime import datetime as _dt
+                parsed = _dt.fromisoformat(dt_raw.replace("Z", "+00:00"))
+                norm["publication_date"] = parsed.strftime("%d/%m/%Y")
+            except Exception:
+                norm["publication_date"] = dt_raw[:10]
+    # relator
     if meta.get("relator"):
         norm["relator"] = meta["relator"]
+    elif meta.get("magistrado"):
+        norm["relator"] = meta["magistrado"]
+    # orgao_julgador
     if meta.get("colegiado"):
         norm["orgao_julgador"] = meta["colegiado"]
+    elif meta.get("orgao_julgador"):
+        norm["orgao_julgador"] = meta["orgao_julgador"]
+    # ementa
     if meta.get("ementa_full"):
         norm["ementa"] = meta["ementa_full"]
+    elif meta.get("texto_ementa"):
+        norm["ementa"] = meta["texto_ementa"]
+    # tipo_processo
     if meta.get("tipo_processo"):
         norm["tipo_processo"] = meta["tipo_processo"]
+    # source_url
     if meta.get("link_detalhes"):
         norm["source_url"] = meta["link_detalhes"]
+    elif meta.get("link_decisao"):
+        norm["source_url"] = meta["link_decisao"]
     return norm
 
 
@@ -224,8 +269,10 @@ def handle_parse_tce_pdf(msg_json: str) -> dict:
         return {"status": "skipped", "reason": "pdf_too_small", "blob_path": blob_path}
 
     # 2. Parsear com tce_parser_v3
+    #    include_text=True quando text_strategy="full_text" (PDFs curtos sem seções padrão)
+    _include_text = cfg.text_strategy == "full_text"
     try:
-        parser_output = parse_pdf_bytes(pdf_bytes, include_text=False)
+        parser_output = parse_pdf_bytes(pdf_bytes, include_text=_include_text)
         logger.info(f"[parse-tce] Parser OK - {sum(1 for v in parser_output.values() if v != '__MISSING__' and v != [])}/25 campos")
     except Exception as e:
         logger.error(f"[parse-tce] Erro no parser: {e}")
@@ -236,7 +283,8 @@ def handle_parse_tce_pdf(msg_json: str) -> dict:
     #     Saves cost of scraper-metadata fetch + mapping + blob write.
     _MISSING = "__MISSING__"
     _LEGAL_MARKERS = ("EMENTA", "DISPOSITIVO", "ACORDAM", "ACÓRDÃO",
-                      "RELATÓRIO", "VOTO", "DECIDE")
+                      "RELATÓRIO", "VOTO", "DECIDE",
+                      "TRIBUNAL DE CONTAS", "DECISÃO N.")
     _em = parser_output.get("ementa", _MISSING)
     _di = parser_output.get("dispositivo", _MISSING)
     _kc = parser_output.get("key_citation", _MISSING)
