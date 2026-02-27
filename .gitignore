@@ -33,17 +33,12 @@ scripts/test_*
 scripts/validate_*
 scripts/microbatch_manifest_example.json
 
-# === Snapshots & secrets ===
+# --- local artifacts (do not commit) ---
+out/
+outputs/
 snapshots/
 nul
-
-# === Ephemeral output data (large JSON audit/debug files) ===
-outputs/*_reconciliation*.json
-outputs/*_terminal_exceptions*.json
-outputs/*_audit_*.json
-outputs/*_dryrun*.json
-outputs/*_inventory*.json
-outputs/doctrine_test_output.json
-outputs/*_missing*.json
-outputs/*_missing*.txt
-outputs/*_progress*.json
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

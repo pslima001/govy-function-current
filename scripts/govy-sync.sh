@@ -1,87 +1,87 @@
 #!/usr/bin/env bash
-# govy-sync.sh — Auto-sync WIP branch between machines
-# Usage: bash scripts/govy-sync.sh [pull|push|full]
-# Default: full (pull + commit-if-changed + push)
+# govy-sync.sh — Sync working tree to wip/local branch for multi-computer access
+# Usage: bash scripts/govy-sync.sh [full|push|pull]
+#   full  = pull + commit + push (default)
+#   push  = commit + push only
+#   pull  = pull only
 
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-cd "$REPO_DIR"
-
-BRANCH="wip/local"
 MODE="${1:-full}"
-TIMESTAMP="$(date '+%Y-%m-%d %H:%M:%S')"
-HOSTNAME="$(hostname)"
+BRANCH="wip/local"
+CURRENT_BRANCH=$(git branch --show-current)
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+HOSTNAME=$(hostname)
 
 log() { echo "[govy-sync] $*"; }
 
-# Ensure we're on the right branch
-CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$CURRENT_BRANCH" != "$BRANCH" ]; then
-    log "ERROR: Not on $BRANCH (currently on $CURRENT_BRANCH). Aborting."
-    exit 1
+# Save current branch to restore later
+if [ "$CURRENT_BRANCH" = "$BRANCH" ]; then
+    ON_WIP=true
+else
+    ON_WIP=false
 fi
 
-do_pull() {
+cleanup() {
+    if [ "$ON_WIP" = false ] && [ "$(git branch --show-current)" = "$BRANCH" ]; then
+        git checkout "$CURRENT_BRANCH" --quiet 2>/dev/null || true
+    fi
+}
+trap cleanup EXIT
+
+# --- PULL ---
+if [ "$MODE" = "full" ] || [ "$MODE" = "pull" ]; then
     log "Pulling from origin/$BRANCH..."
-    git fetch origin "$BRANCH" 2>/dev/null || {
-        log "Remote branch not found yet — skip pull."
-        return 0
-    }
-    # Rebase only if clean
-    if git diff --quiet && git diff --cached --quiet; then
-        git rebase "origin/$BRANCH" 2>/dev/null || {
-            log "Rebase conflict — aborting rebase, will merge instead."
-            git rebase --abort
-            git merge "origin/$BRANCH" --no-edit || {
-                log "ERROR: Merge conflict. Resolve manually."
-                exit 1
-            }
-        }
+    git fetch origin "$BRANCH" --quiet 2>/dev/null || true
+    if [ "$ON_WIP" = true ]; then
+        git pull origin "$BRANCH" --quiet --no-edit 2>/dev/null || true
     else
-        log "Working tree dirty — stash + pull + unstash."
-        git stash push -m "govy-sync-auto-stash"
-        git rebase "origin/$BRANCH" 2>/dev/null || {
-            git rebase --abort
-            git merge "origin/$BRANCH" --no-edit || {
-                git stash pop
-                log "ERROR: Merge conflict. Resolve manually."
-                exit 1
-            }
-        }
-        git stash pop || log "WARN: stash pop had conflicts — check files."
+        # Merge remote wip/local into local wip/local without switching
+        git fetch origin "$BRANCH":"$BRANCH" --quiet 2>/dev/null || true
     fi
     log "Pull done."
-}
+fi
 
-do_push() {
-    # Check if there are changes to commit
-    if git diff --quiet && git diff --cached --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+# --- COMMIT + PUSH ---
+if [ "$MODE" = "full" ] || [ "$MODE" = "push" ]; then
+    # Switch to wip/local
+    if [ "$ON_WIP" = false ]; then
+        # Stash any uncommitted/untracked changes on current branch
+        STASH_NEEDED=false
+        if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+            STASH_NEEDED=true
+            git stash push --include-untracked -m "govy-sync-temp" --quiet
+        fi
+
+        # Merge current branch state into wip/local (prefer current branch on conflicts)
+        git checkout "$BRANCH" --quiet
+        git merge "$CURRENT_BRANCH" -X theirs --no-edit --quiet 2>/dev/null || {
+            # If merge still fails, accept all theirs
+            git checkout --theirs . 2>/dev/null || true
+            git add -A
+        }
+    fi
+
+    # Add all changes and commit
+    git add -A
+    if git diff --cached --quiet; then
         log "No changes to commit."
     else
-        git add -A
-        git commit -m "$(cat <<EOF
-wip: auto-sync from $HOSTNAME at $TIMESTAMP
-
-Co-Authored-By: govy-sync <noreply@govy.dev>
-EOF
-)"
-        log "Committed WIP."
+        git commit -m "wip: auto-sync from $HOSTNAME at $TIMESTAMP" --quiet
+        log "Committed changes."
     fi
 
     # Push
-    git push -u origin "$BRANCH" 2>/dev/null || {
-        log "Push failed — trying with force-with-lease..."
-        git push --force-with-lease origin "$BRANCH"
-    }
+    git push origin "$BRANCH" --quiet 2>/dev/null
     log "Push done."
-}
 
-case "$MODE" in
-    pull)  do_pull ;;
-    push)  do_push ;;
-    full)  do_pull; do_push ;;
-    *)     log "Usage: govy-sync.sh [pull|push|full]"; exit 1 ;;
-esac
+    # Switch back
+    if [ "$ON_WIP" = false ]; then
+        git checkout "$CURRENT_BRANCH" --quiet
+        if [ "$STASH_NEEDED" = true ]; then
+            git stash pop --quiet 2>/dev/null || true
+        fi
+    fi
+fi
 
-log "Sync complete ($MODE) at $TIMESTAMP."
+log "Sync complete ($MODE) at $TIMESTAMP"

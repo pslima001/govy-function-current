@@ -3,12 +3,19 @@ GOVY - Doctrine v2 -> KB Legal Indexer (A2 - Governance + OCR Gate)
 ====================================================================
 Indexa semantic_chunks (e opcionalmente raw_chunks como fallback)
 do doctrine_processed_v2 no indice kb-legal.
+<<<<<<< Updated upstream
+
+Respeita configs/doctrine_policy.json para governanca de citabilidade.
+Inclui OCR quality gate para raw_chunks (check_gibberish_quality).
+=======
+>>>>>>> Stashed changes
 
 Respeita configs/doctrine_policy.json para governanca de citabilidade.
 Inclui OCR quality gate para raw_chunks (check_gibberish_quality).
 
-Usa diretamente index_chunks() do handler (Golden Path).
-NAO passa pelo endpoint HTTP - evita problemas de envelope/formato.
+FAIL-CLOSED: aborta se policy nao carregar (a menos que --allow-missing-policy).
+
+Usa diretamente Azure Search SDK (sem depender de azure.functions).
 
 Uso:
   # Indexar um blob especifico:
@@ -23,7 +30,11 @@ Uso:
     [--generate-embeddings true|false] \
     [--dry-run]
 
+<<<<<<< Updated upstream
   # Indexar usando raw_chunks como fallback:
+=======
+  # Indexar usando raw_chunks como fallback (com OCR quality gate):
+>>>>>>> Stashed changes
   python scripts/kb/index_doctrine_v2_to_kblegal.py \
     --batch --use-raw-fallback \
     [--dry-run]
@@ -60,7 +71,11 @@ ARGUMENT_ROLE_CATALOG_V1 = {
 DEFAULT_PROCESSED_CONTAINER = "kb-doutrina-processed"
 POLICY_PATH = Path(__file__).resolve().parent.parent.parent / "configs" / "doctrine_policy.json"
 
+<<<<<<< Updated upstream
 # Stopwords pt-BR mínimas para detecção de gibberish (texto jurídico)
+=======
+# Stopwords pt-BR para detecção de gibberish (texto jurídico)
+>>>>>>> Stashed changes
 _STOPWORDS_PTBR = frozenset({
     "a", "à", "ao", "aos", "as", "às", "até",
     "com", "como", "contra",
@@ -72,7 +87,10 @@ _STOPWORDS_PTBR = frozenset({
     "que", "qual", "quando",
     "se", "sem", "ser", "seu", "sua", "são",
     "um", "uma",
+<<<<<<< Updated upstream
     # Termos jurídicos frequentes
+=======
+>>>>>>> Stashed changes
     "art", "lei", "contrato", "contratos", "licitação", "licitações",
     "deve", "pode", "será", "sobre", "caso", "forma", "prazo",
     "público", "pública", "públicos", "públicas",
@@ -98,6 +116,7 @@ def _shorten(s: str, max_len: int = 80) -> str:
     return s[: max_len - 1].rstrip() + "..."
 
 
+<<<<<<< Updated upstream
 def load_doctrine_policy() -> Dict[str, Any]:
     """Carrega doctrine_policy.json. Retorna {} se nao existir."""
     if POLICY_PATH.exists():
@@ -105,11 +124,40 @@ def load_doctrine_policy() -> Dict[str, Any]:
             return json.load(f)
     print(f"[WARN] Policy nao encontrada em {POLICY_PATH} - usando defaults")
     return {}
+=======
+def load_doctrine_policy(allow_missing: bool = False) -> Tuple[Dict[str, Any], bool]:
+    """
+    Carrega doctrine_policy.json. Retorna (policy, loaded).
+    FAIL-CLOSED: se nao existir e allow_missing=False, aborta.
+    """
+    abs_path = POLICY_PATH.resolve()
+    if abs_path.exists():
+        try:
+            with open(abs_path, encoding="utf-8") as f:
+                policy = json.load(f)
+            print(f"[POLICY] Carregada de {abs_path}")
+            return policy, True
+        except Exception as e:
+            print(f"[FATAL] Erro ao parsear {abs_path}: {e}")
+            sys.exit(1)
+
+    # Policy não encontrada
+    print(f"[WARN] Policy NAO encontrada em {abs_path}")
+    if not allow_missing:
+        print("[FATAL] Abortando (fail-closed). Use --allow-missing-policy para forcar.")
+        sys.exit(1)
+
+    print("[WARN] --allow-missing-policy ativo: todas as obras serao KNOWLEDGE_ONLY, is_citable=false")
+    return {}, False
+>>>>>>> Stashed changes
 
 
 def identify_work(source_blob_name: str) -> str:
     """Extrai o identificador da obra a partir do blob_name da fonte raw."""
+<<<<<<< Updated upstream
     # source.blob_name format: "marcal/comentarios_a_lei_.../.../doc_metadata.json"
+=======
+>>>>>>> Stashed changes
     if "/" in source_blob_name:
         return source_blob_name.split("/")[0]
     return "unknown"
@@ -151,6 +199,7 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
     Detecta gibberish textual (palavras sem sentido de OCR ruim).
 
     Retorna (passed, reject_reason, metrics).
+<<<<<<< Updated upstream
     Se passed=True, reject_reason="" e metrics contém os valores calculados.
 
     Calibrado com dados reais pt-BR jurídico (2026-02-27):
@@ -158,16 +207,27 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
       stopword ~0.37-0.45, vowel ~0.47-0.50
     - Gibberish OCR: single_char ~0.13-0.18, short_token ~0.33-0.39,
       stopword ~0.33-0.37
+=======
+
+    Calibrado com dados reais pt-BR jurídico (2026-02-27):
+    - Texto limpo: single_char ~0.07-0.11, noise_score ~0.35-0.42, stopword ~0.37-0.45
+    - Gibberish OCR: single_char ~0.13-0.18, noise_score ~0.47-0.55, stopword ~0.33-0.37
+>>>>>>> Stashed changes
     """
     metrics: Dict[str, float] = {}
 
     if not text or len(text) < min_chars:
         return False, "TOO_SHORT", {"len": len(text) if text else 0}
 
+<<<<<<< Updated upstream
     # Normalizar: remover soft-hyphen
     clean = text.replace("\xad", "")
 
     # Tokenizar por espaço, strip de pontuação nas bordas
+=======
+    clean = text.replace("\xad", "")
+
+>>>>>>> Stashed changes
     raw_tokens = clean.split()
     tokens = []
     for t in raw_tokens:
@@ -183,29 +243,44 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
     alpha_tokens = [t for t in tokens if t.isalpha()]
     n_alpha = len(alpha_tokens)
 
+<<<<<<< Updated upstream
     # 1. single_char_rate
+=======
+>>>>>>> Stashed changes
     single_char = sum(1 for t in tokens if len(t) == 1)
     single_char_rate = single_char / n
     metrics["single_char_rate"] = round(single_char_rate, 4)
 
+<<<<<<< Updated upstream
     # 2. short_token_rate (len <= 2)
+=======
+>>>>>>> Stashed changes
     short_tokens = sum(1 for t in tokens if len(t) <= 2)
     short_token_rate = short_tokens / n
     metrics["short_token_rate"] = round(short_token_rate, 4)
 
+<<<<<<< Updated upstream
     # 3. digit_token_rate (informational, not gated)
     digit_tokens = sum(1 for t in tokens if t.isdigit())
     digit_token_rate = digit_tokens / n
     metrics["digit_token_rate"] = round(digit_token_rate, 4)
 
     # 4. avg_token_len (tokens alfabéticos)
+=======
+    digit_tokens = sum(1 for t in tokens if t.isdigit())
+    metrics["digit_token_rate"] = round(digit_tokens / n, 4)
+
+>>>>>>> Stashed changes
     if n_alpha > 0:
         avg_token_len = sum(len(t) for t in alpha_tokens) / n_alpha
     else:
         avg_token_len = 0.0
     metrics["avg_token_len"] = round(avg_token_len, 2)
 
+<<<<<<< Updated upstream
     # 5. vowel_ratio (em tokens alfabéticos)
+=======
+>>>>>>> Stashed changes
     vowels = set("aeiouáàâãéêíóôõúç")
     if n_alpha > 0:
         alpha_chars = "".join(alpha_tokens).lower()
@@ -215,18 +290,26 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
         vowel_ratio = 0.0
     metrics["vowel_ratio"] = round(vowel_ratio, 4)
 
+<<<<<<< Updated upstream
     # 6. stopword_hit_rate
+=======
+>>>>>>> Stashed changes
     tokens_lower = [t.lower() for t in tokens]
     stopword_hits = sum(1 for t in tokens_lower if t in _STOPWORDS_PTBR)
     stopword_hit_rate = stopword_hits / n
     metrics["stopword_hit_rate"] = round(stopword_hit_rate, 4)
 
+<<<<<<< Updated upstream
     # --- GATES ---
+=======
+    # --- GATES (calibrados 2026-02-27, sem digit gate) ---
+>>>>>>> Stashed changes
 
     # Gate 1: gibberish pesado (chars soltos demais)
     if single_char_rate > 0.16:
         return False, "HIGH_SINGLE_CHAR_RATE", metrics
 
+<<<<<<< Updated upstream
     # Gate 2: texto sem estrutura linguística (poucas stopwords pt-BR)
     if stopword_hit_rate < 0.25:
         return False, "LOW_STOPWORD_HIT_RATE", metrics
@@ -238,6 +321,17 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
     # Gate 4: combinação single_char + short_token alta = gibberish moderado
     # Texto limpo: single ~0.09 + short ~0.30 = ~0.39
     # Garbage: single ~0.15 + short ~0.36 = ~0.51
+=======
+    # Gate 2: texto sem estrutura linguística
+    if stopword_hit_rate < 0.25:
+        return False, "LOW_STOPWORD_HIT_RATE", metrics
+
+    # Gate 3: gibberish consonantal
+    if vowel_ratio < 0.33:
+        return False, "LOW_VOWEL_RATIO", metrics
+
+    # Gate 4: combinação single_char + short_token
+>>>>>>> Stashed changes
     noise_score = single_char_rate + short_token_rate
     metrics["noise_score"] = round(noise_score, 4)
     if noise_score > 0.46:
@@ -325,7 +419,7 @@ def make_kb_doc_from_semantic(
     coverage = ch.get("coverage_status") or ""
     authority = authority_for_coverage(coverage)
     if authority is None:
-        return None  # NAO indexar INCERTO
+        return None
 
     chunk_id = ch.get("id")
     if not chunk_id:
@@ -340,14 +434,20 @@ def make_kb_doc_from_semantic(
 
     secao = map_role_to_secao(role)
     pergunta = (ch.get("pergunta_ancora") or "").strip()
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     citation = f"Doutrina - {procedural_stage} - {_shorten(pergunta, 80)}"
 
     content = build_content_from_semantic(ch)
     if not content:
         return None
 
+<<<<<<< Updated upstream
     # Governanca de citabilidade
+=======
+>>>>>>> Stashed changes
     can_cite = work_policy.get("can_cite_in_defense", False)
     if can_cite:
         is_citable, citable_reason = check_chunk_quality(content, global_policy)
@@ -355,7 +455,11 @@ def make_kb_doc_from_semantic(
         is_citable = False
         citable_reason = "OBRA_NAO_CITAVEL"
 
+<<<<<<< Updated upstream
     doc: Dict[str, Any] = {
+=======
+    return {
+>>>>>>> Stashed changes
         "chunk_id": str(chunk_id).replace("::", "--"),
         "doc_type": "doutrina",
         "content": content,
@@ -368,14 +472,58 @@ def make_kb_doc_from_semantic(
         "title": pergunta or citation,
         "source": f"doutrina-processed/{processed_blob_name}",
         "claim_pattern": f"argument_role={role};tema={tema_principal};coverage={coverage}",
+<<<<<<< Updated upstream
         # Governanca (v1)
+=======
+>>>>>>> Stashed changes
         "is_citable": is_citable,
         "citable_reason": citable_reason,
         "source_work": work_key,
     }
 
-    return doc
 
+def make_kb_doc_from_raw(
+    ch: Dict[str, Any],
+    processed_blob_name: str,
+    internal_year: int,
+    work_key: str,
+    chunk_index: int,
+) -> Optional[Dict[str, Any]]:
+    """Transforma um raw_chunk em documento kb-legal (KNOWLEDGE_ONLY, nunca citavel)."""
+
+    content = build_content_from_raw(ch)
+    if not content or len(content) < 100:
+        return None
+
+    chunk_id = ch.get("chunk_id") or ch.get("id")
+    if not chunk_id:
+        source_sha = ch.get("source_sha", "unknown")
+        chunk_id = f"raw--{source_sha}--{chunk_index}"
+
+    procedural_stage = (ch.get("procedural_stage") or "").strip().upper() or "NAO_CLARO"
+
+    return {
+        "chunk_id": str(chunk_id).replace("::", "--"),
+        "doc_type": "doutrina",
+        "content": content,
+        "citation": f"Doutrina (raw) - {work_key}",
+        "year": int(internal_year) if internal_year and internal_year > 0 else 0,
+        "authority_score": 0.40,
+        "is_current": True,
+        "secao": "contexto_minimo",
+        "procedural_stage": procedural_stage,
+        "title": f"Doutrina raw - {work_key} - chunk {chunk_index}",
+        "source": f"doutrina-processed/{processed_blob_name}",
+        "claim_pattern": f"chunk_type=raw;work={work_key}",
+        "is_citable": False,
+        "citable_reason": "RAW_CHUNK_SEM_ENRICHMENT",
+        "source_work": work_key,
+    }
+
+
+# =============================================================================
+# LOADERS
+# =============================================================================
 
 def make_kb_doc_from_raw(
     ch: Dict[str, Any],
@@ -437,7 +585,10 @@ def try_normalize(docs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         from govy.utils.juris_constants import normalize_chunk_for_upsert
         return [normalize_chunk_for_upsert(d) for d in docs]
     except ImportError:
+<<<<<<< Updated upstream
         # Fallback: tenta via packages path
+=======
+>>>>>>> Stashed changes
         try:
             sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
             from packages.govy_platform.utils.juris_constants import normalize_chunk_for_upsert
@@ -477,7 +628,11 @@ def _generate_embedding(text: str) -> List[float]:
 
 
 def _index_chunks_direct(chunks: List[Dict], generate_embeddings: bool = True) -> Dict[str, Any]:
+<<<<<<< Updated upstream
     """Indexa chunks diretamente via Azure Search SDK (sem depender de azure.functions)."""
+=======
+    """Indexa chunks diretamente via Azure Search SDK."""
+>>>>>>> Stashed changes
     from azure.search.documents import SearchClient
     from azure.core.credentials import AzureKeyCredential
 
@@ -495,7 +650,10 @@ def _index_chunks_direct(chunks: List[Dict], generate_embeddings: bool = True) -
 
     for i, chunk in enumerate(chunks):
         try:
+<<<<<<< Updated upstream
             # Filtra apenas campos do indice
+=======
+>>>>>>> Stashed changes
             doc = {k: v for k, v in chunk.items() if k in INDEX_FIELDS}
             if generate_embeddings and doc.get("content"):
                 doc["embedding"] = _generate_embedding(doc["content"])
@@ -530,7 +688,11 @@ def process_blob(
     use_raw_fallback: bool,
     generate_embeddings: bool,
     dry_run: bool,
+<<<<<<< Updated upstream
 ) -> Dict[str, int]:
+=======
+) -> Dict[str, Any]:
+>>>>>>> Stashed changes
     """Processa um blob e retorna contadores."""
     payload = load_processed_v2(blob_service, container, blob_name)
 
@@ -538,7 +700,10 @@ def process_blob(
         print(f"  SKIP: kind={payload.get('kind')} (esperado doctrine_processed_v2)")
         return {"skipped_wrong_kind": 1}
 
+<<<<<<< Updated upstream
     # Identificar obra
+=======
+>>>>>>> Stashed changes
     source = payload.get("source") or {}
     raw_blob_name = source.get("blob_name", "")
     work_key = identify_work(raw_blob_name)
@@ -553,8 +718,15 @@ def process_blob(
     docs: List[Dict[str, Any]] = []
     skipped = 0
     used_raw = False
+<<<<<<< Updated upstream
 
     # Preferir semantic_chunks
+=======
+    raw_accepted = 0
+    raw_rejected = 0
+    raw_reject_reasons: Dict[str, int] = {}
+
+>>>>>>> Stashed changes
     if semantic_chunks:
         for ch in semantic_chunks:
             doc = make_kb_doc_from_semantic(
@@ -565,11 +737,15 @@ def process_blob(
             else:
                 skipped += 1
     elif use_raw_fallback and raw_chunks:
+<<<<<<< Updated upstream
         # Fallback: usar raw_chunks (KNOWLEDGE_ONLY) com OCR quality gate
         used_raw = True
         raw_accepted = 0
         raw_rejected = 0
         raw_reject_reasons: Dict[str, int] = {}
+=======
+        used_raw = True
+>>>>>>> Stashed changes
         for i, ch in enumerate(raw_chunks):
             content = build_content_from_raw(ch)
             passed, reason, metrics = check_gibberish_quality(content)
@@ -585,6 +761,7 @@ def process_blob(
             else:
                 skipped += 1
 
+<<<<<<< Updated upstream
     # Contadores de raw fallback (só existem se usou raw)
     _raw_accepted = raw_accepted if used_raw else 0
     _raw_rejected = raw_rejected if used_raw else 0
@@ -609,6 +786,25 @@ def process_blob(
             result_base["raw_accepted"] = _raw_accepted
             result_base["raw_rejected"] = _raw_rejected
             result_base["raw_reject_reasons"] = _raw_reject_reasons
+=======
+    # Blob-level gates
+    if used_raw and docs:
+        accepted_chars = sum(len(d.get("content", "")) for d in docs)
+        total_raw = len(raw_chunks)
+        if accepted_chars < 1200:
+            docs = []
+            raw_reject_reasons["BLOB_LOW_CHARS"] = raw_reject_reasons.get("BLOB_LOW_CHARS", 0) + 1
+        elif total_raw > 40 and raw_accepted / total_raw < 0.20:
+            docs = []
+            raw_reject_reasons["BLOB_LOW_RATIO"] = raw_reject_reasons.get("BLOB_LOW_RATIO", 0) + 1
+
+    if not docs:
+        result_base: Dict[str, Any] = {"empty": 1, "skipped": skipped, "work": work_key}
+        if used_raw:
+            result_base["raw_accepted"] = raw_accepted
+            result_base["raw_rejected"] = raw_rejected
+            result_base["raw_reject_reasons"] = raw_reject_reasons
+>>>>>>> Stashed changes
         return result_base
 
     citable_count = sum(1 for d in docs if d.get("is_citable"))
@@ -618,6 +814,7 @@ def process_blob(
             print(json.dumps(d, ensure_ascii=False, indent=2))
         if len(docs) > 2:
             print(f"  ... +{len(docs)-2} docs")
+<<<<<<< Updated upstream
         result_dry = {"dry_run_docs": len(docs), "skipped": skipped, "work": work_key, "is_citable_count": citable_count}
         if used_raw:
             result_dry["raw_accepted"] = _raw_accepted
@@ -629,6 +826,16 @@ def process_blob(
     docs = try_normalize(docs)
 
     # Indexar diretamente via Azure Search SDK
+=======
+        result_dry: Dict[str, Any] = {"dry_run_docs": len(docs), "skipped": skipped, "work": work_key, "is_citable_count": citable_count}
+        if used_raw:
+            result_dry["raw_accepted"] = raw_accepted
+            result_dry["raw_rejected"] = raw_rejected
+            result_dry["raw_reject_reasons"] = raw_reject_reasons
+        return result_dry
+
+    docs = try_normalize(docs)
+>>>>>>> Stashed changes
     result = _index_chunks_direct(docs, generate_embeddings=generate_embeddings)
 
     indexed = result.get("indexed", 0)
@@ -638,7 +845,11 @@ def process_blob(
     if errors:
         print(f"  ERRORS in {blob_name}: {errors[:2]}")
 
+<<<<<<< Updated upstream
     result_live = {
+=======
+    result_live: Dict[str, Any] = {
+>>>>>>> Stashed changes
         "indexed": indexed,
         "failed": failed,
         "skipped": skipped,
@@ -648,9 +859,15 @@ def process_blob(
         "errors": errors,
     }
     if used_raw:
+<<<<<<< Updated upstream
         result_live["raw_accepted"] = _raw_accepted
         result_live["raw_rejected"] = _raw_rejected
         result_live["raw_reject_reasons"] = _raw_reject_reasons
+=======
+        result_live["raw_accepted"] = raw_accepted
+        result_live["raw_rejected"] = raw_rejected
+        result_live["raw_reject_reasons"] = raw_reject_reasons
+>>>>>>> Stashed changes
     return result_live
 
 
@@ -676,7 +893,11 @@ def main():
     ap.add_argument(
         "--use-raw-fallback",
         action="store_true",
+<<<<<<< Updated upstream
         help="Indexar raw_chunks se semantic_chunks nao existirem (KNOWLEDGE_ONLY)",
+=======
+        help="Indexar raw_chunks se semantic_chunks nao existirem (KNOWLEDGE_ONLY, com OCR gate)",
+>>>>>>> Stashed changes
     )
     ap.add_argument(
         "--generate-embeddings",
@@ -689,6 +910,11 @@ def main():
         action="store_true",
         help="Mostra docs que seriam indexados sem enviar ao Azure Search",
     )
+    ap.add_argument(
+        "--allow-missing-policy",
+        action="store_true",
+        help="Permite rodar sem policy (KNOWLEDGE_ONLY forcado, is_citable=false sempre)",
+    )
     args = ap.parse_args()
 
     if not args.batch and not args.processed_blob:
@@ -696,10 +922,17 @@ def main():
 
     generate_embeddings = args.generate_embeddings.lower() == "true"
 
+<<<<<<< Updated upstream
     # 1. Carregar policy
     policy = load_doctrine_policy()
     works_config = policy.get("works", {})
     print(f"[CONFIG] Policy: {len(works_config)} obras configuradas")
+=======
+    # 1. Carregar policy (FAIL-CLOSED)
+    policy, policy_loaded = load_doctrine_policy(allow_missing=args.allow_missing_policy)
+    works_config = policy.get("works", {})
+    print(f"[CONFIG] policy_loaded={policy_loaded}, {len(works_config)} obras configuradas")
+>>>>>>> Stashed changes
     for wk, wp in works_config.items():
         cite = "CITABLE" if wp.get("can_cite_in_defense") else "KNOWLEDGE_ONLY"
         print(f"  {wk}: {cite}")
@@ -718,7 +951,11 @@ def main():
         blob_names = [args.processed_blob]
 
     # 4. Processar
+<<<<<<< Updated upstream
     totals = {
+=======
+    totals: Dict[str, int] = {
+>>>>>>> Stashed changes
         "processed": 0,
         "indexed": 0,
         "failed": 0,
@@ -730,7 +967,11 @@ def main():
         "raw_rejected": 0,
     }
     per_work: Dict[str, Dict[str, int]] = {}
+<<<<<<< Updated upstream
     all_errors = []
+=======
+    all_errors: List[Any] = []
+>>>>>>> Stashed changes
     all_raw_reject_reasons: Dict[str, int] = {}
 
     for i, bn in enumerate(blob_names):
@@ -767,6 +1008,10 @@ def main():
     print("=" * 60)
     mode = "DRY RUN" if args.dry_run else "LIVE"
     print(f"Modo: {mode}")
+<<<<<<< Updated upstream
+=======
+    print(f"policy_loaded: {policy_loaded}")
+>>>>>>> Stashed changes
     print(f"Blobs processados: {totals['processed']}")
     print(f"Chunks indexados:  {totals['indexed']}")
     print(f"Chunks falharam:   {totals['failed']}")
@@ -788,7 +1033,10 @@ def main():
     for wk, wd in sorted(per_work.items()):
         print(f"  {wk}: {wd['indexed']} indexed, {wd['citable']} citable")
 
+<<<<<<< Updated upstream
     # Mostrar primeiros erros se houver
+=======
+>>>>>>> Stashed changes
     if all_errors:
         print(f"\nPrimeiros 5 erros:")
         for e in all_errors[:5]:

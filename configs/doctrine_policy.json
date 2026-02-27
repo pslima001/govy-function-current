@@ -1,48 +1,25 @@
 {
-  "_description": "Politica de citabilidade de doutrina para GOVY KB. Decisao humana por obra.",
-  "_rules": {
-    "chat": "Doutrina NUNCA e citada no chat. Usada apenas como base de raciocinio (KNOWLEDGE_ONLY).",
-    "defesa": "So pode citar se work.can_cite_in_defense=true E chunk.is_citable=true.",
-    "default": "Toda doutrina entra como KNOWLEDGE_ONLY ate ser explicitamente liberada."
-  },
-  "_updated_at": "2026-02-27",
-  "_updated_by": "Victor (decisao humana)",
-
+  "version": "1.0",
+  "description": "Politica de citabilidade por obra doutrinaria",
   "works": {
     "marcal": {
-      "author": "Marcal Justen Filho",
-      "title": "Comentarios a Lei de Licitacoes e Contratacoes Administrativas",
-      "blob_prefix": "marcal/",
       "can_cite_in_defense": true,
-      "can_cite_in_chat": false,
-      "quality_notes": "OCR com ruido (bleed-through). Chunks precisam passar validate_citabilidade() + criterios de qualidade minima.",
-      "citation_template": "JUSTEN FILHO, Marcal. Comentarios a Lei de Licitacoes e Contratacoes Administrativas: Lei 14.133/2021. {edition}. {city}: {publisher}, {year}. p. {page}."
+      "can_cite_in_chat": true,
+      "quality_notes": "Referencia principal, revisado e aprovado para citacao"
     },
     "jacoby": {
-      "author": "Jacoby Fernandes",
-      "title": "Lei de Licitacoes e Contratos Administrativos",
-      "blob_prefix": "jacoby/",
       "can_cite_in_defense": false,
       "can_cite_in_chat": false,
-      "quality_notes": "Aguardando decisao humana sobre citabilidade.",
-      "citation_template": "FERNANDES, Jorge Ulisses Jacoby. Lei de Licitacoes e Contratos Administrativos. {edition}. {city}: {publisher}, {year}. p. {page}."
+      "quality_notes": "Obra complementar, somente para contexto e conhecimento"
     },
     "dalenogare": {
-      "author": "Felipe Dalenogare",
-      "title": "Manual de Licitacoes e Contratos Administrativos",
-      "blob_prefix": "dalenogare/",
       "can_cite_in_defense": false,
       "can_cite_in_chat": false,
-      "quality_notes": "Aguardando decisao humana sobre citabilidade.",
-      "citation_template": "DALENOGARE, Felipe. Manual de Licitacoes e Contratos Administrativos. {edition}. {city}: {publisher}, {year}. p. {page}."
+      "quality_notes": "Obra complementar, somente para contexto e conhecimento"
     }
   },
-
   "chunk_quality_gates": {
-    "_description": "Criterios automaticos para is_citable=true (alem de obra ser can_cite_in_defense=true)",
     "min_content_chars": 200,
-    "min_alpha_ratio": 0.7,
-    "validate_citabilidade_must_pass": true,
-    "reject_reasons": ["SEM_LASTRO", "FRAGMENTADO", "DUPLICADO", "OCR_RUIDOSO"]
+    "min_alpha_ratio": 0.7
   }
 }
