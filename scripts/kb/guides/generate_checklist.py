@@ -76,6 +76,8 @@ def main():
     print(f"Total checks: {result.total_checks}")
     print(f"Sinalizacao: {result.sinalizacao_distribution}")
     print(f"Stages: {result.stage_tag_distribution}")
+    if result.ni_reason_distribution:
+        print(f"NI reasons: {result.ni_reason_distribution}")
 
 
 if __name__ == "__main__":
