@@ -84,6 +84,7 @@ class Gap:
     required: Optional[str] = None  # valor exigido no edital
     found: Optional[str] = None     # valor encontrado na bula (None se ausente)
     evidence: Optional[str] = None  # trecho curto da bula (≤220 chars)
+    req_snippet: Optional[str] = None  # trecho curto do TR/requisito original (CP18)
 
 
 @dataclass(frozen=True)
