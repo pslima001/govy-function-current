@@ -1,0 +1,552 @@
+{
+  "kind": "audit_report",
+  "tribunal_id": "tce-go",
+  "generated_at": "2026-02-25T14:09:51.997266+00:00",
+  "total_kb_raw_blobs": 16879,
+  "samples_audited": 30,
+  "pass_count": 30,
+  "fail_count": 0,
+  "verdict": "PASS",
+  "results": [
+    {
+      "blob": "tce-go/tce-go--100160.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--278657.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--58963.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--294121.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--283051.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--264152.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--321226.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--319060.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--321220.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--100013.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--415199.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--321225.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--317675.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--321221.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--321224.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--99956.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--99879.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--71177.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--321214.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--324641.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--419916.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--276499.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--100143.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--99900.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--100075.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--99919.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--63453.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--324494.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--100010.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    },
+    {
+      "blob": "tce-go/tce-go--99810.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "uf": "PASS",
+        "region": "PASS",
+        "authority_score": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS"
+      }
+    }
+  ]
+}

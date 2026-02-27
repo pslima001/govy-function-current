@@ -1,0 +1,47 @@
+[CONFIG] Policy: 3 obras configuradas
+  marcal: CITABLE
+  jacoby: KNOWLEDGE_ONLY
+  dalenogare: KNOWLEDGE_ONLY
+
+[BATCH] 248 blobs no container kb-doutrina-processed
+  Progress: 25/248
+  ERRORS in licitacao/licitacao/23c6d4b09bb30376a891cc58818776275146f238b45fbd64a4ec8873c1517b5e.json: [{'error': "(<HTTPSConnection(host='search-govy-kb.search.windows.net', port=443) at 0x18fd3c1a190>, 'Connection to search-govy-kb.search.windows.net timed out. (connect timeout=300)')"}]
+  Progress: 50/248
+  Progress: 75/248
+  Progress: 100/248
+  Progress: 125/248
+  Progress: 150/248
+  Progress: 175/248
+  Progress: 200/248
+  Progress: 225/248
+
+============================================================
+RELATORIO FINAL
+============================================================
+Modo: LIVE
+Blobs processados: 248
+Chunks indexados:  1277
+Chunks falharam:   8
+Chunks pulados:    1723
+Blobs vazios:      74
+Usaram raw_chunks: 159
+Chunks citaveis:   132
+
+Raw fallback (OCR quality gate):
+  raw_accepted:  1121
+  raw_rejected:  1723
+  reject_reasons:
+    HIGH_NOISE_SCORE: 975
+    HIGH_SINGLE_CHAR_RATE: 687
+    LOW_STOPWORD_HIT_RATE: 43
+    TOO_SHORT: 18
+    BLOB_LOW_RATIO: 1
+    BLOB_LOW_CHARS: 1
+
+Por obra:
+  dalenogare: 188 indexed, 0 citable
+  jacoby: 406 indexed, 0 citable
+  marcal: 683 indexed, 132 citable
+
+Primeiros 5 erros:
+  {'error': "(<HTTPSConnection(host='search-govy-kb.search.windows.net', port=443) at 0x18fd3c1a190>, 'Connection to search-govy-kb.search.windows.net timed out. (connect timeout=300)')"}

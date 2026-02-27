@@ -1,0 +1,19 @@
+{
+  "kind": "parse_batch_report",
+  "tribunal_id": "trf2",
+  "generated_at": "2026-02-27T17:39:49.338355+00:00",
+  "dry_run": false,
+  "stats": {
+    "total": 1020,
+    "parsed": 1020,
+    "skipped_existing": 0,
+    "terminal_no_text": 0,
+    "skipped_no_content": 0,
+    "validation_errors": 0,
+    "upload_errors": 0,
+    "elapsed_seconds": 323.6,
+    "rate_per_min": 189.1
+  },
+  "exception_count": 0,
+  "exceptions_sample": []
+}

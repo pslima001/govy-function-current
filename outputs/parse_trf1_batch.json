@@ -1,0 +1,33 @@
+{
+  "kind": "parse_batch_report",
+  "tribunal_id": "trf1",
+  "generated_at": "2026-02-26T21:25:05.612287+00:00",
+  "dry_run": false,
+  "stats": {
+    "total": 1830,
+    "parsed": 77,
+    "skipped_existing": 1750,
+    "terminal_no_text": 0,
+    "terminal_excluded": 3,
+    "skipped_no_content": 0,
+    "validation_errors": 0,
+    "upload_errors": 0,
+    "elapsed_seconds": 21.8,
+    "rate_per_min": 211.8
+  },
+  "exception_count": 3,
+  "exceptions_sample": [
+    {
+      "blob": "cjf/acordaos/cjf--TRF1--00169256020114013900/metadata.json",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "cjf/acordaos/cjf--TRF1--00676764320134010000/metadata.json",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "cjf/acordaos/cjf--TRF1--10271800320234010000/metadata.json",
+      "error": "terminal_excluded_crime_criminal"
+    }
+  ]
+}
