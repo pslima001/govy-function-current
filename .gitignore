@@ -33,6 +33,10 @@ scripts/test_*
 scripts/validate_*
 scripts/microbatch_manifest_example.json
 
+# === Snapshots & secrets ===
+snapshots/
+nul
+
 # === Ephemeral output data (large JSON audit/debug files) ===
 outputs/*_reconciliation*.json
 outputs/*_terminal_exceptions*.json
