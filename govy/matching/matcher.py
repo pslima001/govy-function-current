@@ -201,6 +201,14 @@ def _conc_equal(
     return _nearly_equal(req_conc_normalized, p_conc_normalized)
 
 
+def _req_snippet(raw: str, max_len: int = 120) -> Optional[str]:
+    """Extract short snippet from ItemRequirement.raw for gap context (CP18)."""
+    if not raw:
+        return None
+    s = re.sub(r"\s+", " ", raw).strip()
+    return s[:max_len] if s else None
+
+
 def _compute_all_gaps(
     item_requirement: ItemRequirement,
     p: Presentation,
@@ -213,6 +221,7 @@ def _compute_all_gaps(
     Waivers are applied by the caller via _split_by_waivers().
     """
     gaps: List[Gap] = []
+    snippet = _req_snippet(item_requirement.raw)
 
     req_conc = _fmt_conc(
         item_requirement.conc_num,
@@ -229,6 +238,7 @@ def _compute_all_gaps(
         gaps.append(Gap(
             GapCode.ACTIVE_MISSING,
             required=item_requirement.principle,
+            req_snippet=snippet,
         ))
 
     # --- CONCENTRACAO (cross-multiply quando possível) ---
@@ -237,6 +247,7 @@ def _compute_all_gaps(
             GapCode.CONC_MISSING,
             required=req_conc,
             evidence=p.evidence,
+            req_snippet=snippet,
         ))
     else:
         if not _conc_equal(item_requirement, p):
@@ -246,6 +257,7 @@ def _compute_all_gaps(
                 required=req_conc,
                 found=found_conc,
                 evidence=p.evidence,
+                req_snippet=snippet,
             ))
 
     # --- FORMA FARMACEUTICA (estrita) ---
@@ -253,7 +265,8 @@ def _compute_all_gaps(
         gaps.append(Gap(
             GapCode.FORM_MISSING,
             required=req_form,
-            evidence=p.evidence,  # fix: era None, agora mostra contexto
+            evidence=p.evidence,
+            req_snippet=snippet,
         ))
     elif normalize_text(p.form) != normalize_text(req_form):
         gaps.append(Gap(
@@ -261,6 +274,7 @@ def _compute_all_gaps(
             required=req_form,
             found=p.form,
             evidence=p.evidence,
+            req_snippet=snippet,
         ))
 
     # --- EMBALAGEM (busca global) ---
@@ -273,6 +287,7 @@ def _compute_all_gaps(
             required=item_requirement.pkg,
             found=any_pkg.group(1) if any_pkg else None,
             evidence=pkg_ev,
+            req_snippet=snippet,
         ))
 
     # --- VOLUME (prefere RE_PKG_VOL packaging, fallback p.vol) ---
@@ -313,6 +328,7 @@ def _compute_all_gaps(
             required=req_pkgvol,
             found=found_vol_str,
             evidence=vol_evidence,
+            req_snippet=snippet,
         ))
 
     return gaps
@@ -363,12 +379,14 @@ def match_item_to_bula(
     disclaimer = WAIVER_DISCLAIMER if waiver_used else None
 
     # Sem apresentações → UNMATCH (waivers não salvam sem evidência)
+    snippet = _req_snippet(item_requirement.raw)
     if not pres:
         all_gaps = []
         if not principle_ok:
             all_gaps.append(Gap(
                 GapCode.ACTIVE_MISSING,
                 required=item_requirement.principle,
+                req_snippet=snippet,
             ))
         all_gaps.append(Gap(
             GapCode.CONC_MISSING,
@@ -377,6 +395,7 @@ def match_item_to_bula(
                 item_requirement.conc_unit,
                 item_requirement.conc_den_unit,
             ),
+            req_snippet=snippet,
         ))
         effective, waived = _split_by_waivers(all_gaps, waivers)
         return MatchResult(
@@ -414,8 +433,8 @@ def match_item_to_bula(
         if not effective:
             break
 
-    # Determine status
-    other = [x for x in pres if x is not best_match] if not best_effective else []
+    # Determine status (CP17: other_presentations sempre populado)
+    other = [x for x in pres if x is not best_match]
 
     if not best_effective:
         status = "MATCH_WITH_WAIVER" if best_waived else "MATCH"
@@ -455,6 +474,14 @@ def _fmt_gap_part(g: Gap, with_evidence: bool = True) -> str:
     return part
 
 
+def _fmt_req_context(item_requirement: ItemRequirement, max_len: int = 80) -> str:
+    """Format short TR context line for UNMATCH popup (CP19)."""
+    raw = re.sub(r"\s+", " ", item_requirement.raw).strip()
+    if len(raw) <= max_len:
+        return f'TR: "{raw}"'
+    return f'TR: "{raw[:max_len]}..."'
+
+
 def format_popup(result: MatchResult, item_requirement: ItemRequirement) -> str:
     """
     Gera string curta para UI (popup). Hard cap: 220 chars.
@@ -491,20 +518,25 @@ def format_popup(result: MatchResult, item_requirement: ItemRequirement) -> str:
         )
         return s[:_POPUP_MAX]
 
-    # UNMATCH — compact gaps com evidence
+    # UNMATCH — compact gaps com evidence + TR context (CP19)
     suffix = " | RISCO" if result.disclaimer else ""
+    tr_ctx = _fmt_req_context(item_requirement)
 
-    # Try 1: up to 3 gaps with evidence
+    # Try 1: up to 3 gaps with evidence + TR context
     parts = [_fmt_gap_part(g, with_evidence=True) for g in result.gaps[:3]]
     gap_str = "; ".join(parts) if parts else "(sem gaps detectados)"
     s = f"{base} | {gap_str}{suffix}"
+    if len(s) + len(tr_ctx) + 3 <= _POPUP_MAX:
+        s = f"{s} | {tr_ctx}"
     if len(s) <= _POPUP_MAX:
         return s
 
-    # Try 2: up to 3 gaps without evidence
+    # Try 2: up to 3 gaps without evidence + TR context
     parts = [_fmt_gap_part(g, with_evidence=False) for g in result.gaps[:3]]
     gap_str = "; ".join(parts)
     s = f"{base} | {gap_str}{suffix}"
+    if len(s) + len(tr_ctx) + 3 <= _POPUP_MAX:
+        s = f"{s} | {tr_ctx}"
     if len(s) <= _POPUP_MAX:
         return s
 
@@ -512,4 +544,6 @@ def format_popup(result: MatchResult, item_requirement: ItemRequirement) -> str:
     parts = [_fmt_gap_part(result.gaps[0], with_evidence=False)] if result.gaps else []
     gap_str = parts[0] if parts else "(sem gaps)"
     s = f"{base} | {gap_str}{suffix}"
+    if len(s) + len(tr_ctx) + 3 <= _POPUP_MAX:
+        s = f"{s} | {tr_ctx}"
     return s[:_POPUP_MAX]
