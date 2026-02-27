@@ -104,6 +104,8 @@ class WaiverConfig:
     Tolerâncias que o usuário pode aplicar a componentes do matching.
     Se True, aquele componente é ignorado na decisão (gera disclaimer de risco).
     """
+    # DEPRECATED (CP16): substancia/principio ativo NAO e mais waivable.
+    # Campo mantido para compat com payloads legados, mas matcher ignora.
     ignore_principle: bool = False
     ignore_concentration: bool = False
     ignore_form: bool = False

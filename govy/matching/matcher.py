@@ -79,7 +79,7 @@ WAIVER_DISCLAIMER = (
 
 # Mapping GapCode → waiver field name
 _GAP_WAIVER_FIELD = {
-    GapCode.ACTIVE_MISSING: "ignore_principle",
+    # ACTIVE_MISSING removido: substancia/principio ativo NUNCA e waivable (CP16).
     GapCode.CONC_MISSING: "ignore_concentration",
     GapCode.CONC_MISMATCH: "ignore_concentration",
     GapCode.FORM_MISSING: "ignore_form",
@@ -89,6 +89,10 @@ _GAP_WAIVER_FIELD = {
     GapCode.VOLUME_MISSING: "ignore_volume",
     GapCode.VOLUME_MISMATCH: "ignore_volume",
 }
+
+# Constante explicita: gaps elegiveis a waiver (auditoria).
+# ACTIVE_MISSING fica FORA para sempre.
+WAIVABLE_GAPS = frozenset(_GAP_WAIVER_FIELD.keys())
 
 
 def _split_by_waivers(
@@ -111,42 +115,90 @@ _RE_PKG_ANY = re.compile(
     r"(?i)\b(FRASCO-AMPOLA|AMPOLA|FRASCO|SERINGA|BISNAGA|TUBO|BLISTER)\b"
 )
 
+# Unit conversion to common base (MG for mass, ML for volume)
+_MASS_TO_MG = {"MG": 1.0, "G": 1000.0, "MCG": 0.001}
+_VOL_TO_ML = {"ML": 1.0, "L": 1000.0}
+
+
+def _to_mg(value: float, unit: str) -> Optional[float]:
+    """Convert mass to MG. Returns None for non-mass units (e.g. UI)."""
+    factor = _MASS_TO_MG.get(unit)
+    return value * factor if factor is not None else None
+
+
+def _to_ml(value: float, unit: str) -> Optional[float]:
+    """Convert volume to ML. Returns None for unknown units."""
+    factor = _VOL_TO_ML.get(unit)
+    return value * factor if factor is not None else None
+
+
+def _nearly_equal(a: float, b: float, rel_tol: float = 1e-6) -> bool:
+    """Compare floats with relative tolerance (handles unit conversion rounding)."""
+    if a == b:
+        return True
+    largest = max(abs(a), abs(b))
+    if largest == 0:
+        return True
+    return abs(a - b) / largest < rel_tol
+
 
 def _conc_equal(
     item_requirement: ItemRequirement, p: Presentation
 ) -> bool:
     """
-    Compare concentration: cross-multiply when dose/vol available (exact),
-    fall back to derived conc_num with relaxed tolerance.
+    Compare concentration with unit conversion (CP15).
 
     Cross-multiply avoids float division artifacts:
-      req 10 MG/ML + bula 500 MG/50 ML → 500 == 10*50 → True (exact)
-      req 10 MG/ML + bula 500 MG/60 ML → 500 != 10*60 → False (exact)
+      req 10 MG/ML + bula 500 MG/50 ML → 10*50 == 500 → True
+    Unit conversion handles pharmacological equivalence:
+      req 10 MG/ML + bula 0.01 G/ML → 10 MG == 10 MG → True
+      req 100 UI/ML + bula 100 MG/ML → UI not convertible → False
+      req 100 UI/ML + bula 100000 UI/L → 100 UI/ML == 100 UI/ML → True
     """
     if p.conc_unit is None or p.conc_den_unit is None:
         return False
 
-    # Unit check first
-    if p.conc_unit != item_requirement.conc_unit:
-        return False
-    if p.conc_den_unit != item_requirement.conc_den_unit:
+    req_num_mg = _to_mg(item_requirement.conc_num, item_requirement.conc_unit)
+    p_conc_mg = _to_mg(p.conc_num, p.conc_unit) if p.conc_num is not None else None
+    req_den_ml = _to_ml(1.0, item_requirement.conc_den_unit)
+    p_den_ml = _to_ml(1.0, p.conc_den_unit)
+
+    if req_num_mg is None:
+        # Non-convertible numerator (UI etc.) — require exact numerator unit
+        if p.conc_unit != item_requirement.conc_unit:
+            return False
+        if p.conc_num is None:
+            return False
+        # Denominator: convert to ML if both sides are convertible
+        if req_den_ml is not None and p_den_ml is not None:
+            req_per_ml = item_requirement.conc_num / req_den_ml
+            p_per_ml = p.conc_num / p_den_ml
+            return _nearly_equal(req_per_ml, p_per_ml)
+        # Non-convertible denominator — require exact match
+        if p.conc_den_unit != item_requirement.conc_den_unit:
+            return False
+        return _nearly_equal(p.conc_num, item_requirement.conc_num)
+
+    # Both sides mass-convertible — normalize to MG/ML
+    if req_den_ml is None or p_den_ml is None:
         return False
 
-    # Cross-multiply when raw dose/vol available and denominator units match
-    if (
-        p.dose is not None
-        and p.vol is not None
-        and p.dose_unit == item_requirement.conc_unit
-        and p.vol_unit == item_requirement.conc_den_unit
-    ):
-        # dose/vol == conc_num/1  →  dose == conc_num * vol
-        expected = item_requirement.conc_num * p.vol
-        return abs(p.dose - expected) < 0.01  # tolerance for rounding
+    # Cross-multiply path: dose/vol available on bula side
+    if p.dose is not None and p.vol is not None and p.dose_unit and p.vol_unit:
+        dose_mg = _to_mg(p.dose, p.dose_unit)
+        vol_ml = _to_ml(p.vol, p.vol_unit)
+        if dose_mg is not None and vol_ml is not None and vol_ml > 0:
+            # Cross-multiply: req_num_mg * vol_ml == dose_mg * req_den_ml
+            lhs = req_num_mg * vol_ml
+            rhs = dose_mg * req_den_ml
+            return _nearly_equal(lhs, rhs)
 
-    # Fall back to derived concentration with relaxed tolerance
-    if p.conc_num is None:
+    # Fallback: compare derived conc_num after normalization to MG/ML
+    if p_conc_mg is None:
         return False
-    return abs(p.conc_num - item_requirement.conc_num) < 1e-6
+    req_conc_normalized = req_num_mg / req_den_ml
+    p_conc_normalized = p_conc_mg / p_den_ml
+    return _nearly_equal(req_conc_normalized, p_conc_normalized)
 
 
 def _compute_all_gaps(
@@ -237,16 +289,22 @@ def _compute_all_gaps(
         found_unit = normalize_text(m_pkg_vol.group("unit"))
         found_vol_str = f"{found_vol:g} {found_unit}"
         vol_evidence = _evidence_around(t, m_pkg_vol)
+        found_vol_ml = _to_ml(found_vol, found_unit)
+        req_vol_ml = _to_ml(item_requirement.vol, item_requirement.vol_unit)
         vol_ok = (
-            abs(found_vol - item_requirement.vol) < 1e-6
-            and found_unit == item_requirement.vol_unit
+            found_vol_ml is not None
+            and req_vol_ml is not None
+            and abs(found_vol_ml - req_vol_ml) < 1e-6
         )
     elif p.vol is not None and p.vol_unit is not None:
         found_vol_str = f"{p.vol:g} {p.vol_unit}"
         vol_evidence = p.evidence
+        found_vol_ml = _to_ml(p.vol, p.vol_unit)
+        req_vol_ml = _to_ml(item_requirement.vol, item_requirement.vol_unit)
         vol_ok = (
-            abs(p.vol - item_requirement.vol) < 1e-6
-            and p.vol_unit == item_requirement.vol_unit
+            found_vol_ml is not None
+            and req_vol_ml is not None
+            and abs(found_vol_ml - req_vol_ml) < 1e-6
         )
 
     if not vol_ok:
@@ -295,8 +353,8 @@ def match_item_to_bula(
     principle_ok = bool(principle_re.search(t))
 
     # Disclaimer se algum waiver está ativo
+    # ignore_principle nao entra: substancia nunca e waivable (CP16).
     waiver_used = any([
-        waivers.ignore_principle,
         waivers.ignore_concentration,
         waivers.ignore_form,
         waivers.ignore_pkg,
