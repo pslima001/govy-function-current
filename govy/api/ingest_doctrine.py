@@ -52,8 +52,8 @@ def handle_ingest_doctrine(req: func.HttpRequest) -> func.HttpResponse:
             force_reprocess=bool(data.get("force_reprocess", False)),
         )
 
-        container_source = os.getenv("DOCTRINE_CONTAINER_NAME", "doutrina")
-        container_processed = os.getenv("DOCTRINE_PROCESSED_CONTAINER_NAME", "doutrina-processed")
+        container_source = os.getenv("DOCTRINE_CONTAINER_NAME", "kb-doutrina-raw")
+        container_processed = os.getenv("DOCTRINE_PROCESSED_CONTAINER_NAME", "kb-doutrina-processed")
 
         blob_service = get_blob_service_client()
 

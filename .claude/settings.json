@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd C:/govy/repos/govy-function-current && bash scripts/govy-sync.sh full 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}

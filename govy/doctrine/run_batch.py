@@ -61,8 +61,8 @@ def main() -> None:
 
     _setup_logging()
 
-    container_source = os.getenv("DOCTRINE_CONTAINER_SOURCE", "doutrina")
-    container_processed = os.getenv("DOCTRINE_CONTAINER_PROCESSED", "doutrina-processed")
+    container_source = os.getenv("DOCTRINE_CONTAINER_SOURCE", "kb-doutrina-raw")
+    container_processed = os.getenv("DOCTRINE_CONTAINER_PROCESSED", "kb-doutrina-processed")
     manifest_path = os.getenv("DOCTRINE_MANIFEST_JSON", "")
     force_reprocess = os.getenv("DOCTRINE_FORCE_REPROCESS", "false").lower() == "true"
     blob_service = get_blob_service_client()

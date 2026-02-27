@@ -78,8 +78,8 @@ def main():
 
     _setup_logging()
 
-    container_source = os.environ.get("DOCTRINE_CONTAINER_SOURCE", "doutrina")
-    container_processed = os.environ.get("DOCTRINE_CONTAINER_PROCESSED", "doutrina-processed")
+    container_source = os.environ.get("DOCTRINE_CONTAINER_SOURCE", "kb-doutrina-raw")
+    container_processed = os.environ.get("DOCTRINE_CONTAINER_PROCESSED", "kb-doutrina-processed")
     force = os.environ.get("DOCTRINE_FORCE_REPROCESS", "false").lower() == "true"
     manifest_path = os.environ.get("DOCTRINE_MICROBATCH_MANIFEST_JSON", "")
     report_path = os.environ.get("DOCTRINE_MICROBATCH_REPORT_PATH", "outputs/microbatch_report_doctrine_v2.json")

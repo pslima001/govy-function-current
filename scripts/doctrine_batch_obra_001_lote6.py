@@ -57,8 +57,8 @@ def get_blob_service():
 def process_items(items, force=False):
     from govy.doctrine.pipeline import ingest_doctrine_process_once, DoctrineIngestRequest
     bs = get_blob_service()
-    container_source = os.getenv("DOCTRINE_CONTAINER_SOURCE", "doutrina")
-    container_processed = os.getenv("DOCTRINE_CONTAINER_PROCESSED", "doutrina-processed")
+    container_source = os.getenv("DOCTRINE_CONTAINER_SOURCE", "kb-doutrina-raw")
+    container_processed = os.getenv("DOCTRINE_CONTAINER_PROCESSED", "kb-doutrina-processed")
     results = {"processed": 0, "already_processed": 0, "failed": 0, "errors": []}
     for i, item in enumerate(items, 1):
         blob = item["blob_name"]
@@ -99,7 +99,7 @@ def process_items(items, force=False):
 
 def check_status():
     bs = get_blob_service()
-    container = os.getenv("DOCTRINE_PROCESSED_CONTAINER_NAME", "doutrina-processed")
+    container = os.getenv("DOCTRINE_PROCESSED_CONTAINER_NAME", "kb-doutrina-processed")
     client = bs.get_container_client(container)
     blobs = [b.name for b in client.list_blobs() if b.name.endswith(".json")]
     print(f"\nBlobs processados em {container}: {len(blobs)}")

@@ -79,9 +79,9 @@ class TestDoctrineV2Contract(unittest.TestCase):
         self.blob_service = BlobServiceClient.from_connection_string(self.conn)
 
         self.processed_container = os.getenv(
-            "DOCTRINE_PROCESSED_CONTAINER_NAME", "doutrina-processed"
+            "DOCTRINE_PROCESSED_CONTAINER_NAME", "kb-doutrina-processed"
         )
-        self.source_container = os.getenv("DOCTRINE_CONTAINER_NAME", "doutrina")
+        self.source_container = os.getenv("DOCTRINE_CONTAINER_NAME", "kb-doutrina-raw")
         self.mode = (os.getenv("DOCTRINE_TEST_MODE") or "cheap").strip().lower()
 
         self.processed_blob = (

@@ -44,7 +44,7 @@ def _get_container(container_name: str = RAW_CONTAINER) -> ContainerClient:
     """
     connstr = os.environ.get("AZURE_STORAGE_CONNSTR_SPONSOR", "")
     if connstr:
-        svc = BlobServiceClient.from_connection_string(connstr)
+        svc = BlobServiceClient.from_connection_string(connstr)  # ALLOW_CONNECTION_STRING_OK
         return svc.get_container_client(container_name)
     else:
         from govy.utils.azure_clients import get_container_client

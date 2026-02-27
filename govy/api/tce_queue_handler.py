@@ -155,6 +155,7 @@ def _normalize_scraper_fields(meta: dict) -> dict:
     Suporta formatos de vários scrapers:
     - Genérico: numero_processo, data_decisao, relator, colegiado, ...
     - TCE-RS: nr_processo_fmt, dt_sessao, magistrado, orgao_julgador, ...
+    - TCE-BA: numero_protocolo, numero_decisao, ano_decisao, ementa, ...
     """
     norm = {}
     # processo
@@ -162,9 +163,13 @@ def _normalize_scraper_fields(meta: dict) -> dict:
         norm["processo"] = meta["numero_processo"]
     elif meta.get("nr_processo_fmt"):
         norm["processo"] = meta["nr_processo_fmt"]
+    elif meta.get("numero_protocolo"):
+        norm["processo"] = meta["numero_protocolo"]
     # acordao_numero
     if meta.get("numero_acordao"):
         norm["acordao_numero"] = meta["numero_acordao"]
+    elif meta.get("numero_decisao") and meta.get("ano_decisao"):
+        norm["acordao_numero"] = f"{meta['numero_decisao']}/{meta['ano_decisao']}"
     # julgamento_date
     if meta.get("data_decisao"):
         norm["julgamento_date"] = meta["data_decisao"]
@@ -205,6 +210,8 @@ def _normalize_scraper_fields(meta: dict) -> dict:
         norm["ementa"] = meta["ementa_full"]
     elif meta.get("texto_ementa"):
         norm["ementa"] = meta["texto_ementa"]
+    elif meta.get("ementa"):
+        norm["ementa"] = meta["ementa"]
     # tipo_processo
     if meta.get("tipo_processo"):
         norm["tipo_processo"] = meta["tipo_processo"]
@@ -213,6 +220,11 @@ def _normalize_scraper_fields(meta: dict) -> dict:
         norm["source_url"] = meta["link_detalhes"]
     elif meta.get("link_decisao"):
         norm["source_url"] = meta["link_decisao"]
+    elif meta.get("source_url"):
+        norm["source_url"] = meta["source_url"]
+    # tipo (TCE-BA: Acordao, Voto)
+    if not norm.get("tipo_processo") and meta.get("tipo"):
+        norm["tipo_processo"] = meta["tipo"]
     return norm
 
 

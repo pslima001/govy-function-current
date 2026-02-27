@@ -186,12 +186,14 @@ def prepare_chunk_for_index(chunk: Dict) -> Dict:
         if doc.get(field) == "":
             doc[field] = None
     
-    # Campos do indice (SPEC 1.3 (Golden Path))
+    # Campos do indice (SPEC 1.3 (Golden Path) + governanca v1)
     index_fields = [
         "chunk_id", "doc_type", "source", "tribunal", "uf", "region",
         "title", "content", "citation", "year", "authority_score", "is_current",
         "effect", "secao", "procedural_stage", "holding_outcome", "remedy_type", "claim_pattern",
-        "embedding"
+        "embedding",
+        # Governanca de citabilidade (v1 - 2026-02-27)
+        "is_citable", "citable_reason", "source_work",
     ]
     
     # Remove campos que nao estao no indice
