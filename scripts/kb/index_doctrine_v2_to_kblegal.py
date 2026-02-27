@@ -1,10 +1,11 @@
 """
-GOVY - Doctrine v2 -> KB Legal Indexer (A2 - Governance)
-=========================================================
+GOVY - Doctrine v2 -> KB Legal Indexer (A2 - Governance + OCR Gate)
+====================================================================
 Indexa semantic_chunks (e opcionalmente raw_chunks como fallback)
 do doctrine_processed_v2 no indice kb-legal.
 
 Respeita configs/doctrine_policy.json para governanca de citabilidade.
+Inclui OCR quality gate para raw_chunks (check_gibberish_quality).
 
 Usa diretamente index_chunks() do handler (Golden Path).
 NAO passa pelo endpoint HTTP - evita problemas de envelope/formato.
@@ -151,6 +152,12 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
 
     Retorna (passed, reject_reason, metrics).
     Se passed=True, reject_reason="" e metrics contém os valores calculados.
+
+    Calibrado com dados reais pt-BR jurídico (2026-02-27):
+    - Texto limpo: single_char ~0.07-0.11, short_token ~0.28-0.35,
+      stopword ~0.37-0.45, vowel ~0.47-0.50
+    - Gibberish OCR: single_char ~0.13-0.18, short_token ~0.33-0.39,
+      stopword ~0.33-0.37
     """
     metrics: Dict[str, float] = {}
 
@@ -164,8 +171,8 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
     raw_tokens = clean.split()
     tokens = []
     for t in raw_tokens:
-        t = re.sub(r'^[.,;:!?()\[\]{}\'"«»""—–\-]+', '', t)
-        t = re.sub(r'[.,;:!?()\[\]{}\'"«»""—–\-]+$', '', t)
+        t = re.sub(r'^[.,;:!?()\[\]{}\'"«»\u201c\u201d\u2014\u2013\-]+', '', t)
+        t = re.sub(r'[.,;:!?()\[\]{}\'"«»\u201c\u201d\u2014\u2013\-]+$', '', t)
         if t:
             tokens.append(t)
 
@@ -186,7 +193,7 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
     short_token_rate = short_tokens / n
     metrics["short_token_rate"] = round(short_token_rate, 4)
 
-    # 3. digit_token_rate
+    # 3. digit_token_rate (informational, not gated)
     digit_tokens = sum(1 for t in tokens if t.isdigit())
     digit_token_rate = digit_tokens / n
     metrics["digit_token_rate"] = round(digit_token_rate, 4)
@@ -214,15 +221,7 @@ def check_gibberish_quality(text: str, min_chars: int = 600) -> Tuple[bool, str,
     stopword_hit_rate = stopword_hits / n
     metrics["stopword_hit_rate"] = round(stopword_hit_rate, 4)
 
-    # Thresholds recalibrados com dados reais pt-BR jurídico (2026-02-27)
-    # Texto limpo pt-BR: single_char ~0.07-0.11, short_token ~0.28-0.35,
-    #   stopword ~0.37-0.45, vowel ~0.47-0.50
-    # Gibberish OCR: single_char ~0.13-0.18, short_token ~0.33-0.39,
-    #   stopword ~0.33-0.37, vowel ~0.49-0.51 (similar!)
-    #
-    # Estratégia: usar stopword_hit_rate como discriminador principal
-    # (texto real pt-BR jurídico tem >0.37 de stopwords; garbage <0.34)
-    # + single_char_rate como filtro de garbage pesado
+    # --- GATES ---
 
     # Gate 1: gibberish pesado (chars soltos demais)
     if single_char_rate > 0.16:
@@ -730,7 +729,7 @@ def main():
         "raw_accepted": 0,
         "raw_rejected": 0,
     }
-    per_work = {}
+    per_work: Dict[str, Dict[str, int]] = {}
     all_errors = []
     all_raw_reject_reasons: Dict[str, int] = {}
 
