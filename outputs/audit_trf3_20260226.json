@@ -1,0 +1,552 @@
+{
+  "kind": "audit_report",
+  "tribunal_id": "trf3",
+  "generated_at": "2026-02-26T20:58:47.392417+00:00",
+  "total_kb_raw_blobs": 9470,
+  "samples_audited": 30,
+  "pass_count": 30,
+  "fail_count": 0,
+  "verdict": "PASS",
+  "results": [
+    {
+      "blob": "trf3/trf3--50018188120174030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50200215220214030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00191938720154036100.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00000015220134036129.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50018252220214036115.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00000034020124036102.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00116685420064036105.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50042393420234030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--53743418620204039999.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50068983320194036183.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50077377020254030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--56365816420194039999.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50018198920204036134.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00328057320074036100.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00061932020074036126.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00000016920054036117.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--61114312420194039999.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50204369320254030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50028086020234036144.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00000015620144036181.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--58216966120194039999.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50320418020184030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50018207320204036005.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00001438120064036103.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--00000011520144036130.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--53684699020204039999.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50052171120234030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50018196620174030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50090475320214030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    },
+    {
+      "blob": "trf3/trf3--50062593220224030000.json",
+      "status": "PASS",
+      "checks": {
+        "tribunal": "PASS",
+        "authority_score": "PASS",
+        "region": "PASS",
+        "parser_version": "PASS",
+        "content_len_gt_50": "PASS",
+        "chunk_id_present": "PASS",
+        "doc_type": "PASS",
+        "blob_path_present": "PASS",
+        "processed_at_present": "PASS",
+        "citation_present": "PASS",
+        "year_present": "PASS",
+        "title_present": "PASS"
+      }
+    }
+  ]
+}
