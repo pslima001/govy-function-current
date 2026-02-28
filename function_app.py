@@ -22,6 +22,7 @@ from blueprints.bp_kb_content import bp as bp_kb_content
 from blueprints.bp_legal import bp as bp_legal
 from blueprints.bp_tce import bp as bp_tce
 from blueprints.bp_diagnostics import bp as bp_diagnostics
+from blueprints.bp_copilot import bp as bp_copilot
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
@@ -34,3 +35,4 @@ app.register_functions(bp_kb_content)
 app.register_functions(bp_legal)
 app.register_functions(bp_tce)
 app.register_functions(bp_diagnostics)
+app.register_functions(bp_copilot)
