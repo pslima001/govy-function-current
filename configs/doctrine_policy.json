@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "description": "Politica de citabilidade por obra doutrinaria",
+  "works": {
+    "marcal": {
+      "can_cite_in_defense": true,
+      "can_cite_in_chat": true,
+      "quality_notes": "Referencia principal, revisado e aprovado para citacao"
+    },
+    "jacoby": {
+      "can_cite_in_defense": false,
+      "can_cite_in_chat": false,
+      "quality_notes": "Obra complementar, somente para contexto e conhecimento"
+    },
+    "dalenogare": {
+      "can_cite_in_defense": false,
+      "can_cite_in_chat": false,
+      "quality_notes": "Obra complementar, somente para contexto e conhecimento"
+    }
+  },
+  "chunk_quality_gates": {
+    "min_content_chars": 200,
+    "min_alpha_ratio": 0.7
+  }
+}

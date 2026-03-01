@@ -47,5 +47,8 @@ jobs:
           pip install pip-audit
           pip-audit -r requirements.txt 2>&1 | tee pip-audit-output.txt || echo "::warning::pip-audit found vulnerabilities (temporary soft-fail). See logs above."
 
-      - name: Run tests
+      - name: Run tests (juris + doctrine)
         run: pytest tests/test_juris_*.py tests/test_doctrine_*.py -q --tb=short
+
+      - name: Run tests (copilot)
+        run: pytest tests/test_copilot_*.py -q --tb=short

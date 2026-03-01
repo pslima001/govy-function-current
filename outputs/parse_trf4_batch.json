@@ -1,0 +1,123 @@
+{
+  "kind": "parse_batch_report",
+  "tribunal_id": "trf4",
+  "generated_at": "2026-02-27T12:07:50.768170+00:00",
+  "dry_run": false,
+  "stats": {
+    "total": 1755,
+    "parsed": 161,
+    "skipped_existing": 0,
+    "terminal_no_text": 0,
+    "terminal_excluded": 183,
+    "terminal_date_excluded": 1411,
+    "skipped_no_content": 0,
+    "validation_errors": 0,
+    "upload_errors": 0,
+    "html_read_errors": 0,
+    "elapsed_seconds": 797.9,
+    "rate_per_min": 12.1
+  },
+  "exception_count": 1594,
+  "exceptions_sample": [
+    {
+      "blob": "trf4/acordaos/trf4--000004042201440400004--417317680115/metadata.json",
+      "doc_id": "trf4--000004042201440400004--417317680115",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000008840201040400004--417320334005/metadata.json",
+      "doc_id": "trf4--000008840201040400004--417320334005",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000008887200940470124--417320334005/metadata.json",
+      "doc_id": "trf4--000008887200940470124--417320334005",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000014996200540470084--417318139578/metadata.json",
+      "doc_id": "trf4--000014996200540470084--417318139578",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000024614200540471004--417317680115/metadata.json",
+      "doc_id": "trf4--000024614200540471004--417317680115",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000041207200940470034--417317217103/metadata.json",
+      "doc_id": "trf4--000041207200940470034--417317217103",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000055094200740472124--417318139578/metadata.json",
+      "doc_id": "trf4--000055094200740472124--417318139578",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000056393201040400004--417320334005/metadata.json",
+      "doc_id": "trf4--000056393201040400004--417320334005",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000061044200940470034--417317680115/metadata.json",
+      "doc_id": "trf4--000061044200940470034--417317680115",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000090022200140471064--417320334005/metadata.json",
+      "doc_id": "trf4--000090022200140471064--417320334005",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000106523200640470004--417317680115/metadata.json",
+      "doc_id": "trf4--000106523200640470004--417317680115",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000107226200840470064--417317680115/metadata.json",
+      "doc_id": "trf4--000107226200840470064--417317680115",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000119874201040400004--417320218471/metadata.json",
+      "doc_id": "trf4--000119874201040400004--417320218471",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000120138200240472014--417318858683/metadata.json",
+      "doc_id": "trf4--000120138200240472014--417318858683",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000131650201040400004--417320218471/metadata.json",
+      "doc_id": "trf4--000131650201040400004--417320218471",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000134821200840472124--417319437878/metadata.json",
+      "doc_id": "trf4--000134821200840472124--417319437878",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000158237201040400004--417320218471/metadata.json",
+      "doc_id": "trf4--000158237201040400004--417320218471",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000172441201040400004--417320334005/metadata.json",
+      "doc_id": "trf4--000172441201040400004--417320334005",
+      "error": "terminal_date_excluded"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000176937200540470114--417317217103/metadata.json",
+      "doc_id": "trf4--000176937200540470114--417317217103",
+      "error": "terminal_excluded_crime_criminal"
+    },
+    {
+      "blob": "trf4/acordaos/trf4--000190268200840472074--417320334005/metadata.json",
+      "doc_id": "trf4--000190268200840472074--417320334005",
+      "error": "terminal_date_excluded"
+    }
+  ]
+}

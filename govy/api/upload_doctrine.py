@@ -15,7 +15,7 @@ def handle_upload_doctrine(req: func.HttpRequest) -> func.HttpResponse:
       - não faz LLM
     """
     try:
-        container = os.getenv("DOCTRINE_CONTAINER_NAME", "doutrina")
+        container = os.getenv("DOCTRINE_CONTAINER_NAME", "kb-doutrina-raw")
 
         # Azure Functions (python) expõe req.files quando multipart/form-data
         try:

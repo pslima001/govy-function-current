@@ -4,7 +4,7 @@ from azure.storage.blob import BlobServiceClient
 
 conn = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
 bs = BlobServiceClient.from_connection_string(conn)
-client = bs.get_container_client("doutrina-processed")
+client = bs.get_container_client("kb-doutrina-processed")
 blobs = sorted([b.name for b in client.list_blobs() if b.name.endswith(".json")])
 print(f"Total: {len(blobs)} blobs")
 

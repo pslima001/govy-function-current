@@ -1,0 +1,120 @@
+{
+  "kind": "parse_batch_report",
+  "tribunal_id": "tce-go",
+  "generated_at": "2026-02-25T14:08:41.845001+00:00",
+  "dry_run": false,
+  "stats": {
+    "total": 16918,
+    "parsed": 16879,
+    "skipped_existing": 0,
+    "terminal_no_text": 39,
+    "skipped_no_content": 0,
+    "validation_errors": 0,
+    "upload_errors": 0,
+    "elapsed_seconds": 5016.4,
+    "rate_per_min": 201.9
+  },
+  "exception_count": 39,
+  "exceptions_sample": [
+    {
+      "blob": "tce-go/acordaos/tce-go--497153/tce-go--497153.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--498195/tce-go--498195.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--498682/tce-go--498682.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--501290/tce-go--501290.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--502045/tce-go--502045.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--502731/tce-go--502731.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--502733/tce-go--502733.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--504224/tce-go--504224.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--505654/tce-go--505654.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--505668/tce-go--505668.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--505671/tce-go--505671.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--505674/tce-go--505674.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--505675/tce-go--505675.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--506316/tce-go--506316.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--507053/tce-go--507053.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--509115/tce-go--509115.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--509117/tce-go--509117.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--509134/tce-go--509134.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--509693/tce-go--509693.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    },
+    {
+      "blob": "tce-go/acordaos/tce-go--509785/tce-go--509785.json",
+      "error": "terminal_no_text",
+      "has_full_text": false
+    }
+  ]
+}

@@ -25,7 +25,7 @@ jobs:
       - name: Create deployment package
         run: |
           echo "📦 Creating deployment ZIP..."
-          zip -r deploy.zip host.json function_app.py requirements.txt govy params.json
+          zip -r deploy.zip host.json function_app.py requirements.txt govy packages blueprints params.json
           echo "✅ ZIP created"
           unzip -l deploy.zip | head -20
       

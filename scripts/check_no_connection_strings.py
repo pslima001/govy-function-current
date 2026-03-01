@@ -20,6 +20,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SCAN_TARGETS = [
     REPO_ROOT / "govy",
+    REPO_ROOT / "packages",
+    REPO_ROOT / "blueprints",
     REPO_ROOT / "function_app.py",
 ]
 

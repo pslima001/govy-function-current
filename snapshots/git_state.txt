@@ -1,0 +1,227 @@
+=== SNAPSHOT DATE ===
+qua, 25 de fev de 2026 15:46:19
+
+=== CURRENT BRANCH ===
+feat/legal-engine-kb
+
+=== GIT STATUS ===
+On branch feat/legal-engine-kb
+Your branch is up to date with 'origin/feat/legal-engine-kb'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	outputs/REPORT_FINAL_tce_go.md
+	outputs/REPORT_FINAL_tce_rn.md
+	outputs/REPORT_WATCH_GOVBR_20260225.json
+	outputs/REPORT_WATCH_GOVBR_20260225.md
+	outputs/audit_tce_go_20260225.json
+	outputs/audit_tce_rn_20260225.json
+	outputs/parse_tce_go_batch.json
+	outputs/parse_tce_rn_batch.json
+	snapshots/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+=== ALL BRANCHES (local + remote) ===
+  docs/checklists-operacionais
+  feat/ci-cd-hardening
+* feat/legal-engine-kb
+  main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/dev
+  remotes/origin/docs/checklists-operacionais
+  remotes/origin/feat/ci-cd-hardening
+  remotes/origin/feat/kb-pipeline-phase3-doctrine-governance
+  remotes/origin/feat/legal-engine-kb
+  remotes/origin/main
+
+=== STASH LIST ===
+stash@{0}: On feat/kb-pipeline-phase3-doctrine-governance: stash-phase3-wip
+
+=== LAST 10 COMMITS ON main ===
+2ce4b48 docs: add State of the Union report (2026-02-19)
+6909cd5 chore(juris): record TCE-SP migration report and update docs
+6266762 Merge pull request #4 from pslima001/feat/kb-pipeline-phase3-doctrine-governance
+e4f6b1f feat(doctrine): enforce contracts, chunking, citation, pipeline, batch guardrails
+5aacf09 chore(governance): add repo integrity script + PR template + doctrine docs
+2db9def Merge pull request #3 from pslima001/feat/juris-storage-standard
+18fb6fc docs(security): document storage auth architecture (Option 3)
+635180b feat(auth): migrate blob clients to DefaultAzureCredential
+e137746 feat(scripts): migration and inventory scripts for juris storage
+66484a7 feat(infra): create juris-raw and juris-parsed containers + storage standard doc
+
+=== LAST 10 COMMITS ON feat/legal-engine-kb ===
+66d7db2 fix(legal): skip non-normative items in watch runner instead of counting as errors
+936a4ff feat(registry): add TCE-GO parser, batch script, and TCE-RN audit script
+cf93c45 docs(reports): add TCE-PR final report and gov.br watch reports
+aacd60a test: add legal engine and gov.br parser tests with fixtures
+26be1b6 feat(legal): add normas-juridicas-registry federal manifests
+c361a11 feat(security): add security module (audit, rate_limit, headers, validation)
+4bdb9a5 fix(mapping): add ARQUIVOU and ABSOLVEU to valid holding outcomes
+633b8fd feat(registry): add TCE-RN tribunal config, parser, and batch script
+3c30778 feat(legal): add timer trigger + watch_runner module for gov.br/compras monitoring
+4182842 docs: update dashboard — TCE-AM parser FECHADO (33900/33941)
+
+=== COMMITS AHEAD (feat/legal-engine-kb vs main) ===
+66d7db2 fix(legal): skip non-normative items in watch runner instead of counting as errors
+936a4ff feat(registry): add TCE-GO parser, batch script, and TCE-RN audit script
+cf93c45 docs(reports): add TCE-PR final report and gov.br watch reports
+aacd60a test: add legal engine and gov.br parser tests with fixtures
+26be1b6 feat(legal): add normas-juridicas-registry federal manifests
+c361a11 feat(security): add security module (audit, rate_limit, headers, validation)
+4bdb9a5 fix(mapping): add ARQUIVOU and ABSOLVEU to valid holding outcomes
+633b8fd feat(registry): add TCE-RN tribunal config, parser, and batch script
+3c30778 feat(legal): add timer trigger + watch_runner module for gov.br/compras monitoring
+4182842 docs: update dashboard — TCE-AM parser FECHADO (33900/33941)
+17ae31c close(tce-am): REPORT_FINAL — parser FECHADO (33900/33941, poison=0)
+45de8ea fix(registry): restore /acordaos/ in raw_prefix for TCE-RJ
+9dd2f63 fix(registry): remove /acordaos/ from raw_prefix for TCE-AM and TCE-RJ
+d15b873 feat(registry): add TCE-AM and TCE-PB tribunal configs
+7338def feat: Legal Engine v1 (KB federal + watcher gov.br + vigencia + relations)
+2217ddc feat(registry): add TCE-CE tribunal config
+009b21f close(tce-es): REPORT_TCE_ES_FINAL.md — baseline fechado
+1878811 chore(reports): TCE-SC FECHADO (576/576, poison=0)
+193563b feat: add TCE-ES to tribunal registry
+4c23fec feat: add TCE-PR to tribunal registry
+c828b22 close: tce-mg parsing audit + mapping fixes + poison cleanup evidence
+8384053 fix(parser): override tribunal_type from config to prevent misdetection
+46fac19 feat(tcu): enable TCU in tribunal registry + fix skip_existing for non-TCE tribunals
+a24aff7 fix(tce-sc): scraper metadata merge + config-driven tribunal/uf/region
+dce5530 feat(tce-sc): add TCE-SC pipeline support and fix ementa extraction
+c4519f2 fix(queue): add messageEncoding=none to host.json for plain-text queue messages
+2cba39e fix(queue): re-raise on parse_tce_pdf errors for retry/poison
+e56bc73 juris: parameterize enqueue/parse by tribunal_id (tce-mg support)
+d4cf625 juris(tce-sp): reduce RESPONSAVEL fragmentation and strip label echo
+a1e28f5 juris(tce-sp): fix party fragmentation for institutional roles
+97df9cc juris(tce-sp): add deterministic party_extraction (private/public parties)
+da828ba docs: add branch protection hardening script
+bb60298 ci: add production environment gate
+c0549d8 ci: add post-deploy smoke tests
+c3c2bec ci: add gitleaks and pip-audit security scanning
+366134c ci: add anti-regression connection string check with sentinel comments
+
+=== COMMITS BEHIND (main vs feat/legal-engine-kb) ===
+
+=== DIFF STATS main..feat/legal-engine-kb ===
+ .github/workflows/ci-lint-test.yml                 |   15 +
+ .github/workflows/deploy-fixed.yml                 |    7 +
+ .gitignore                                         |   11 +
+ .gitleaks.toml                                     |   13 +
+ docs/security/branch-protection.md                 |   54 +
+ docs/security/deploy-smoke-tests.md                |   39 +
+ docs/security/github-environments.md               |   36 +
+ docs/security/security-checks.md                   |   44 +
+ docs/security/storage-auth.md                      |   12 +
+ function_app.py                                    |  119 +-
+ govy/api/cors.py                                   |   39 +-
+ govy/api/kb_index_upsert.py                        |    2 +-
+ govy/api/mapping_tce_to_kblegal.py                 |  123 +-
+ govy/api/tce_go_parser.py                          |  201 +
+ govy/api/tce_parser_v3.py                          |  391 +-
+ govy/api/tce_queue_handler.py                      |  129 +-
+ govy/api/tce_rn_parser.py                          |  227 +
+ govy/config/tribunal_registry.py                   |  186 +-
+ govy/db/__init__.py                                |    1 +
+ govy/db/connection.py                              |   80 +
+ govy/db/migrations/001_create_jurisdiction.sql     |   11 +
+ govy/db/migrations/002_create_legal_document.sql   |   26 +
+ govy/db/migrations/003_create_legal_provision.sql  |   21 +
+ govy/db/migrations/004_create_legal_chunk.sql      |   19 +
+ govy/db/migrations/005_create_legal_relation.sql   |   19 +
+ govy/db/migrations/006_seed_jurisdictions.sql      |   33 +
+ govy/db/migrations/007_add_vigencia_fields.sql     |   37 +
+ govy/db/migrations/008_create_legal_source.sql     |   26 +
+ govy/db/migrations/009_legal_source_tracking.sql   |    8 +
+ govy/db/run_migrations.py                          |  163 +
+ govy/legal/__init__.py                             |    1 +
+ govy/legal/db_writer.py                            |  178 +
+ govy/legal/effective_date_extractor.py             |  247 +
+ govy/legal/govbr_parser.py                         |  425 +
+ govy/legal/html_extractor.py                       |   93 +
+ govy/legal/legal_chunker.py                        |  526 ++
+ govy/legal/models.py                               |   62 +
+ govy/legal/pipeline.py                             |  316 +
+ govy/legal/registry_overrides.py                   |  140 +
+ govy/legal/relation_extractor.py                   |  355 +
+ govy/legal/text_extractor.py                       |  123 +
+ govy/legal/watch_runner.py                         |  789 ++
+ govy/security/__init__.py                          |   18 +
+ govy/security/audit.py                             |   53 +
+ govy/security/error_shield.py                      |   54 +
+ govy/security/headers.py                           |   45 +
+ govy/security/rate_limit.py                        |  109 +
+ govy/security/validation.py                        |   75 +
+ host.json                                          |    9 +
+ .../federal/federal_core_manifest.json             |  110 +
+ normas-juridicas-registry/federal/overrides.json   |   15 +
+ .../federal/planalto_core_manifest.json            |  133 +
+ outputs/DASHBOARD_PIPELINE.md                      |   49 +
+ outputs/REPORT_FEDERAL_CORE_INGEST.md              |  188 +
+ outputs/REPORT_FINAL_tce_am.md                     |  163 +
+ outputs/REPORT_FINAL_tce_pr.md                     |  245 +
+ outputs/REPORT_PLANALTO_URLS.md                    |   99 +
+ outputs/REPORT_POISON_QUEUE.md                     |  212 +
+ outputs/REPORT_POISON_TCE_SC.md                    |   36 +
+ outputs/REPORT_POISON_TCE_SP.md                    |   68 +
+ outputs/REPORT_RELATIONS_EXTRACTED.md              |  190 +
+ outputs/REPORT_TCE_ES_FINAL.md                     |  294 +
+ outputs/REPORT_TCE_MG_FINAL.md                     |  327 +
+ outputs/REPORT_TCE_SC_FINAL.md                     |  215 +
+ outputs/REPORT_TCE_SP_FINAL.md                     |  263 +
+ outputs/REPORT_TCM_SP_FINAL.md                     |  360 +
+ outputs/REPORT_WATCH_GOVBR.md                      |   13 +
+ outputs/REPORT_WATCH_GOVBR_20260224.json           |   23 +
+ outputs/REPORT_WATCH_GOVBR_20260224.md             |   13 +
+ outputs/audit_tce_am_20260224.json                 |  657 ++
+ outputs/batch_index_tce-mg_progress.json           |    7 +
+ outputs/core_pack_ingest_report.json               |   48 +
+ outputs/doctrine_test_output.json                  |    1 +
+ outputs/extractors_report.json                     | 1207 +++
+ outputs/extractors_report_v2.json                  | 1207 +++
+ outputs/federal_core_manifest.json                 |   68 +
+ outputs/run_summary_tce_sc.json                    |   71 +
+ outputs/sp_missing_acordaos.txt                    |   11 +
+ outputs/sp_missing_rv.txt                          |  263 +
+ outputs/tce_am_terminal_exceptions.json            |  248 +
+ outputs/tcm_sp_exceptions_no_legal_text.json       |  479 ++
+ outputs/tcm_sp_missing.txt                         |   47 +
+ outputs/tcm_sp_missing_doc_ids.json                |  293 +
+ outputs/tcm_sp_missing_doc_ids.txt                 |   47 +
+ outputs/tcu_inventory.json                         | 8434 ++++++++++++++++++++
+ requirements.txt                                   |    1 +
+ scripts/audit_tce_rn.py                            |  529 ++
+ scripts/batch_index_kb.py                          |  335 +
+ scripts/check_no_connection_strings.py             |   87 +
+ scripts/fix_skipped_files.py                       |  132 +
+ scripts/harden_github_branch_protection.sh         |   75 +
+ scripts/ingest_core_pack.py                        |  161 +
+ scripts/legal_ingest_batch.py                      |  116 +
+ scripts/parse_tce_go_batch.py                      |  669 ++
+ scripts/parse_tce_rn_batch.py                      |  376 +
+ scripts/run_extractors.py                          |  250 +
+ scripts/smoke_test_endpoints.py                    |  124 +
+ scripts/upload_core_pack.py                        |  169 +
+ scripts/watch_govbr_list.py                        |   90 +
+ tests/fixtures/sample_lei_14133_excerpt.txt        |   65 +
+ tests/test_extract_partes.py                       |  394 +
+ tests/test_govbr_parser.py                         |  468 ++
+ tests/test_legal_chunker.py                        |  288 +
+ tests/test_legal_db_writer.py                      |  123 +
+ tests/test_legal_text_extractor.py                 |   70 +
+ tests/test_tce_enqueue.py                          |  232 +
+ 106 files changed, 26492 insertions(+), 76 deletions(-)
+
+=== TAGS ===
+deploy-sucesso-20260119_193455
+deploy-sucesso-20260119_202052
+deploy-sucesso-20260120_155701
+deploy-sucesso-20260120_161644
+deploy-sucesso-20260121_155634
+restorepoint-azure-ok-20260109
+restorepoint-backend-ok-20260109
+v1.0-stable
+v1.0.0-stable
+v11-3camadas-consenso
+v22-extract-items-fix
+v8-running
+v8.1-extract-items-100pct

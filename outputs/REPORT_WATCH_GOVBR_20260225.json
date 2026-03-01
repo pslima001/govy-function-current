@@ -1,0 +1,133 @@
+{
+  "timestamp": "2026-02-25T13:33:42Z",
+  "totals": {
+    "items": 510,
+    "new": 503,
+    "updated": 0,
+    "skipped": 1,
+    "skipped_non_normative": 6,
+    "errors": 0
+  },
+  "lists": [
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/instrucoes-normativas",
+      "kind": "instrucao_normativa",
+      "status_hint": "vigente",
+      "total_items": 83,
+      "new": 77,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 6,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/instrucoes-normativas-revogadas",
+      "kind": "instrucao_normativa",
+      "status_hint": "revogada",
+      "total_items": 58,
+      "new": 58,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/portarias",
+      "kind": "portaria",
+      "status_hint": "vigente",
+      "total_items": 61,
+      "new": 61,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/portarias-revogadas",
+      "kind": "portaria",
+      "status_hint": "revogada",
+      "total_items": 143,
+      "new": 143,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/resolucoes",
+      "kind": "resolucao",
+      "status_hint": "vigente",
+      "total_items": 8,
+      "new": 7,
+      "updated": 0,
+      "skipped": 1,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/resolucoes-revogadas",
+      "kind": "resolucao",
+      "status_hint": "revogada",
+      "total_items": 2,
+      "new": 2,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/orientacoes-normativas",
+      "kind": "orientacao_normativa",
+      "status_hint": "vigente",
+      "total_items": 3,
+      "new": 3,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/orientacoes-normativas-revogadas",
+      "kind": "orientacao_normativa",
+      "status_hint": "revogada",
+      "total_items": 4,
+      "new": 4,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/leis",
+      "kind": "lei",
+      "status_hint": "vigente",
+      "total_items": 22,
+      "new": 22,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    },
+    {
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/decretos-vigentes",
+      "kind": "decreto",
+      "status_hint": "vigente",
+      "total_items": 126,
+      "new": 126,
+      "updated": 0,
+      "skipped": 0,
+      "skipped_non_normative": 0,
+      "errors": 0,
+      "error_details": []
+    }
+  ]
+}

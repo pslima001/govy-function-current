@@ -62,7 +62,7 @@ def handle_upload_doctrine_b64(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="application/json",
             )
 
-        container = os.getenv("DOCTRINE_CONTAINER_NAME", "doutrina")
+        container = os.getenv("DOCTRINE_CONTAINER_NAME", "kb-doutrina-raw")
 
         blob_service = get_blob_service_client()
         cont = blob_service.get_container_client(container)

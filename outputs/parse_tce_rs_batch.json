@@ -1,0 +1,19 @@
+{
+  "kind": "parse_batch_report",
+  "tribunal_id": "tce-rs",
+  "generated_at": "2026-02-25T23:43:16.928682+00:00",
+  "dry_run": false,
+  "stats": {
+    "total": 5488,
+    "parsed": 5488,
+    "skipped_existing": 0,
+    "terminal_no_text": 0,
+    "skipped_no_content": 0,
+    "validation_errors": 0,
+    "upload_errors": 0,
+    "elapsed_seconds": 3203.9,
+    "rate_per_min": 102.8
+  },
+  "exception_count": 0,
+  "exceptions_sample": []
+}
