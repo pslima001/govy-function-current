@@ -5,25 +5,38 @@ Answer Builder — gera resposta via LLM usando SOMENTE evidência interna.
 Fluxo:
 1. Monta system prompt com regras da policy
 2. Monta user prompt com query + evidências
-3. Chama LLM (Anthropic Claude)
+3. Chama LLM (Anthropic Claude ou OpenAI GPT)
 4. Parseia resposta JSON
 5. Valida contra policy (sem doutrina, sem externo, sem defesa)
+
+Providers suportados:
+- anthropic: Anthropic Claude (api.anthropic.com)
+- openai: OpenAI GPT (api.openai.com) — compatível com Azure OpenAI futuro
 """
-import os
 import json
 import logging
 import re
 import time
-from typing import List, Optional
+from typing import List
 
 import requests
 
 from govy.copilot.contracts import Evidence, Tone
+from govy.copilot.config import (
+    LLM_PROVIDER,
+    ANTHROPIC_API_KEY,
+    ANTHROPIC_MODEL,
+    OPENAI_API_KEY,
+    OPENAI_MODEL,
+    OPENAI_TEMPERATURE,
+    OPENAI_MAX_OUTPUT_TOKENS,
+    LLM_TIMEOUT_SECONDS,
+    LLM_MAX_RETRIES,
+    get_active_model,
+    get_active_api_key,
+)
 
 logger = logging.getLogger(__name__)
-
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-ANTHROPIC_MODEL = os.environ.get("COPILOT_LLM_MODEL", "claude-sonnet-4-20250514")
 
 
 # ─── System Prompts por tom ──────────────────────────────────────────
@@ -99,20 +112,98 @@ def _parse_llm_json(content: str) -> dict:
         return {}
 
 
+# ─── Chamadas por provider ───────────────────────────────────────────
+
+
+def _call_anthropic(system_prompt: str, user_prompt: str) -> str:
+    """Chama Anthropic Claude. Retorna conteúdo texto ou levanta exceção."""
+    resp = requests.post(
+        "https://api.anthropic.com/v1/messages",
+        headers={
+            "x-api-key": ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01",
+            "Content-Type": "application/json",
+        },
+        json={
+            "model": ANTHROPIC_MODEL,
+            "max_tokens": 1500,
+            "system": system_prompt,
+            "messages": [{"role": "user", "content": user_prompt}],
+        },
+        timeout=LLM_TIMEOUT_SECONDS,
+    )
+    resp.raise_for_status()
+    return resp.json()["content"][0]["text"]
+
+
+def _call_openai(system_prompt: str, user_prompt: str) -> str:
+    """Chama OpenAI GPT. Retorna conteúdo texto ou levanta exceção."""
+    resp = requests.post(
+        "https://api.openai.com/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {OPENAI_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "model": OPENAI_MODEL,
+            "temperature": OPENAI_TEMPERATURE,
+            "max_tokens": OPENAI_MAX_OUTPUT_TOKENS,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+        },
+        timeout=LLM_TIMEOUT_SECONDS,
+    )
+    resp.raise_for_status()
+    return resp.json()["choices"][0]["message"]["content"]
+
+
+def _call_llm_with_retry(system_prompt: str, user_prompt: str) -> str:
+    """Chama o LLM ativo com retry controlado."""
+    call_fn = _call_openai if LLM_PROVIDER == "openai" else _call_anthropic
+    last_error = None
+
+    for attempt in range(1, LLM_MAX_RETRIES + 1):
+        try:
+            return call_fn(system_prompt, user_prompt)
+        except requests.exceptions.Timeout:
+            last_error = f"Timeout ({LLM_TIMEOUT_SECONDS}s) na tentativa {attempt}"
+            logger.warning(f"copilot LLM: {last_error}")
+        except requests.exceptions.HTTPError as e:
+            # Não fazer retry em erros 4xx (auth, bad request)
+            if e.response is not None and 400 <= e.response.status_code < 500:
+                raise
+            last_error = f"HTTP {e.response.status_code if e.response else '?'} na tentativa {attempt}"
+            logger.warning(f"copilot LLM: {last_error}")
+        except Exception:
+            raise
+
+    raise RuntimeError(last_error or "LLM call failed after retries")
+
+
+# ─── Função pública ──────────────────────────────────────────────────
+
+
 def generate_answer(
     query: str,
     evidence: List[Evidence],
     tone: Tone,
-    timeout: int = 45,
+    request_id: str = "",
+    history_context: str = None,
 ) -> dict:
     """
     Chama o LLM para gerar resposta baseada nas evidências.
 
     Retorna dict com:
-      answer, uncertainty, followup_questions, evidence_used, llm_time_ms, llm_model
+      answer, uncertainty, followup_questions, evidence_used,
+      llm_time_ms, llm_model, llm_provider
     """
-    if not ANTHROPIC_API_KEY:
-        logger.error("ANTHROPIC_API_KEY não configurada")
+    api_key = get_active_api_key()
+    model = get_active_model()
+
+    if not api_key:
+        logger.error(f"[{request_id}] API key do provider '{LLM_PROVIDER}' não configurada")
         return {
             "answer": "Serviço de IA indisponível no momento. Tente novamente.",
             "uncertainty": "API key não configurada",
@@ -120,40 +211,32 @@ def generate_answer(
             "evidence_used": [],
             "llm_time_ms": 0,
             "llm_model": None,
+            "llm_provider": LLM_PROVIDER,
+            "llm_error": True,
         }
 
     system_prompt = _build_system_prompt(tone)
     user_prompt = _build_user_prompt(query, evidence)
 
+    # Injetar histórico de conversa antes da pergunta atual
+    if history_context:
+        user_prompt = history_context + "\n" + user_prompt
+
     start = time.time()
     try:
-        resp = requests.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": ANTHROPIC_API_KEY,
-                "anthropic-version": "2023-06-01",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": ANTHROPIC_MODEL,
-                "max_tokens": 1500,
-                "system": system_prompt,
-                "messages": [{"role": "user", "content": user_prompt}],
-            },
-            timeout=timeout,
-        )
-        resp.raise_for_status()
-        content = resp.json()["content"][0]["text"]
+        content = _call_llm_with_retry(system_prompt, user_prompt)
     except Exception as e:
         elapsed = int((time.time() - start) * 1000)
-        logger.exception("Erro ao chamar LLM para copilot")
+        logger.exception(f"[{request_id}] Erro ao chamar LLM ({LLM_PROVIDER}/{model})")
         return {
             "answer": "Erro ao processar sua pergunta. Tente novamente.",
             "uncertainty": str(e),
             "followup_questions": [],
             "evidence_used": [],
             "llm_time_ms": elapsed,
-            "llm_model": ANTHROPIC_MODEL,
+            "llm_model": model,
+            "llm_provider": LLM_PROVIDER,
+            "llm_error": True,
         }
 
     elapsed = int((time.time() - start) * 1000)
@@ -165,5 +248,7 @@ def generate_answer(
         "followup_questions": parsed.get("followup_questions", [])[:3],
         "evidence_used": parsed.get("evidence_used", []),
         "llm_time_ms": elapsed,
-        "llm_model": ANTHROPIC_MODEL,
+        "llm_model": model,
+        "llm_provider": LLM_PROVIDER,
+        "llm_error": False,
     }

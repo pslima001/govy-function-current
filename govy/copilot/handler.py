@@ -15,6 +15,7 @@ Fluxo:
 """
 import logging
 import uuid
+import time
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -22,6 +23,13 @@ from govy.copilot.contracts import (
     CopilotOutput, Evidence, BiRequestDraft,
     BiProductQuery, BiLocation, BiTimeRange,
     WorkspaceContext,
+)
+from govy.copilot.config import (
+    LLM_ENABLED,
+    LLM_DISABLED_MESSAGE,
+    LLM_PROVIDER,
+    validate_llm_config,
+    get_active_model,
 )
 from govy.copilot.policy import build_policy, validate_response
 from govy.copilot.router import (
@@ -31,8 +39,12 @@ from govy.copilot.router import (
 )
 from govy.copilot.retrieval import retrieve_from_kb, retrieve_from_bi, retrieve_workspace_docs
 from govy.copilot.llm_answer import generate_answer
+from govy.copilot.conversation import save_turn, build_history_context
 
 logger = logging.getLogger(__name__)
+
+# Validar config na importação — fail-fast
+_config_ok, _config_error = validate_llm_config()
 
 
 def handle_chat(user_text: str, context: Optional[dict] = None) -> CopilotOutput:
@@ -46,8 +58,18 @@ def handle_chat(user_text: str, context: Optional[dict] = None) -> CopilotOutput
     Returns:
         CopilotOutput com resposta, evidências, flags
     """
+    request_id = str(uuid.uuid4())[:12]
+    t_start = time.time()
     context = context or {}
     policy = build_policy()
+    conversation_id = context.get("conversation_id", "")
+
+    # ─── Fail-closed: LLM desligado ─────────────────────────────
+    # Intent detection e bloqueio de defesa funcionam SEM LLM.
+    # Só bloqueia chamadas ao LLM de fato.
+
+    # ─── Histórico de conversa ───────────────────────────────────
+    history_context = build_history_context(conversation_id) if conversation_id else None
 
     # ─── Router ──────────────────────────────────────────────────
     ws_ctx = build_workspace_context(context)
@@ -55,10 +77,14 @@ def handle_chat(user_text: str, context: Optional[dict] = None) -> CopilotOutput
     intent = detect_intent(user_text)
     tone = choose_tone(user_text)
 
-    logger.info(f"copilot: ctx={ctx} intent={intent} tone={tone} docs={ws_ctx.doc_names()}")
+    logger.info(
+        f"[{request_id}] copilot: ctx={ctx} intent={intent} tone={tone} "
+        f"llm_enabled={LLM_ENABLED} provider={LLM_PROVIDER} docs={ws_ctx.doc_names()}"
+    )
 
-    # ─── Bloqueio de defesa ──────────────────────────────────────
+    # ─── Bloqueio de defesa (não precisa de LLM) ─────────────────
     if intent == "tentativa_defesa":
+        _log_audit(request_id, intent, ctx, t_start, llm_called=False, blocked_defense=True)
         return CopilotOutput(
             intent=intent,
             tone="simples",
@@ -69,16 +95,51 @@ def handle_chat(user_text: str, context: Optional[dict] = None) -> CopilotOutput
             followup_questions=[
                 "Você quer criar: recurso, impugnação ou contrarrazões?",
             ],
-            flags={"blocked_defense": True},
+            flags={"blocked_defense": True, "request_id": request_id},
         )
 
-    # ─── Operacional (não precisa de KB) ─────────────────────────
+    # ─── Operacional (não precisa de LLM) ────────────────────────
     if intent == "operacional_sistema":
-        return _handle_operacional(user_text, tone)
+        _log_audit(request_id, intent, ctx, t_start, llm_called=False)
+        output = _handle_operacional(user_text, tone)
+        output.flags["request_id"] = request_id
+        return output
 
-    # ─── BI Placeholder (quando BI desabilitado) ─────────────────
+    # ─── BI Placeholder (não precisa de LLM) ─────────────────────
     if intent == "pergunta_bi" and not policy.bi_enabled:
-        return _handle_bi_placeholder(user_text, context, ws_ctx)
+        _log_audit(request_id, intent, ctx, t_start, llm_called=False)
+        output = _handle_bi_placeholder(user_text, context, ws_ctx)
+        output.flags["request_id"] = request_id
+        return output
+
+    # ─── Fail-closed: se LLM desabilitado, parar aqui ────────────
+    if not LLM_ENABLED:
+        _log_audit(request_id, intent, ctx, t_start, llm_called=False, fallback="llm_disabled")
+        return CopilotOutput(
+            intent=intent,
+            tone=tone,
+            answer=LLM_DISABLED_MESSAGE,
+            flags={
+                "request_id": request_id,
+                "llm_enabled": False,
+                "workspace_mode": ws_ctx.mode,
+            },
+        )
+
+    # ─── Fail-closed: config inválida ────────────────────────────
+    if not _config_ok:
+        _log_audit(request_id, intent, ctx, t_start, llm_called=False, fallback="config_error")
+        return CopilotOutput(
+            intent=intent,
+            tone=tone,
+            answer=LLM_DISABLED_MESSAGE,
+            flags={
+                "request_id": request_id,
+                "llm_enabled": True,
+                "config_error": _config_error,
+                "workspace_mode": ws_ctx.mode,
+            },
+        )
 
     # ─── Retrieval ───────────────────────────────────────────────
     evidence: list[Evidence] = []
@@ -104,18 +165,32 @@ def handle_chat(user_text: str, context: Optional[dict] = None) -> CopilotOutput
         # Se estamos num workspace, buscar também docs do workspace
         workspace_id = ws_ctx.workspace_id or ws_ctx.licitacao_id
         if workspace_id:
-            ws_evidence = retrieve_workspace_docs(user_text, workspace_id, policy)
+            # Converter WorkspaceDoc para dicts para retrieve_workspace_docs
+            available_docs_raw = [
+                {"name": d.name, "doc_type": d.doc_type, "indexed": d.indexed}
+                for d in ws_ctx.available_docs
+            ]
+            ws_evidence = retrieve_workspace_docs(
+                user_text, workspace_id, policy,
+                available_docs=available_docs_raw,
+            )
             evidence.extend(ws_evidence)
 
     # ─── Sem evidência ───────────────────────────────────────────
     if policy.require_evidence and not evidence:
-        return _build_no_evidence_response(intent, tone, ws_ctx)
+        _log_audit(request_id, intent, ctx, t_start, llm_called=False,
+                   evidence_count=0, fallback="no_evidence")
+        output = _build_no_evidence_response(intent, tone, ws_ctx)
+        output.flags["request_id"] = request_id
+        return output
 
     # ─── Gerar resposta via LLM ──────────────────────────────────
     llm_result = generate_answer(
         query=user_text,
         evidence=evidence,
         tone=tone,
+        request_id=request_id,
+        history_context=history_context,
     )
 
     answer = llm_result["answer"]
@@ -123,12 +198,32 @@ def handle_chat(user_text: str, context: Optional[dict] = None) -> CopilotOutput
     # ─── Validação pós-resposta ──────────────────────────────────
     violations = validate_response(answer, policy)
     if violations:
-        logger.warning(f"copilot: policy violations detectadas: {violations}")
+        logger.warning(f"[{request_id}] copilot: policy violations detectadas: {violations}")
         answer = (
             "Não consigo responder dessa forma dentro das regras do copiloto. "
             "Posso reformular de outra maneira — tente ser mais específico sobre "
             "o que deseja saber."
         )
+
+    # ─── Salvar turno na conversa ────────────────────────────────
+    if conversation_id:
+        try:
+            save_turn(conversation_id, user_text, answer, intent=intent)
+        except Exception as e:
+            logger.warning(f"[{request_id}] Falha ao salvar turno: {e}")
+
+    # ─── Log de auditoria ────────────────────────────────────────
+    _log_audit(
+        request_id, intent, ctx, t_start,
+        llm_called=True,
+        provider=llm_result.get("llm_provider"),
+        model=llm_result.get("llm_model"),
+        llm_time_ms=llm_result.get("llm_time_ms"),
+        evidence_count=len(evidence),
+        llm_error=llm_result.get("llm_error", False),
+        policy_violations=violations or None,
+        blocked_defense=False,
+    )
 
     return CopilotOutput(
         intent=intent,
@@ -138,11 +233,48 @@ def handle_chat(user_text: str, context: Optional[dict] = None) -> CopilotOutput
         followup_questions=llm_result.get("followup_questions", [])[:3],
         evidence=evidence[: policy.max_evidence],
         flags={
+            "request_id": request_id,
             "llm_time_ms": llm_result.get("llm_time_ms"),
             "llm_model": llm_result.get("llm_model"),
+            "llm_provider": llm_result.get("llm_provider"),
             "policy_violations": violations if violations else None,
             "workspace_mode": ws_ctx.mode,
         },
+    )
+
+
+# ─── Log de auditoria ────────────────────────────────────────────────
+
+
+def _log_audit(
+    request_id: str,
+    intent: str,
+    ctx: str,
+    t_start: float,
+    *,
+    llm_called: bool = False,
+    provider: str = None,
+    model: str = None,
+    llm_time_ms: int = None,
+    evidence_count: int = None,
+    llm_error: bool = False,
+    policy_violations: list = None,
+    blocked_defense: bool = False,
+    fallback: str = None,
+):
+    """Log estruturado de auditoria para cada request."""
+    total_ms = int((time.time() - t_start) * 1000)
+    logger.info(
+        f"AUDIT [{request_id}] "
+        f"intent={intent} ctx={ctx} "
+        f"provider={provider or '-'} model={model or '-'} "
+        f"llm_called={llm_called} llm_time_ms={llm_time_ms or 0} "
+        f"total_ms={total_ms} "
+        f"evidence_count={evidence_count if evidence_count is not None else '-'} "
+        f"llm_error={llm_error} "
+        f"blocked_defense={blocked_defense} "
+        f"fallback={fallback or '-'} "
+        f"violations={policy_violations or '-'}"
     )
 
 
@@ -385,6 +517,7 @@ def explain_check(check_id: str, edital_id: str, context: Optional[dict] = None)
     Returns:
         CopilotOutput com explicação detalhada do item
     """
+    request_id = str(uuid.uuid4())[:12]
     context = context or {}
     policy = build_policy()
 
@@ -397,7 +530,28 @@ def explain_check(check_id: str, edital_id: str, context: Optional[dict] = None)
             intent="checklist_conformidade",
             tone="tecnico",
             answer=f"Item de checklist **{check_id}** não encontrado na base de auditoria.",
-            flags={"explain_check": True, "check_id": check_id, "found": False},
+            flags={"explain_check": True, "check_id": check_id, "found": False,
+                   "request_id": request_id},
+        )
+
+    # ─── Fail-closed: se LLM desabilitado, resposta sem LLM ─────
+    if not LLM_ENABLED or not _config_ok:
+        return CopilotOutput(
+            intent="checklist_conformidade",
+            tone="tecnico",
+            answer=(
+                f"O item **{check_id}** ({audit_q['stage_tag']}) verifica: "
+                f"\"{audit_q['pergunta']}\". "
+                f"Severidade: **{audit_q['severidade']}**. "
+                f"{LLM_DISABLED_MESSAGE}"
+            ),
+            flags={
+                "explain_check": True,
+                "check_id": check_id,
+                "found": True,
+                "llm_enabled": False,
+                "request_id": request_id,
+            },
         )
 
     # Buscar evidência na KB sobre o tema do item
@@ -423,6 +577,7 @@ def explain_check(check_id: str, edital_id: str, context: Optional[dict] = None)
         query=query,
         evidence=evidence,
         tone="tecnico",
+        request_id=request_id,
     )
 
     answer = llm_result["answer"]
@@ -430,7 +585,7 @@ def explain_check(check_id: str, edital_id: str, context: Optional[dict] = None)
     # Validação pós-resposta
     violations = validate_response(answer, policy)
     if violations:
-        logger.warning(f"explain_check: policy violations: {violations}")
+        logger.warning(f"[{request_id}] explain_check: policy violations: {violations}")
         answer = (
             f"O item **{check_id}** ({audit_q['stage_tag']}) verifica: "
             f"\"{audit_q['pergunta']}\". "
@@ -453,5 +608,7 @@ def explain_check(check_id: str, edital_id: str, context: Optional[dict] = None)
             "severidade": audit_q["severidade"],
             "found": True,
             "llm_time_ms": llm_result.get("llm_time_ms"),
+            "llm_provider": llm_result.get("llm_provider"),
+            "request_id": request_id,
         },
     )

@@ -26,8 +26,15 @@ CORS_HEADERS = {
 @bp.function_name(name="copilot_ping")
 @bp.route(route="copilot/ping", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
 def copilot_ping(req: func.HttpRequest) -> func.HttpResponse:
+    from govy.copilot.config import LLM_ENABLED, LLM_PROVIDER, get_active_model
     return func.HttpResponse(
-        json.dumps({"status": "ok", "module": "copilot"}),
+        json.dumps({
+            "status": "ok",
+            "module": "copilot",
+            "llm_enabled": LLM_ENABLED,
+            "llm_provider": LLM_PROVIDER,
+            "llm_model": get_active_model() if LLM_ENABLED else None,
+        }),
         status_code=200,
         headers=CORS_HEADERS,
     )

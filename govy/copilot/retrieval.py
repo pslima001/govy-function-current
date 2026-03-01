@@ -179,10 +179,125 @@ def retrieve_workspace_docs(
     query: str,
     workspace_id: str,
     policy: Policy,
+    available_docs: Optional[List[dict]] = None,
 ) -> List[Evidence]:
     """
     Busca nos documentos do workspace (edital, TR, ETP, minuta, anexos).
-    TODO: Implementar quando API de workspace docs estiver disponível.
+
+    Fluxo:
+    1. Verifica quais docs do workspace estão indexados
+    2. Para docs indexados: busca no Azure Search filtrando por workspace
+    3. Para docs não indexados: loga (handler já trata a mensagem)
+    4. Retorna evidências encontradas com source="workspace_doc"
+
+    Args:
+        query: texto do usuário
+        workspace_id: ID do workspace ou licitacao
+        policy: policy vigente
+        available_docs: lista de docs [{name, doc_type, indexed}] do contexto
     """
-    logger.info(f"retrieve_workspace_docs chamado para workspace={workspace_id}")
-    return []
+    available_docs = available_docs or []
+    indexed_docs = [d for d in available_docs if d.get("indexed")]
+    not_indexed_docs = [d for d in available_docs if not d.get("indexed")]
+
+    if not_indexed_docs:
+        names = [d.get("name", "?") for d in not_indexed_docs]
+        logger.info(
+            f"workspace_docs [{workspace_id}]: {len(not_indexed_docs)} docs "
+            f"ainda não indexados: {names}"
+        )
+
+    if not indexed_docs:
+        logger.info(f"workspace_docs [{workspace_id}]: nenhum doc indexado para buscar")
+        return []
+
+    # Buscar no Azure Search filtrando pelo workspace
+    client = _get_search_client()
+    if not client:
+        return []
+
+    query_vector = generate_query_embedding(query)
+
+    # Buscar por cada doc_type presente no workspace
+    indexed_doc_types = list({d.get("doc_type", "outro") for d in indexed_docs})
+    all_results = []
+
+    for doc_type in indexed_doc_types:
+        if _is_blocked_doc_type(doc_type):
+            continue
+
+        # Filtro: doc_type + workspace_id (se campo existir no índice)
+        filter_parts = [f"doc_type eq '{doc_type}'"]
+        if workspace_id:
+            filter_parts.append(
+                f"(workspace_id eq '{workspace_id}' or "
+                f"licitacao_id eq '{workspace_id}')"
+            )
+        filter_str = " and ".join(filter_parts)
+
+        try:
+            results, _mode_info = run_search_with_mode_fallback(
+                search_client=client,
+                query=query,
+                query_vector=query_vector,
+                filter_str=filter_str,
+                top_k=4,
+                initial_use_vector=True,
+                initial_use_semantic=True,
+            )
+            all_results.extend(results)
+        except Exception as e:
+            # Se o filtro por workspace_id falhar (campo não existe),
+            # faz fallback buscando só por doc_type
+            logger.warning(
+                f"workspace_docs: filtro workspace_id falhou ({e}), "
+                f"tentando sem filtro de workspace"
+            )
+            fallback_filter = f"doc_type eq '{doc_type}'"
+            try:
+                results, _ = run_search_with_mode_fallback(
+                    search_client=client,
+                    query=query,
+                    query_vector=query_vector,
+                    filter_str=fallback_filter,
+                    top_k=4,
+                    initial_use_vector=True,
+                    initial_use_semantic=True,
+                )
+                all_results.extend(results)
+            except Exception as e2:
+                logger.error(f"workspace_docs: fallback também falhou: {e2}")
+
+    # Converter e filtrar
+    all_results.sort(
+        key=lambda x: (x.get("semantic_score") or 0, x.get("search_score") or 0),
+        reverse=True,
+    )
+
+    evidence = []
+    seen_ids = set()
+    for doc in all_results:
+        if len(evidence) >= policy.max_evidence:
+            break
+
+        content = doc.get("content") or doc.get("snippet") or doc.get("text") or ""
+        if not content.strip():
+            continue
+
+        ev = _doc_to_evidence(doc)
+        ev.source = "workspace_doc"
+
+        if ev.confidence < MIN_CONFIDENCE:
+            continue
+        if ev.id and ev.id in seen_ids:
+            continue
+        seen_ids.add(ev.id)
+
+        evidence.append(ev)
+
+    doc_names = [d.get("name", "?") for d in indexed_docs]
+    logger.info(
+        f"workspace_docs [{workspace_id}]: buscou em {doc_names}, "
+        f"encontrou {len(evidence)} evidências"
+    )
+    return evidence
